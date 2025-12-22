@@ -10,12 +10,12 @@ import type { PersonalInfo } from '../types';
 export const personalInfo: PersonalInfo = {
     name: 'BungChoi',
     title: 'Mobile Developer',
-    subtitle: 'Flutter & React Native Enthusiast',
+    subtitle: 'Flutter Developer',
     bio: `Passionate mobile developer with experience in building 
         beautiful and performant mobile applications. 
         I love turning ideas into reality through code.`,
-    email: 'hello@bungchoi.dev',
-    phone: '+62 812 3456 7890',
+    email: 'bungchoi.dev@gmail.com',
+    phone: '+62 821 4256 8403',
     location: 'Indonesia',
     avatar: '/images/avatar.jpg',
     resumeUrl: '/resume.pdf',
@@ -27,13 +27,13 @@ export const personalInfo: PersonalInfo = {
         },
         {
             name: 'LinkedIn',
-            url: 'https://linkedin.com/in/bungchoi',
+            url: 'https://www.linkedin.com/in/ahmad-choirul-umam-ali-rozaqi-1b3196271/',
             icon: 'linkedin',
         },
         {
-            name: 'Twitter',
-            url: 'https://twitter.com/bungchoi',
-            icon: 'twitter',
+            name: 'Instagram',
+            url: 'https://www.instagram.com/bung_choi/',
+            icon: 'instagram',
         },
     ],
 };
