@@ -8,9 +8,8 @@
 import type { PersonalInfo } from '../types';
 
 export const personalInfo: PersonalInfo = {
-    name: 'BungChoi',
+    name: 'Ahmad Choirul Umam Ali Rozaqi',
     title: 'Mobile Developer',
-    subtitle: 'Flutter Developer',
     bio: `Passionate mobile developer with experience in building 
         beautiful and performant mobile applications. 
         I love turning ideas into reality through code.`,
@@ -21,7 +20,7 @@ export const personalInfo: PersonalInfo = {
     resumeUrl: '/resume.pdf',
     stats: [
         { label: 'Projects', value: '5+', icon: 'folder' },
-        { label: 'Years Exp', value: '2+', icon: 'calendar' },
+        { label: 'Years Exp', value: '1+', icon: 'calendar' },
         { label: 'Clients', value: '10+', icon: 'users' },
     ],
     socialLinks: [

@@ -5,10 +5,7 @@
  * NAVBAR COMPONENT
  * ===========================================
  * Fixed navigation bar with glassmorphism effect.
- * Centered layout with logo, nav items, and CTA button.
- *
- * @example
- * <Navbar />
+ * Includes scroll spy to highlight active section.
  */
 
 import { useState, useEffect } from 'react';
@@ -21,7 +18,6 @@ import { cn } from '@/lib/utils';
 // ============================================
 
 interface NavbarProps {
-    /** Additional CSS classes */
     className?: string;
 }
 
@@ -32,14 +28,31 @@ interface NavbarProps {
 export function Navbar({ className }: NavbarProps) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('home');
 
-    // Handle scroll effect
+    // Handle scroll effect & scroll spy
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
+
+            // Scroll spy - detect which section is in view
+            const sections = ['home', 'about', 'skills', 'projects', 'contact'];
+            const scrollPosition = window.scrollY + 150; // Offset for navbar height
+
+            for (const sectionId of sections) {
+                const element = document.getElementById(sectionId);
+                if (element) {
+                    const { offsetTop, offsetHeight } = element;
+                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                        setActiveSection(sectionId);
+                        break;
+                    }
+                }
+            }
         };
 
         window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Run on mount
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -54,9 +67,9 @@ export function Navbar({ className }: NavbarProps) {
 
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
+            setActiveSection(targetId);
         }
 
-        // Close mobile menu after clicking
         setIsMobileMenuOpen(false);
     };
 
@@ -92,21 +105,27 @@ export function Navbar({ className }: NavbarProps) {
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center gap-1">
                         {NAV_ITEMS.filter((item) => item.label !== 'Contact').map(
-                            (item) => (
-                                <a
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={(e) => handleNavClick(e, item.href)}
-                                    className={cn(
-                                        'px-4 py-2 text-sm font-medium rounded-full',
-                                        'text-[var(--foreground-secondary)]',
-                                        'hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]',
-                                        'transition-all duration-200'
-                                    )}
-                                >
-                                    {item.label}
-                                </a>
-                            )
+                            (item) => {
+                                const sectionId = item.href.replace('#', '');
+                                const isActive = activeSection === sectionId;
+
+                                return (
+                                    <a
+                                        key={item.href}
+                                        href={item.href}
+                                        onClick={(e) => handleNavClick(e, item.href)}
+                                        className={cn(
+                                            'px-4 py-2 text-sm font-medium rounded-full',
+                                            'transition-all duration-200',
+                                            isActive
+                                                ? 'text-[var(--primary)] bg-[var(--primary)]/10'
+                                                : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
+                                        )}
+                                    >
+                                        {item.label}
+                                    </a>
+                                );
+                            }
                         )}
                     </div>
 
@@ -137,6 +156,7 @@ export function Navbar({ className }: NavbarProps) {
             {/* Mobile Menu Dropdown */}
             <MobileMenu
                 isOpen={isMobileMenuOpen}
+                activeSection={activeSection}
                 onNavClick={handleNavClick}
                 onClose={() => setIsMobileMenuOpen(false)}
             />
@@ -148,9 +168,6 @@ export function Navbar({ className }: NavbarProps) {
 // SUB-COMPONENTS
 // ============================================
 
-/**
- * Hamburger icon with animation
- */
 function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
     return (
         <div className="w-5 h-5 flex flex-col justify-center items-center gap-1">
@@ -176,16 +193,14 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
     );
 }
 
-/**
- * Mobile menu dropdown
- */
 interface MobileMenuProps {
     isOpen: boolean;
+    activeSection: string;
     onNavClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
     onClose: () => void;
 }
 
-function MobileMenu({ isOpen, onNavClick, onClose }: MobileMenuProps) {
+function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuProps) {
     if (!isOpen) return null;
 
     return (
@@ -198,21 +213,27 @@ function MobileMenu({ isOpen, onNavClick, onClose }: MobileMenuProps) {
                     'shadow-xl'
                 )}
             >
-                {NAV_ITEMS.map((item) => (
-                    <a
-                        key={item.href}
-                        href={item.href}
-                        onClick={(e) => onNavClick(e, item.href)}
-                        className={cn(
-                            'px-4 py-3 text-sm font-medium rounded-xl',
-                            'text-[var(--foreground-secondary)]',
-                            'hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]',
-                            'transition-all duration-200'
-                        )}
-                    >
-                        {item.label}
-                    </a>
-                ))}
+                {NAV_ITEMS.map((item) => {
+                    const sectionId = item.href.replace('#', '');
+                    const isActive = activeSection === sectionId;
+
+                    return (
+                        <a
+                            key={item.href}
+                            href={item.href}
+                            onClick={(e) => onNavClick(e, item.href)}
+                            className={cn(
+                                'px-4 py-3 text-sm font-medium rounded-xl',
+                                'transition-all duration-200',
+                                isActive
+                                    ? 'text-[var(--primary)] bg-[var(--primary)]/10'
+                                    : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
+                            )}
+                        >
+                            {item.label}
+                        </a>
+                    );
+                })}
 
                 {/* Mobile CTA Button */}
                 <Button
