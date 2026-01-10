@@ -19,6 +19,11 @@ export const personalInfo: PersonalInfo = {
     location: 'Indonesia',
     avatar: '/images/avatar.jpg',
     resumeUrl: '/resume.pdf',
+    stats: [
+        { label: 'Projects', value: '5+', icon: 'folder' },
+        { label: 'Years Exp', value: '2+', icon: 'calendar' },
+        { label: 'Clients', value: '10+', icon: 'users' },
+    ],
     socialLinks: [
         {
             name: 'GitHub',

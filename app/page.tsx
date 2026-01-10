@@ -6,7 +6,7 @@
  * Composed of multiple sections.
  */
 
-import { Hero } from '@/components/sections';
+import { Hero, About, Skills } from '@/components/sections';
 
 export default function Home() {
   return (
@@ -14,9 +14,13 @@ export default function Home() {
       {/* Hero Section */}
       <Hero />
 
-      {/* Future sections will be added here: */}
-      {/* <About /> */}
-      {/* <Skills /> */}
+      {/* About Section */}
+      <About />
+
+      {/* Skills Section */}
+      <Skills />
+
+      {/* Future sections: */}
       {/* <Projects /> */}
       {/* <Contact /> */}
 

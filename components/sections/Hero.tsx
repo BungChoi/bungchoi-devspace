@@ -2,13 +2,10 @@
 
 /**
  * ===========================================
- * HERO SECTION COMPONENT
+ * HERO SECTION COMPONENT - UPGRADED
  * ===========================================
- * The main landing section of the portfolio.
- * Displays name, title, bio, and call-to-action buttons.
- *
- * @example
- * <Hero />
+ * Modern landing section with animated background,
+ * stats badges, and enhanced visual effects.
  */
 
 import { Button } from '@/components/ui';
@@ -20,7 +17,6 @@ import { cn } from '@/lib/utils';
 // ============================================
 
 interface HeroProps {
-    /** Additional CSS classes */
     className?: string;
 }
 
@@ -29,105 +25,130 @@ interface HeroProps {
 // ============================================
 
 export function Hero({ className }: HeroProps) {
-    const { name, title, subtitle, bio } = personalInfo;
+    const { name, title, subtitle, bio, stats, socialLinks } = personalInfo;
 
     return (
         <section
             id="home"
             className={cn(
-                'relative min-h-screen flex items-center justify-center',
+                'relative min-h-screen flex items-center justify-center overflow-hidden',
                 'py-20 px-4',
                 className
             )}
         >
-            {/* Background gradient effect */}
-            <div className="absolute inset-0 -z-10">
-                <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary-50)] via-[var(--background)] to-[var(--background)] dark:from-[var(--color-primary-950)] dark:via-[var(--background)] dark:to-[var(--background)]" />
-                {/* Optional: Decorative blur circles */}
-                <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-[var(--primary)] opacity-10 rounded-full blur-3xl" />
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[var(--accent)] opacity-10 rounded-full blur-3xl" />
-            </div>
+            {/* Enhanced Background */}
+            <HeroBackground />
 
             {/* Content Container */}
-            <div className="container max-w-4xl mx-auto text-center">
-                {/* Greeting Tag */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--color-primary-100)] dark:bg-[var(--color-primary-950)] text-[var(--primary)] text-sm font-medium mb-6">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--primary)] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--primary)]"></span>
-                    </span>
-                    Available for new projects
-                </div>
+            <div className="container max-w-5xl mx-auto relative z-10">
+                <div className="text-center">
+                    {/* Status Badge */}
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-sm font-medium mb-8">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--primary)] opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--primary)]"></span>
+                        </span>
+                        Available for new projects
+                    </div>
 
-                {/* Name */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-4">
-                    Hi, I&apos;m{' '}
-                    <span className="text-gradient">{name}</span>
-                </h1>
+                    {/* Main Heading */}
+                    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+                        <span className="block text-[var(--foreground)]">Hi, I&apos;m</span>
+                        <span className="text-gradient">{name}</span>
+                    </h1>
 
-                {/* Title */}
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[var(--foreground-secondary)] mb-2">
-                    {title}
-                </h2>
+                    {/* Title & Subtitle */}
+                    <div className="mb-6">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-[var(--foreground)]">
+                            {title}
+                        </h2>
+                        {subtitle && (
+                            <p className="text-lg text-[var(--primary)] mt-1 font-medium">
+                                {subtitle}
+                            </p>
+                        )}
+                    </div>
 
-                {/* Subtitle */}
-                {subtitle && (
-                    <p className="text-lg text-[var(--foreground-muted)] mb-6">
-                        {subtitle}
+                    {/* Bio */}
+                    <p className="text-base sm:text-lg text-[var(--foreground-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed">
+                        {bio}
                     </p>
-                )}
 
-                {/* Bio */}
-                <p className="text-base sm:text-lg text-[var(--foreground-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed">
-                    {bio}
-                </p>
-
-                {/* CTA Buttons - Testing our Button component! */}
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Button
-                        size="lg"
-                        onClick={() => {
-                            document.getElementById('projects')?.scrollIntoView({
-                                behavior: 'smooth',
-                            });
-                        }}
-                    >
-                        View My Work
-                    </Button>
-
-                    <Button
-                        variant="outline"
-                        size="lg"
-                        onClick={() => {
-                            document.getElementById('contact')?.scrollIntoView({
-                                behavior: 'smooth',
-                            });
-                        }}
-                    >
-                        Get In Touch
-                    </Button>
-                </div>
-
-                {/* Social Links - Simple version for now */}
-                <div className="mt-12 flex items-center justify-center gap-4">
-                    {personalInfo.socialLinks.map((link) => (
-                        <a
-                            key={link.name}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-3 rounded-full bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground-secondary)] hover:text-[var(--primary)] hover:border-[var(--primary)] transition-colors duration-200"
-                            aria-label={link.name}
+                    {/* CTA Buttons */}
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+                        <Button
+                            size="lg"
+                            onClick={() => {
+                                document.getElementById('projects')?.scrollIntoView({
+                                    behavior: 'smooth',
+                                });
+                            }}
                         >
-                            <SocialIcon name={link.icon} />
-                        </a>
-                    ))}
-                </div>
+                            <span className="flex items-center gap-2">
+                                <FolderIcon />
+                                View My Work
+                            </span>
+                        </Button>
 
-                {/* Scroll indicator */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+                        <Button
+                            variant="outline"
+                            size="lg"
+                            onClick={() => {
+                                document.getElementById('contact')?.scrollIntoView({
+                                    behavior: 'smooth',
+                                });
+                            }}
+                        >
+                            <span className="flex items-center gap-2">
+                                <MailIcon />
+                                Get In Touch
+                            </span>
+                        </Button>
+                    </div>
+
+                    {/* Stats Badges */}
+                    {stats && stats.length > 0 && (
+                        <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 mb-12">
+                            {stats.map((stat, index) => (
+                                <div
+                                    key={index}
+                                    className="flex flex-col items-center"
+                                >
+                                    <span className="text-3xl sm:text-4xl font-bold text-gradient">
+                                        {stat.value}
+                                    </span>
+                                    <span className="text-sm text-[var(--foreground-muted)] mt-1">
+                                        {stat.label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Social Links */}
+                    <div className="flex items-center justify-center gap-4">
+                        {socialLinks.map((link) => (
+                            <a
+                                key={link.name}
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group p-3 rounded-full bg-[var(--background-secondary)] border border-[var(--border)] text-[var(--foreground-secondary)] hover:text-[var(--primary)] hover:border-[var(--primary)] hover:bg-[var(--primary)]/5 transition-all duration-300"
+                                aria-label={link.name}
+                            >
+                                <SocialIcon name={link.icon} />
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+                <div className="flex flex-col items-center gap-2 text-[var(--foreground-muted)]">
+                    <span className="text-xs uppercase tracking-widest">Scroll</span>
                     <div className="w-6 h-10 border-2 border-[var(--border)] rounded-full flex justify-center">
-                        <div className="w-1.5 h-3 bg-[var(--foreground-muted)] rounded-full mt-2 animate-pulse" />
+                        <div className="w-1.5 h-3 bg-[var(--primary)] rounded-full mt-2 animate-bounce" />
                     </div>
                 </div>
             </div>
@@ -140,8 +161,37 @@ export function Hero({ className }: HeroProps) {
 // ============================================
 
 /**
- * Simple SVG icons for social links
- * In a real project, you might use a library like lucide-react
+ * Enhanced animated background with gradient mesh
+ */
+function HeroBackground() {
+    return (
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+            {/* Base gradient */}
+            <div className="absolute inset-0 bg-[var(--background)]" />
+
+            {/* Animated gradient orbs */}
+            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--primary)] opacity-15 rounded-full blur-[120px] animate-pulse" />
+            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[var(--accent)] opacity-10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--color-primary-600)] opacity-5 rounded-full blur-[100px]" />
+
+            {/* Grid pattern overlay */}
+            <div
+                className="absolute inset-0 opacity-[0.02]"
+                style={{
+                    backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px),
+                                      linear-gradient(90deg, var(--foreground) 1px, transparent 1px)`,
+                    backgroundSize: '60px 60px'
+                }}
+            />
+
+            {/* Radial gradient for vignette effect */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
+        </div>
+    );
+}
+
+/**
+ * Social media icons
  */
 function SocialIcon({ name }: { name: string }) {
     const iconSize = 'w-5 h-5';
@@ -178,6 +228,25 @@ function SocialIcon({ name }: { name: string }) {
                 </svg>
             );
     }
+}
+
+/**
+ * Small icons for CTA buttons
+ */
+function FolderIcon() {
+    return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+        </svg>
+    );
+}
+
+function MailIcon() {
+    return (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+    );
 }
 
 // ============================================

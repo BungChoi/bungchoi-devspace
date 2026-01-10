@@ -106,6 +106,12 @@ export interface ContactFormState {
 // ============================================
 // PROFILE / PERSONAL INFO TYPES
 // ============================================
+export interface Stat {
+    label: string;
+    value: string;
+    icon?: string;
+}
+
 export interface PersonalInfo {
     name: string;
     title: string;
@@ -117,6 +123,7 @@ export interface PersonalInfo {
     avatar?: string;
     resumeUrl?: string;
     socialLinks: SocialLink[];
+    stats?: Stat[];
 }
 
 // ============================================

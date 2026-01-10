@@ -6,28 +6,29 @@
 
 :root {
   /* ==========================================
-     COLOR PALETTE - LIGHT MODE
+     COLOR PALETTE - DARK MODE DEFAULT
      ========================================== */
 
-  /* Primary Colors (Modern Blue) */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-200: #bfdbfe;
-  --color-primary-300: #93c5fd;
-  --color-primary-400: #60a5fa;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
-  --color-primary-800: #1e40af;
-  --color-primary-900: #1e3a8a;
-  --color-primary-950: #172554;
+  /* Primary Colors (Teal) */
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e4;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+  --color-primary-950: #042f2e;
 
   /* Accent Colors (Cyan) */
+  --color-accent-300: #67e8f9;
   --color-accent-400: #22d3ee;
   --color-accent-500: #06b6d4;
   --color-accent-600: #0891b2;
 
-  /* Neutral Colors (Zinc) */
+  /* Neutral Colors (Dark Zinc) */
   --color-neutral-50: #fafafa;
   --color-neutral-100: #f4f4f5;
   --color-neutral-200: #e4e4e7;
@@ -44,49 +45,49 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  --color-info: #3b82f6;
+  --color-info: #14b8a6;
 
   /* ==========================================
-     THEME VARIABLES - LIGHT MODE
+     THEME VARIABLES - DARK MODE (DEFAULT)
      ========================================== */
 
-  /* Background */
-  --background: var(--color-neutral-50);
-  --background-secondary: #ffffff;
-  --background-tertiary: var(--color-neutral-100);
+  /* Background - Deep dark tones */
+  --background: #0a0a0b;
+  --background-secondary: #121214;
+  --background-tertiary: #1a1a1e;
 
   /* Foreground / Text */
-  --foreground: var(--color-neutral-900);
-  --foreground-secondary: var(--color-neutral-600);
-  --foreground-muted: var(--color-neutral-400);
+  --foreground: var(--color-neutral-50);
+  --foreground-secondary: var(--color-neutral-400);
+  --foreground-muted: var(--color-neutral-500);
 
-  /* Primary */
-  --primary: var(--color-primary-600);
-  --primary-hover: var(--color-primary-700);
-  --primary-foreground: #ffffff;
+  /* Primary (Teal) */
+  --primary: var(--color-primary-500);
+  --primary-hover: var(--color-primary-400);
+  --primary-foreground: #0a0a0b;
 
-  /* Accent */
-  --accent: var(--color-accent-500);
-  --accent-hover: var(--color-accent-600);
-  --accent-foreground: #ffffff;
+  /* Accent (Cyan) */
+  --accent: var(--color-accent-400);
+  --accent-hover: var(--color-accent-300);
+  --accent-foreground: #0a0a0b;
 
   /* Border */
-  --border: var(--color-neutral-200);
-  --border-hover: var(--color-neutral-300);
+  --border: var(--color-neutral-800);
+  --border-hover: var(--color-neutral-700);
 
   /* Card */
-  --card: #ffffff;
-  --card-hover: var(--color-neutral-50);
-  --card-foreground: var(--color-neutral-900);
+  --card: #121214;
+  --card-hover: #1a1a1e;
+  --card-foreground: var(--color-neutral-50);
 
   /* Input */
-  --input: var(--color-neutral-100);
-  --input-border: var(--color-neutral-300);
+  --input: var(--color-neutral-800);
+  --input-border: var(--color-neutral-700);
   --input-focus: var(--color-primary-500);
 
   /* Ring (focus outline) */
   --ring: var(--color-primary-500);
-  --ring-offset: #ffffff;
+  --ring-offset: #0a0a0b;
 
   /* ==========================================
      TYPOGRAPHY
@@ -209,68 +210,42 @@
 }
 
 /* ===========================================
-   DARK MODE THEME
+   LIGHT MODE THEME (Optional Override)
    =========================================== */
-.dark,
-[data-theme="dark"] {
-  --background: var(--color-neutral-950);
-  --background-secondary: var(--color-neutral-900);
-  --background-tertiary: var(--color-neutral-800);
+[data-theme="light"] {
+  --background: var(--color-neutral-50);
+  --background-secondary: #ffffff;
+  --background-tertiary: var(--color-neutral-100);
 
-  --foreground: var(--color-neutral-50);
-  --foreground-secondary: var(--color-neutral-400);
-  --foreground-muted: var(--color-neutral-500);
+  --foreground: var(--color-neutral-900);
+  --foreground-secondary: var(--color-neutral-600);
+  --foreground-muted: var(--color-neutral-400);
 
-  --primary: var(--color-primary-500);
-  --primary-hover: var(--color-primary-400);
+  --primary: var(--color-primary-600);
+  --primary-hover: var(--color-primary-700);
   --primary-foreground: #ffffff;
 
-  --border: var(--color-neutral-800);
-  --border-hover: var(--color-neutral-700);
+  --accent: var(--color-accent-500);
+  --accent-hover: var(--color-accent-600);
+  --accent-foreground: #ffffff;
 
-  --card: var(--color-neutral-900);
-  --card-hover: var(--color-neutral-800);
-  --card-foreground: var(--color-neutral-50);
+  --border: var(--color-neutral-200);
+  --border-hover: var(--color-neutral-300);
 
-  --input: var(--color-neutral-800);
-  --input-border: var(--color-neutral-700);
+  --card: #ffffff;
+  --card-hover: var(--color-neutral-50);
+  --card-foreground: var(--color-neutral-900);
 
-  --ring-offset: var(--color-neutral-950);
+  --input: var(--color-neutral-100);
+  --input-border: var(--color-neutral-300);
 
-  /* Dark mode shadows (more subtle) */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-}
+  --ring-offset: #ffffff;
 
-/* Auto dark mode based on system preference */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --background: var(--color-neutral-950);
-    --background-secondary: var(--color-neutral-900);
-    --background-tertiary: var(--color-neutral-800);
-
-    --foreground: var(--color-neutral-50);
-    --foreground-secondary: var(--color-neutral-400);
-    --foreground-muted: var(--color-neutral-500);
-
-    --primary: var(--color-primary-500);
-    --primary-hover: var(--color-primary-400);
-    --primary-foreground: #ffffff;
-
-    --border: var(--color-neutral-800);
-    --border-hover: var(--color-neutral-700);
-
-    --card: var(--color-neutral-900);
-    --card-hover: var(--color-neutral-800);
-    --card-foreground: var(--color-neutral-50);
-
-    --input: var(--color-neutral-800);
-    --input-border: var(--color-neutral-700);
-
-    --ring-offset: var(--color-neutral-950);
-  }
+  /* Light mode shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
 /* ===========================================
@@ -410,14 +385,15 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* Glass Effect */
+/* Glass Effect - Dark mode default */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(18, 18, 20, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.dark .glass,
-[data-theme="dark"] .glass {
-  background: rgba(24, 24, 27, 0.8);
+[data-theme="light"] .glass {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
