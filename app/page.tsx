@@ -6,38 +6,25 @@
  * Composed of multiple sections.
  */
 
-import { Hero, About, Skills } from '@/components/sections';
+import { HeroSection, HobiSection, ShowcaseProjectsSection, BlogPreviewSection } from '@/components/sections';
 
 export default function Home() {
   return (
     <main className="relative">
       {/* Hero Section */}
-      <Hero />
+      <HeroSection />
 
-      {/* About Section */}
-      <About />
+      {/* My Activity Section - Spotify & GitHub */}
+      <HobiSection />
 
-      {/* Skills Section */}
-      <Skills />
+      {/* Showcase Projects Section */}
+      <ShowcaseProjectsSection />
+
+      {/* Blog Preview Section */}
+      <BlogPreviewSection />
 
       {/* Future sections: */}
-      {/* <Projects /> */}
-      {/* <Contact /> */}
-
-      {/* Placeholder sections for scroll testing */}
-      <section id="projects" className="min-h-screen flex items-center justify-center bg-[var(--background-secondary)]">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Projects Section</h2>
-          <p className="text-[var(--foreground-secondary)]">Coming soon...</p>
-        </div>
-      </section>
-
-      <section id="contact" className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold mb-4">Contact Section</h2>
-          <p className="text-[var(--foreground-secondary)]">Coming soon...</p>
-        </div>
-      </section>
+      {/* <Footer /> */}
     </main>
   );
 }

@@ -5,22 +5,28 @@
  * Re-export all section components for cleaner imports
  *
  * @example
- * import { Hero, About, Skills } from '@/components/sections';
+ * import { HeroSection, HobiSection, ShowcaseProjectsSection } from '@/components/sections';
  */
 
 // Hero Section
-export { Hero } from './Hero';
-export type { HeroProps } from './Hero';
+export { HeroSection } from './HeroSection';
+export type { HeroSectionProps } from './HeroSection';
 
-// About Section
-export { About } from './About';
-export type { AboutProps } from './About';
+// Hobi Section (My Activity)
+export { HobiSection } from './HobiSection';
+export type { HobiSectionProps } from './HobiSection';
 
-// Skills Section
-export { Skills } from './Skills';
-export type { SkillsProps } from './Skills';
+// Showcase Projects Section
+export { ShowcaseProjectsSection } from './ShowcaseProjectsSection';
+export type { ShowcaseProjectsSectionProps, Project } from './ShowcaseProjectsSection';
+
+// Tech Marquee Section (used inside Hero)
+export { TechMarqueeSection } from './TechMarqueeSection';
+export type { TechMarqueeSectionProps } from './TechMarqueeSection';
+
+// Blog Preview Section
+export { BlogPreviewSection } from './BlogPreviewSection';
+export type { BlogPreviewSectionProps } from './BlogPreviewSection';
 
 // Future sections:
-// export { Projects } from './Projects';
-// export { Contact } from './Contact';
-
+// export { Footer } from './Footer';
