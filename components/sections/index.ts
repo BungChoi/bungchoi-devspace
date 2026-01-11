@@ -20,7 +20,11 @@ export type { AboutProps } from './About';
 export { Skills } from './Skills';
 export type { SkillsProps } from './Skills';
 
+// Hobi Section
+export { HobiSection } from './HobiSection';
+export type { HobiSectionProps } from './HobiSection';
+
 // Future sections:
 // export { Projects } from './Projects';
-// export { Contact } from './Contact';
+// export { BlogPreview } from './BlogPreview';
 

@@ -21,11 +21,10 @@ export const SITE_CONFIG = {
 // NAVIGATION
 // ============================================
 export const NAV_ITEMS = [
-    { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Contact', href: '#contact' },
+    { label: 'Home', href: '/', isPage: false },
+    { label: 'About', href: '/about', isPage: true },
+    { label: 'Projects', href: '/projects', isPage: true },
+    { label: 'Blog', href: '/blog', isPage: true },
 ] as const;
 
 // ============================================

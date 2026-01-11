@@ -30,22 +30,19 @@ export function Navbar({ className }: NavbarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [activeSection, setActiveSection] = useState('home');
 
-    // Handle scroll effect & scroll spy
+    // Handle scroll effect & scroll spy (only for home page sections)
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
 
-            // Scroll spy - detect which section is in view
-            const sections = ['home', 'about', 'skills', 'projects', 'contact'];
-            const scrollPosition = window.scrollY + 150; // Offset for navbar height
-
-            for (const sectionId of sections) {
-                const element = document.getElementById(sectionId);
-                if (element) {
-                    const { offsetTop, offsetHeight } = element;
+            // Only run scroll spy on home page
+            if (window.location.pathname === '/') {
+                const scrollPosition = window.scrollY + 150;
+                const homeElement = document.getElementById('home');
+                if (homeElement) {
+                    const { offsetTop, offsetHeight } = homeElement;
                     if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                        setActiveSection(sectionId);
-                        break;
+                        setActiveSection('home');
                     }
                 }
             }
@@ -56,20 +53,29 @@ export function Navbar({ className }: NavbarProps) {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Handle smooth scroll to section
+    // Determine active section based on current path
+    useEffect(() => {
+        const path = window.location.pathname;
+        if (path === '/') setActiveSection('home');
+        else if (path === '/about') setActiveSection('about');
+        else if (path === '/projects') setActiveSection('projects');
+        else if (path === '/blog') setActiveSection('blog');
+    }, []);
+
+    // Handle navigation click
     const handleNavClick = (
         e: React.MouseEvent<HTMLAnchorElement>,
-        href: string
+        href: string,
+        isPage: boolean
     ) => {
-        e.preventDefault();
-        const targetId = href.replace('#', '');
-        const element = document.getElementById(targetId);
-
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            setActiveSection(targetId);
+        if (!isPage && href === '/') {
+            // Home - scroll to top on home page, or navigate to home
+            if (window.location.pathname === '/') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
-
+        // For page links, let the default navigation happen
         setIsMobileMenuOpen(false);
     };
 
@@ -95,8 +101,8 @@ export function Navbar({ className }: NavbarProps) {
                 >
                     {/* Logo/Brand */}
                     <a
-                        href="#home"
-                        onClick={(e) => handleNavClick(e, '#home')}
+                        href="/"
+                        onClick={(e) => handleNavClick(e, '/', false)}
                         className="px-4 py-2 font-bold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
                     >
                         {SITE_CONFIG.author}
@@ -104,43 +110,36 @@ export function Navbar({ className }: NavbarProps) {
 
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center gap-1">
-                        {NAV_ITEMS.filter((item) => item.label !== 'Contact').map(
-                            (item) => {
-                                const sectionId = item.href.replace('#', '');
-                                const isActive = activeSection === sectionId;
+                        {NAV_ITEMS.map((item) => {
+                            const linkPath = item.href === '/' ? 'home' : item.href.replace('/', '');
+                            const isActive = activeSection === linkPath;
 
-                                return (
-                                    <a
-                                        key={item.href}
-                                        href={item.href}
-                                        onClick={(e) => handleNavClick(e, item.href)}
-                                        className={cn(
-                                            'px-4 py-2 text-sm font-medium rounded-full',
-                                            'transition-all duration-200',
-                                            isActive
-                                                ? 'text-[var(--primary)] bg-[var(--primary)]/10'
-                                                : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
-                                        )}
-                                    >
-                                        {item.label}
-                                    </a>
-                                );
-                            }
-                        )}
+                            return (
+                                <a
+                                    key={item.href}
+                                    href={item.href}
+                                    onClick={(e) => handleNavClick(e, item.href, item.isPage)}
+                                    className={cn(
+                                        'px-4 py-2 text-sm font-medium rounded-full',
+                                        'transition-all duration-200',
+                                        isActive
+                                            ? 'text-[var(--primary)] bg-[var(--primary)]/10'
+                                            : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
+                                    )}
+                                >
+                                    {item.label}
+                                </a>
+                            );
+                        })}
                     </div>
 
-                    {/* CTA Button */}
-                    <Button
-                        size="sm"
-                        className="hidden md:inline-flex ml-2 rounded-full"
-                        onClick={() => {
-                            document.getElementById('contact')?.scrollIntoView({
-                                behavior: 'smooth',
-                            });
-                        }}
+                    {/* CTA Button - Link to About */}
+                    <a
+                        href="/about"
+                        className="hidden md:inline-flex ml-2 px-4 py-2 text-sm font-medium rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-hover)] transition-colors"
                     >
-                        Contact Me
-                    </Button>
+                        Hire Me
+                    </a>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -196,7 +195,7 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 interface MobileMenuProps {
     isOpen: boolean;
     activeSection: string;
-    onNavClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
+    onNavClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string, isPage: boolean) => void;
     onClose: () => void;
 }
 
@@ -214,14 +213,14 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                 )}
             >
                 {NAV_ITEMS.map((item) => {
-                    const sectionId = item.href.replace('#', '');
-                    const isActive = activeSection === sectionId;
+                    const linkPath = item.href === '/' ? 'home' : item.href.replace('/', '');
+                    const isActive = activeSection === linkPath;
 
                     return (
                         <a
                             key={item.href}
                             href={item.href}
-                            onClick={(e) => onNavClick(e, item.href)}
+                            onClick={(e) => onNavClick(e, item.href, item.isPage)}
                             className={cn(
                                 'px-4 py-3 text-sm font-medium rounded-xl',
                                 'transition-all duration-200',
@@ -236,17 +235,13 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                 })}
 
                 {/* Mobile CTA Button */}
-                <Button
-                    className="mt-2"
-                    onClick={() => {
-                        document.getElementById('contact')?.scrollIntoView({
-                            behavior: 'smooth',
-                        });
-                        onClose();
-                    }}
+                <a
+                    href="/about"
+                    className="mt-2 text-center py-3 px-4 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-medium"
+                    onClick={() => onClose()}
                 >
-                    Contact Me
-                </Button>
+                    Hire Me
+                </a>
             </div>
         </div>
     );
