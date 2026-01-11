@@ -2,31 +2,56 @@
  * ===========================================
  * SECTIONS BARREL EXPORT
  * ===========================================
- * Re-export all section components for cleaner imports
- *
- * @example
- * import { HeroSection, HobiSection, ShowcaseProjectsSection } from '@/components/sections';
+ * Re-export all section components organized by page
+ * 
+ * STRUCTURE:
+ * - home/    → Landing page sections (Hero, Hobi, Showcase, BlogPreview)
+ * - about/   → About page sections (Bio, Achievements, Experience)
+ * - projects/→ Projects page sections (future)
+ * - blog/    → Blog page sections (future)
  */
 
-// Hero Section
-export { HeroSection } from './HeroSection';
-export type { HeroSectionProps } from './HeroSection';
+// ============================================
+// HOME / LANDING PAGE SECTIONS
+// ============================================
+export {
+    HeroSection,
+    TechMarqueeSection,
+    HobiSection,
+    ShowcaseProjectsSection,
+    BlogPreviewSection,
+} from './home';
 
-// Hobi Section (My Activity)
-export { HobiSection } from './HobiSection';
-export type { HobiSectionProps } from './HobiSection';
+export type {
+    HeroSectionProps,
+    TechMarqueeSectionProps,
+    HobiSectionProps,
+    ShowcaseProjectsSectionProps,
+    BlogPreviewSectionProps,
+    Project,
+} from './home';
 
-// Showcase Projects Section
-export { ShowcaseProjectsSection } from './ShowcaseProjectsSection';
-export type { ShowcaseProjectsSectionProps, Project } from './ShowcaseProjectsSection';
+// ============================================
+// ABOUT PAGE SECTIONS
+// ============================================
+export {
+    BioSection,
+    AchievementsSection,
+    ExperienceSection,
+} from './about';
 
-// Tech Marquee Section (used inside Hero)
-export { TechMarqueeSection } from './TechMarqueeSection';
-export type { TechMarqueeSectionProps } from './TechMarqueeSection';
+export type {
+    BioSectionProps,
+    AchievementsSectionProps,
+    ExperienceSectionProps,
+} from './about';
 
-// Blog Preview Section
-export { BlogPreviewSection } from './BlogPreviewSection';
-export type { BlogPreviewSectionProps } from './BlogPreviewSection';
+// ============================================
+// PROJECTS PAGE SECTIONS (Future)
+// ============================================
+// export { ... } from './projects';
 
-// Future sections:
-// export { Footer } from './Footer';
+// ============================================
+// BLOG PAGE SECTIONS (Future)
+// ============================================
+// export { ... } from './blog';
