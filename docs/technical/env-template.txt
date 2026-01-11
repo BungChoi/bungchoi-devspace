@@ -1,0 +1,14 @@
+# ===========================================
+# ENVIRONMENT VARIABLES TEMPLATE
+# ===========================================
+# Copy these to your .env.local file
+
+# Spotify API (for Now Playing feature)
+# Get these from https://developer.spotify.com/dashboard
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+# Get this by visiting /api/spotify/callback after setting up above credentials
+SPOTIFY_REFRESH_TOKEN=your_spotify_refresh_token
+
+# GitHub API (optional, for activity stats)
+# GITHUB_TOKEN=your_github_personal_access_token
