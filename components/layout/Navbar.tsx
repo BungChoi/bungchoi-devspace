@@ -132,7 +132,7 @@ export function Navbar({ className }: NavbarProps) {
                     {/* CTA Button */}
                     <Button
                         size="sm"
-                        className="hidden md:inline-flex ml-2"
+                        className="hidden md:inline-flex ml-2 rounded-full"
                         onClick={() => {
                             document.getElementById('contact')?.scrollIntoView({
                                 behavior: 'smooth',

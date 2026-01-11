@@ -9,6 +9,7 @@
 
 import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { TechMarquee } from './TechMarquee';
 
 // ============================================
 // TYPES
@@ -29,7 +30,7 @@ export function Hero({ className }: HeroProps) {
         <section
             id="home"
             className={cn(
-                'relative min-h-screen flex items-center justify-center overflow-hidden',
+                'relative min-h-screen flex flex-col justify-center overflow-hidden',
                 'py-20 px-4',
                 className
             )}
@@ -38,8 +39,8 @@ export function Hero({ className }: HeroProps) {
             <HeroBackground />
 
             {/* Content Container */}
-            <div className="container max-w-5xl mx-auto relative z-10">
-                <div className="text-center">
+            <div className="container max-w-5xl mx-auto relative z-10 flex-1 flex items-center">
+                <div className="text-center w-full">
                     {/* Status Badge */}
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-[var(--primary)] text-sm font-medium mb-8">
                         <span className="relative flex h-2 w-2">
@@ -71,6 +72,9 @@ export function Hero({ className }: HeroProps) {
                     </p>
                 </div>
             </div>
+
+            {/* Tech Stack Marquee at bottom */}
+            <TechMarquee />
         </section>
     );
 }
