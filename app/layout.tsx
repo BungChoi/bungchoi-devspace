@@ -3,7 +3,7 @@ import { Geist, Geist_Mono, Playfair_Display, Space_Grotesk } from "next/font/go
 import "./globals.css";
 
 import { SITE_CONFIG } from "@/lib/constants";
-import { Navbar } from "@/components/layout";
+import { Navbar, BackgroundEffects } from "@/components/layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -84,6 +84,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}
       >
+        <BackgroundEffects />
         <Navbar />
         {children}
       </body>

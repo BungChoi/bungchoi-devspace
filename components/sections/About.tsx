@@ -79,7 +79,6 @@ export function About({ className }: AboutProps) {
             id="about"
             className={cn(
                 'relative py-20 sm:py-28',
-                'bg-[var(--background-secondary)]',
                 className
             )}
         >

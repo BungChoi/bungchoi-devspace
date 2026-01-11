@@ -84,20 +84,13 @@ export function Hero({ className }: HeroProps) {
 // ============================================
 
 /**
- * Enhanced animated background with gradient mesh
+ * Hero-specific background overlay (grid pattern only)
+ * Gradient effects are now handled by global BackgroundEffects
  */
 function HeroBackground() {
     return (
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-            {/* Base gradient */}
-            <div className="absolute inset-0 bg-[var(--background)]" />
-
-            {/* Animated gradient orbs */}
-            <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[var(--primary)] opacity-15 rounded-full blur-[120px] animate-pulse" />
-            <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-[var(--accent)] opacity-10 rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1s' }} />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--color-primary-600)] opacity-5 rounded-full blur-[100px]" />
-
-            {/* Grid pattern overlay */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+            {/* Grid pattern overlay - Hero specific */}
             <div
                 className="absolute inset-0 opacity-[0.02]"
                 style={{
@@ -106,9 +99,6 @@ function HeroBackground() {
                     backgroundSize: '60px 60px'
                 }}
             />
-
-            {/* Radial gradient for vignette effect */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
         </div>
     );
 }

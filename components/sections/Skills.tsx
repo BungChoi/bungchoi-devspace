@@ -59,16 +59,9 @@ export function Skills({ className }: SkillsProps) {
             id="skills"
             className={cn(
                 'relative py-20 sm:py-28',
-                'bg-[var(--background)]',
                 className
             )}
         >
-            {/* Background decoration */}
-            <div className="absolute inset-0 -z-10">
-                <div className="absolute top-1/2 left-0 w-96 h-96 bg-[var(--primary)] opacity-5 rounded-full blur-[150px]" />
-                <div className="absolute bottom-0 right-0 w-80 h-80 bg-[var(--accent)] opacity-5 rounded-full blur-[120px]" />
-            </div>
-
             <div className="container max-w-6xl mx-auto px-4">
                 {/* Section Header */}
                 <div className="text-center mb-16">
