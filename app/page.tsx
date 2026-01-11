@@ -6,20 +6,22 @@
  * Composed of multiple sections.
  */
 
-import { Hero, HobiSection } from '@/components/sections';
+import { HeroSection, HobiSection, ShowcaseProjectsSection } from '@/components/sections';
 
 export default function Home() {
   return (
     <main className="relative">
       {/* Hero Section */}
-      <Hero />
+      <HeroSection />
 
-      {/* Hobi Section - Spotify & GitHub */}
+      {/* My Activity Section - Spotify & GitHub */}
       <HobiSection />
 
+      {/* Showcase Projects Section */}
+      <ShowcaseProjectsSection />
+
       {/* Future sections: */}
-      {/* <ShowcaseProjects /> */}
-      {/* <BlogPreview /> */}
+      {/* <BlogPreviewSection /> */}
       {/* <Footer /> */}
     </main>
   );

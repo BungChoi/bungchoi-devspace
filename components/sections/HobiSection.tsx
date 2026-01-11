@@ -230,17 +230,12 @@ function SpotifyCard() {
 }
 
 // ============================================
-// GITHUB CARD
-// ============================================
-
-// ============================================
 // GITHUB CARD - Fetches from API
 // ============================================
 
 interface GitHubApiResponse extends NowPlayingResponse {
     isConfigured?: boolean;
     error?: string;
-    // Add GitHub specific fields matching the API response
     username?: string;
     profileUrl?: string;
     totalContributions?: number;
@@ -268,7 +263,6 @@ function GitHubCard({ data: initialData }: { data?: any }) {
             } catch (e) {
                 console.error(e);
             }
-            // Fallback to initial mock data or error state if fetch fails
             setLoading(false);
         }
 
@@ -283,15 +277,10 @@ function GitHubCard({ data: initialData }: { data?: any }) {
         'bg-[var(--primary)]',
     ];
 
-    // Use fetched data or fallback
-    // Note: The structure of API response matches what we need
     const displayData = data || initialData;
     const calendar = displayData?.contributionCalendar || displayData?.contributions || [];
     const monthLabels = displayData?.monthLabels || [];
     const totalWeeks = calendar[0]?.length || 0;
-
-    // Check if we have valid data to display
-    const hasData = displayData && (displayData.totalContributions !== undefined || displayData.contributions);
 
     return (
         <div className={cn(

@@ -15,7 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 // TYPES
 // ============================================
 
-interface TechMarqueeProps {
+interface TechMarqueeSectionProps {
     className?: string;
     speed?: number; // pixels per second
 }
@@ -124,7 +124,7 @@ function TechItemDisplay({ tech }: { tech: TechItem }) {
 // COMPONENT
 // ============================================
 
-export function TechMarquee({ className, speed = 50 }: TechMarqueeProps) {
+export function TechMarqueeSection({ className, speed = 50 }: TechMarqueeSectionProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const trackRef = useRef<HTMLDivElement>(null);
     const [isPaused, setIsPaused] = useState(false);
@@ -222,4 +222,4 @@ export function TechMarquee({ className, speed = 50 }: TechMarqueeProps) {
 // EXPORTS
 // ============================================
 
-export type { TechMarqueeProps };
+export type { TechMarqueeSectionProps };

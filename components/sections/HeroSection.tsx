@@ -9,13 +9,13 @@
 
 import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { TechMarquee } from './TechMarquee';
+import { TechMarqueeSection } from './TechMarqueeSection';
 
 // ============================================
 // TYPES
 // ============================================
 
-interface HeroProps {
+interface HeroSectionProps {
     className?: string;
 }
 
@@ -23,7 +23,7 @@ interface HeroProps {
 // COMPONENT
 // ============================================
 
-export function Hero({ className }: HeroProps) {
+export function HeroSection({ className }: HeroSectionProps) {
     const { name, title } = personalInfo;
 
     return (
@@ -74,7 +74,7 @@ export function Hero({ className }: HeroProps) {
             </div>
 
             {/* Tech Stack Marquee at bottom */}
-            <TechMarquee />
+            <TechMarqueeSection />
         </section>
     );
 }
@@ -107,4 +107,4 @@ function HeroBackground() {
 // EXPORTS
 // ============================================
 
-export type { HeroProps };
+export type { HeroSectionProps };
