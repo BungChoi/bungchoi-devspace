@@ -120,9 +120,9 @@ function SpotifyCard() {
     if (loading) {
         return (
             <div className={cn(
-                'p-6 rounded-2xl',
+                'p-6 rounded-xl',
                 'bg-[var(--background)]/40 backdrop-blur-xl',
-                'border border-[var(--border)]/50',
+                'border border-[var(--primary)]/30',
                 'shadow-xl animate-pulse'
             )}>
                 <div className="flex items-center justify-between mb-6">
@@ -144,9 +144,9 @@ function SpotifyCard() {
     if (!data?.isConfigured) {
         return (
             <div className={cn(
-                'p-6 rounded-2xl',
+                'p-6 rounded-xl',
                 'bg-[var(--background)]/40 backdrop-blur-xl',
-                'border border-[var(--border)]/50',
+                'border border-[var(--primary)]/30',
                 'shadow-xl'
             )}>
                 <div className="flex items-center justify-between mb-6">
@@ -179,9 +179,9 @@ function SpotifyCard() {
 
     return (
         <div className={cn(
-            'p-6 rounded-2xl',
+            'p-6 rounded-xl',
             'bg-[var(--background)]/40 backdrop-blur-xl',
-            'border border-[var(--border)]/50',
+            'border border-[var(--primary)]/30',
             'shadow-xl'
         )}>
             {/* Header */}
@@ -233,11 +233,48 @@ function SpotifyCard() {
 // GITHUB CARD
 // ============================================
 
-interface GitHubCardProps {
-    data: typeof githubData;
+// ============================================
+// GITHUB CARD - Fetches from API
+// ============================================
+
+interface GitHubApiResponse extends NowPlayingResponse {
+    isConfigured?: boolean;
+    error?: string;
+    // Add GitHub specific fields matching the API response
+    username?: string;
+    profileUrl?: string;
+    totalContributions?: number;
+    lastCommitDate?: string;
+    longestStreak?: number;
+    currentStreak?: number;
+    contributionCalendar?: number[][];
+    monthLabels?: { month: string; position: number }[];
 }
 
-function GitHubCard({ data }: GitHubCardProps) {
+function GitHubCard({ data: initialData }: { data?: any }) {
+    const [data, setData] = useState<GitHubApiResponse | null>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchGitHubStats() {
+            try {
+                const response = await fetch('/api/github/stats');
+                const json = await response.json();
+                if (response.ok && json.isConfigured) {
+                    setData(json);
+                    setLoading(false);
+                    return;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+            // Fallback to initial mock data or error state if fetch fails
+            setLoading(false);
+        }
+
+        fetchGitHubStats();
+    }, []);
+
     const levelColors = [
         'bg-[var(--background-tertiary)]',
         'bg-[var(--primary)]/20',
@@ -246,19 +283,29 @@ function GitHubCard({ data }: GitHubCardProps) {
         'bg-[var(--primary)]',
     ];
 
+    // Use fetched data or fallback
+    // Note: The structure of API response matches what we need
+    const displayData = data || initialData;
+    const calendar = displayData?.contributionCalendar || displayData?.contributions || [];
+    const monthLabels = displayData?.monthLabels || [];
+    const totalWeeks = calendar[0]?.length || 0;
+
+    // Check if we have valid data to display
+    const hasData = displayData && (displayData.totalContributions !== undefined || displayData.contributions);
+
     return (
         <div className={cn(
-            'p-6 rounded-2xl',
+            'p-6 rounded-xl',
             'bg-[var(--background)]/40 backdrop-blur-xl',
-            'border border-[var(--border)]/50',
+            'border border-[var(--primary)]/30',
             'shadow-xl'
         )}>
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-widest">
                     GitHub Activity
                 </span>
                 <a
-                    href={data.profileUrl}
+                    href={displayData?.profileUrl || "https://github.com"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-[var(--primary)] hover:underline"
@@ -267,39 +314,77 @@ function GitHubCard({ data }: GitHubCardProps) {
                 </a>
             </div>
 
-            <div className="mb-4 overflow-x-auto">
-                <div className="flex flex-col gap-1 min-w-[280px]">
-                    {data.contributions.map((row, rowIndex) => (
-                        <div key={rowIndex} className="flex gap-1">
-                            {row.map((level, colIndex) => (
-                                <div
-                                    key={colIndex}
-                                    className={cn('w-3 h-3 rounded-sm', levelColors[level])}
-                                />
+            {loading ? (
+                <div className="animate-pulse space-y-4">
+                    <div className="h-24 bg-[var(--background-tertiary)] rounded-md"></div>
+                    <div className="h-4 w-1/2 bg-[var(--background-tertiary)] rounded"></div>
+                </div>
+            ) : (
+                <>
+                    {/* Month Labels */}
+                    <div className="mb-1 overflow-x-auto">
+                        <div className="relative" style={{ minWidth: `${totalWeeks * 11}px` }}>
+                            <div className="flex text-xs text-[var(--foreground-muted)]">
+                                {monthLabels.map((label: { month: string; position: number }, idx: number) => (
+                                    <span
+                                        key={idx}
+                                        className="absolute"
+                                        style={{ left: `${label.position * 11}px` }}
+                                    >
+                                        {label.month}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Contribution Graph */}
+                    <div className="mb-4 overflow-x-auto pb-2">
+                        <div className="flex flex-col gap-[3px]" style={{ minWidth: `${totalWeeks * 15}px` }}>
+                            {calendar.map((row: number[], rowIndex: number) => (
+                                <div key={rowIndex} className="flex gap-[3px]">
+                                    {row.map((level, colIndex) => (
+                                        <div
+                                            key={colIndex}
+                                            className={cn('w-[12px] h-[12px] rounded-[2px]', levelColors[level])}
+                                        />
+                                    ))}
+                                </div>
                             ))}
                         </div>
-                    ))}
-                </div>
-            </div>
+                    </div>
 
-            <p className="text-sm text-[var(--foreground-secondary)] mb-4">
-                {data.totalContributions.toLocaleString()} contributions in the last year
-            </p>
+                    {/* Footer: Total + Legend */}
+                    <div className="flex items-center justify-between text-xs text-[var(--foreground-muted)] mb-4">
+                        <span>
+                            {displayData?.totalContributions?.toLocaleString()} contributions in the last year
+                        </span>
+                        <div className="flex items-center gap-1">
+                            <span>Less</span>
+                            {levelColors.map((color, idx) => (
+                                <div key={idx} className={cn('w-[9px] h-[9px] rounded-sm', color)} />
+                            ))}
+                            <span>More</span>
+                        </div>
+                    </div>
 
-            <div className="grid grid-cols-3 gap-3">
-                <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
-                    <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Last Commit</p>
-                    <p className="font-semibold text-[var(--foreground)]">{data.lastCommit}</p>
-                </div>
-                <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
-                    <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Longest Streak</p>
-                    <p className="font-semibold text-[var(--foreground)]">{data.longestStreak} days</p>
-                </div>
-                <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
-                    <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Contributions</p>
-                    <p className="font-semibold text-[var(--foreground)]">{data.totalContributions.toLocaleString()}</p>
-                </div>
-            </div>
+                    {/* Stats Cards */}
+                    <div className="grid grid-cols-3 gap-3">
+                        <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
+                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Last Commit</p>
+                            <p className="font-semibold text-[var(--foreground)] text-sm">{displayData?.lastCommitDate || '-'}</p>
+                        </div>
+                        <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
+                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Longest Streak</p>
+                            <p className="font-semibold text-[var(--foreground)]">{displayData?.longestStreak} days</p>
+                        </div>
+                        <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
+                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Contributions</p>
+                            <p className="font-semibold text-[var(--foreground)]">{displayData?.totalContributions?.toLocaleString()}</p>
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     );
 }
