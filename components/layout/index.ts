@@ -16,5 +16,9 @@ export type { NavbarProps } from './Navbar';
 export { BackgroundEffects } from './BackgroundEffects';
 export type { BackgroundEffectsProps } from './BackgroundEffects';
 
+// Footer
+export { Footer } from './Footer';
+export type { FooterProps } from './Footer';
+
 // Future layout components:
-// export { Footer } from './Footer';
+// export { Sidebar } from './Sidebar';

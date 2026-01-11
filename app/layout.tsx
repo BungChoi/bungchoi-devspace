@@ -3,7 +3,7 @@ import { Geist, Geist_Mono, Playfair_Display, Space_Grotesk } from "next/font/go
 import "./globals.css";
 
 import { SITE_CONFIG } from "@/lib/constants";
-import { Navbar, BackgroundEffects } from "@/components/layout";
+import { Navbar, BackgroundEffects, Footer } from "@/components/layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -87,6 +87,7 @@ export default function RootLayout({
         <BackgroundEffects />
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );

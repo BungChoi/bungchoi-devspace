@@ -24,5 +24,9 @@ export type { ShowcaseProjectsSectionProps, Project } from './ShowcaseProjectsSe
 export { TechMarqueeSection } from './TechMarqueeSection';
 export type { TechMarqueeSectionProps } from './TechMarqueeSection';
 
+// Blog Preview Section
+export { BlogPreviewSection } from './BlogPreviewSection';
+export type { BlogPreviewSectionProps } from './BlogPreviewSection';
+
 // Future sections:
-// export { BlogPreviewSection } from './BlogPreviewSection';
+// export { Footer } from './Footer';

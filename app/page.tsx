@@ -6,7 +6,7 @@
  * Composed of multiple sections.
  */
 
-import { HeroSection, HobiSection, ShowcaseProjectsSection } from '@/components/sections';
+import { HeroSection, HobiSection, ShowcaseProjectsSection, BlogPreviewSection } from '@/components/sections';
 
 export default function Home() {
   return (
@@ -20,8 +20,10 @@ export default function Home() {
       {/* Showcase Projects Section */}
       <ShowcaseProjectsSection />
 
+      {/* Blog Preview Section */}
+      <BlogPreviewSection />
+
       {/* Future sections: */}
-      {/* <BlogPreviewSection /> */}
       {/* <Footer /> */}
     </main>
   );
