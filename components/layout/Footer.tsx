@@ -13,10 +13,18 @@ import { cn } from '@/lib/utils';
 import { personalInfo } from '@/lib/data';
 
 // ============================================
+// TYPES
+// ============================================
+
+interface FooterProps {
+    className?: string;
+}
+
+// ============================================
 // COMPONENT
 // ============================================
 
-export function Footer() {
+export function Footer({ className }: FooterProps) {
     const currentYear = new Date().getFullYear();
 
     return (
@@ -175,3 +183,9 @@ const SOCIAL_LINKS = [
         ),
     },
 ];
+
+// ============================================
+// EXPORTS
+// ============================================
+
+export type { FooterProps };

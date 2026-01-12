@@ -37,20 +37,6 @@ export const experiences: Experience[] = [
         ],
         technologies: ['Flutter', 'React', 'Node.js'],
     },
-    {
-        id: 'work-2',
-        company: 'Tech Startup',
-        position: 'Junior Developer',
-        startDate: 'Jun 2023',
-        endDate: 'Dec 2023',
-        description: 'Contributed to mobile and web development projects in a startup environment.',
-        achievements: [
-            'Built UI components following design specifications',
-            'Collaborated with senior developers on feature implementation',
-            'Participated in code reviews and agile sprints',
-        ],
-        technologies: ['Flutter', 'React', 'Node.js'],
-    },
 ];
 
 export const educations: Education[] = [

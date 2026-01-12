@@ -47,11 +47,20 @@ export type {
 } from './about';
 
 // ============================================
-// PROJECTS PAGE SECTIONS (Future)
+// PROJECTS PAGE SECTIONS
 // ============================================
-// export { ... } from './projects';
+export {
+    ProjectsHeaderSection,
+    ProjectsGridSection,
+} from './projects';
+
+export type {
+    ProjectsHeaderSectionProps,
+    ProjectsGridSectionProps,
+} from './projects';
 
 // ============================================
 // BLOG PAGE SECTIONS (Future)
 // ============================================
 // export { ... } from './blog';
+
