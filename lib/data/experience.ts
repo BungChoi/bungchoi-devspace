@@ -2,7 +2,7 @@
  * ===========================================
  * EXPERIENCE DATA
  * ===========================================
- * Work history - UPDATE THIS!
+ * Work & Education history - REAL DATA
  */
 
 import type { Experience, Education } from '../types';
@@ -10,59 +10,42 @@ import type { Experience, Education } from '../types';
 export const experiences: Experience[] = [
     {
         id: 'work-1',
-        company: 'Freelance',
-        position: 'Mobile Developer',
-        startDate: 'Jan 2024',
-        endDate: undefined, // Current position
-        description: 'Building cross-platform mobile applications using Flutter for various clients.',
+        company: 'Nodewave',
+        position: 'Mobile Developer (Internship)',
+        startDate: 'Agustus 2024',
+        endDate: 'Desember 2024',
+        description: 'Mengembangkan aplikasi ERP Mobile untuk perusahaan Jepang dengan fokus fitur absensi, izin kerja, rincian gaji, dan shift management.',
         achievements: [
-            'Developed 5+ mobile applications from concept to deployment',
-            'Implemented clean architecture patterns for scalable codebases',
-            'Integrated various APIs including payment gateways and social logins',
-            'Maintained 4.5+ star ratings on app stores',
+            'Mengembangkan aplikasi ERP Mobile menggunakan Flutter dan GetX untuk state management',
+            'Melakukan slicing design sesuai dokumentasi kode dan menerapkan Clean Architecture',
+            'Mengimplementasikan fitur izin kerja dan rincian gaji dengan integrasi REST API',
+            'Mengimplementasikan localization untuk pengguna multibahasa',
+            'Berhasil menyelesaikan aplikasi dalam 3 bulan sesuai ketentuan proyek',
         ],
-        technologies: ['Flutter', 'Dart', 'Firebase', 'GetX', 'REST API'],
-    },
-    {
-        id: 'work-2',
-        company: 'Tech Startup',
-        position: 'Junior Developer',
-        startDate: 'Jun 2023',
-        endDate: 'Dec 2023',
-        description: 'Contributed to mobile and web development projects in a startup environment.',
-        achievements: [
-            'Built UI components following design specifications',
-            'Collaborated with senior developers on feature implementation',
-            'Participated in code reviews and agile sprints',
-        ],
-        technologies: ['Flutter', 'React', 'Node.js'],
-    },
-    {
-        id: 'work-2',
-        company: 'Tech Startup',
-        position: 'Junior Developer',
-        startDate: 'Jun 2023',
-        endDate: 'Dec 2023',
-        description: 'Contributed to mobile and web development projects in a startup environment.',
-        achievements: [
-            'Built UI components following design specifications',
-            'Collaborated with senior developers on feature implementation',
-            'Participated in code reviews and agile sprints',
-        ],
-        technologies: ['Flutter', 'React', 'Node.js'],
+        technologies: ['Flutter', 'Dart', 'GetX', 'REST API', 'Clean Architecture'],
     },
 ];
 
 export const educations: Education[] = [
     {
         id: 'edu-1',
-        institution: 'University Name',
-        degree: 'Bachelor',
-        field: 'Informatics Engineering',
-        startDate: '2020',
-        endDate: '2024',
-        description: 'Focused on software engineering and mobile application development.',
-        gpa: '3.8',
+        institution: 'Politeknik Negeri Jember',
+        degree: 'Sarjana Terapan (S.Tr.)',
+        field: 'Teknik Informatika',
+        startDate: '2021',
+        endDate: 'Sekarang',
+        description: 'Mata Kuliah Relevan: Interaksi Manusia dan Komputer, Algoritma, Struktur Data, Workshop Mobile Applications, Workshop Mobile Applications Framework.',
+        gpa: '3.82',
+    },
+    {
+        id: 'edu-2',
+        institution: 'MSIB Studi Independen Batch 6 - Infinite Learning',
+        degree: 'Sertifikasi',
+        field: 'Android Mobile Development & UI/UX Design',
+        startDate: 'Feb 2024',
+        endDate: 'Juli 2024',
+        description: 'Materi pembelajaran: UI/UX Design, Kotlin - Jetpack Compose, Project Management. Capstone Project: Savor Craft & Nusa Guide.',
+        gpa: '89.3',
     },
 ];
 

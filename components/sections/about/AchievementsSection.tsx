@@ -4,11 +4,12 @@
  * ===========================================
  * ACHIEVEMENTS SECTION - ABOUT PAGE
  * ===========================================
- * Academic awards, certifications, and achievements
- * during college/career. Vertical list with certificate links.
+ * Academic awards, certifications, and achievements.
+ * Data imported from lib/data/achievements.ts
  */
 
 import { cn } from '@/lib/utils';
+import { achievements, type Achievement } from '@/lib/data';
 
 // ============================================
 // TYPES
@@ -17,61 +18,6 @@ import { cn } from '@/lib/utils';
 interface AchievementsSectionProps {
     className?: string;
 }
-
-interface Achievement {
-    id: string;
-    title: string;
-    issuer: string;
-    date: string;
-    description?: string;
-    certificateUrl?: string;
-}
-
-// ============================================
-// ACHIEVEMENTS DATA - UPDATE THIS!
-// ============================================
-
-const achievements: Achievement[] = [
-    {
-        id: '1',
-        title: 'Best Final Project Award',
-        issuer: 'Informatics Department',
-        date: '2024',
-        description: 'Awarded for developing an innovative cross-platform e-commerce mobile application.',
-        certificateUrl: '/certificates/best-project.pdf',
-    },
-    {
-        id: '2',
-        title: 'Google Developer Student Club Lead',
-        issuer: 'Google Developers',
-        date: '2023 - 2024',
-        description: 'Selected as campus lead to organize tech workshops and hackathons.',
-        certificateUrl: '/certificates/gdsc-lead.pdf',
-    },
-    {
-        id: '3',
-        title: 'Bangkit Academy Graduate',
-        issuer: 'Google, Tokopedia, Gojek, Traveloka',
-        date: '2023',
-        description: 'Completed intensive mobile development track with distinction.',
-        certificateUrl: '/certificates/bangkit.pdf',
-    },
-    {
-        id: '4',
-        title: 'Flutter Forward Extended Speaker',
-        issuer: 'Google Developer Groups',
-        date: '2023',
-        description: 'Presented on state management best practices to 100+ developers.',
-        certificateUrl: '/certificates/flutter-forward.pdf',
-    },
-    {
-        id: '5',
-        title: 'Dean\'s List',
-        issuer: 'University',
-        date: '2022 - 2024',
-        description: 'Recognized for outstanding academic performance with GPA above 3.5.',
-    },
-];
 
 // ============================================
 // COMPONENT
