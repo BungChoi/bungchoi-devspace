@@ -14,14 +14,14 @@ export const projects: Project[] = [
         description: 'Aplikasi mobile pemesanan tiket pesawat dan layanan porter dengan dua hak akses: penumpang dan jasa porter. Proyek Skripsi.',
         longDescription: `Aplikasi mobile pemesanan tiket pesawat dan layanan porter dengan dua hak akses: penumpang dan jasa porter.
 
-Fitur utama:
-• Pemesanan tiket pesawat
-• Riwayat transaksi tiket
-• Scan QR porter
-• Antrian porter (sistem FIFO)
-• Riwayat transaksi porter
+        Fitur utama:
+        • Pemesanan tiket pesawat
+        • Riwayat transaksi tiket
+        • Scan QR porter
+        • Antrian porter (sistem FIFO)
+        • Riwayat transaksi porter
 
-Dikembangkan menggunakan Flutter dengan GetX untuk state management dan Firebase sebagai database.`,
+        Dikembangkan menggunakan Flutter dengan GetX untuk state management dan Firebase sebagai database.`,
         image: '/images/projects/e-porter.png',
         tags: ['Flutter', 'Dart', 'GetX', 'Firebase', 'UI/UX Design'],
         githubUrl: 'https://github.com/orangdeso/e-porter',
@@ -34,11 +34,11 @@ Dikembangkan menggunakan Flutter dengan GetX untuk state management dan Firebase
         description: 'Aplikasi pendamping membaca (reading companion) untuk mengubah kutipan & ide dari buku menjadi pengetahuan yang bertahan lama.',
         longDescription: `Aplikasi pendamping membaca (reading companion) untuk mengubah kutipan & ide dari buku menjadi pengetahuan yang bertahan lama.
 
-Dikembangkan dengan:
-• Slicing desain UI yang responsif & intuitif
-• Pola Clean Architecture
-• State management menggunakan BLoC
-• Integrasi dengan layanan backend melalui konsumsi API`,
+        Dikembangkan dengan:
+        • Slicing desain UI yang responsif & intuitif
+        • Pola Clean Architecture
+        • State management menggunakan BLoC
+        • Integrasi dengan layanan backend melalui konsumsi API`,
         image: '/images/projects/orymu.png',
         tags: ['Flutter', 'Dart', 'BLoC', 'Clean Architecture'],
         featured: true,
@@ -50,13 +50,13 @@ Dikembangkan dengan:
         description: 'Aplikasi mobile terintegrasi dengan website untuk membantu pengelolaan data kegiatan PKK. Kerjasama dengan Diskominfo & PKK Nganjuk.',
         longDescription: `Aplikasi mobile terintegrasi dengan website untuk membantu pengelolaan data kegiatan PKK. Proyek bekerja sama dengan Diskominfo Nganjuk dan PKK Nganjuk.
 
-Kontribusi:
-• Riset dengan Diskominfo & PKK untuk identifikasi permasalahan utama
-• Mendesain antarmuka berdasarkan solusi & kebutuhan pengguna PKK Nganjuk
-• Mengembangkan aplikasi menggunakan Flutter & Dart
-• Fitur upload laporan dan galeri terintegrasi dengan website melalui REST API
+        Kontribusi:
+        • Riset dengan Diskominfo & PKK untuk identifikasi permasalahan utama
+        • Mendesain antarmuka berdasarkan solusi & kebutuhan pengguna PKK Nganjuk
+        • Mengembangkan aplikasi menggunakan Flutter & Dart
+        • Fitur upload laporan dan galeri terintegrasi dengan website melalui REST API
 
-Penghargaan: Juara 2 TIF Exhibition & Best Poster Expo Pekan Ilmiah Mahasiswa 2023.`,
+        Penghargaan: Juara 2 TIF Exhibition & Best Poster Expo Pekan Ilmiah Mahasiswa 2023.`,
         image: '/images/projects/e-pkk.png',
         tags: ['Flutter', 'Dart', 'REST API', 'MySQL', 'UI/UX Design'],
         featured: true,
@@ -68,11 +68,11 @@ Penghargaan: Juara 2 TIF Exhibition & Best Poster Expo Pekan Ilmiah Mahasiswa 20
         description: 'Aplikasi mobile untuk memonitoring penyortiran tomat otomatis yang terintegrasi dengan IoT dan sistem klasifikasi tomat matang/mentah.',
         longDescription: `Aplikasi mobile untuk memonitoring penyortiran tomat otomatis yang terintegrasi dengan IoT dan sistem cerdas untuk klasifikasi tomat matang/mentah.
 
-Kontribusi:
-• Mengumpulkan kebutuhan pengguna melalui wawancara & observasi
-• Membuat desain antarmuka sesuai data kebutuhan pengguna
-• Mengembangkan aplikasi menggunakan Flutter & Dart
-• Integrasi dengan IoT pada sistem penyortiran tomat melalui REST API (PHP) dan MySQL`,
+        Kontribusi:
+        • Mengumpulkan kebutuhan pengguna melalui wawancara & observasi
+        • Membuat desain antarmuka sesuai data kebutuhan pengguna
+        • Mengembangkan aplikasi menggunakan Flutter & Dart
+        • Integrasi dengan IoT pada sistem penyortiran tomat melalui REST API (PHP) dan MySQL`,
         image: '/images/projects/tomatify.png',
         tags: ['Flutter', 'Dart', 'REST API', 'MySQL', 'IoT', 'UI/UX Design'],
         featured: false,

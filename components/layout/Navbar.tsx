@@ -133,6 +133,26 @@ export function Navbar({ className }: NavbarProps) {
                         })}
                     </div>
 
+                    {/* Language Switch */}
+                    <div className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--background-tertiary)]/50">
+                        <button
+                            className={cn(
+                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
+                                'text-[var(--primary)] bg-[var(--primary)]/10'
+                            )}
+                        >
+                            ID
+                        </button>
+                        <button
+                            className={cn(
+                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
+                                'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+                            )}
+                        >
+                            EN
+                        </button>
+                    </div>
+
                     {/* CTA Button - Link to About */}
                     <a
                         href="/about"
@@ -233,6 +253,28 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                         </a>
                     );
                 })}
+                {/* Mobile Language Switch */}
+                <div className="flex items-center justify-center gap-2 mt-2 py-2">
+                    <span className="text-xs text-[var(--foreground-muted)]">Language:</span>
+                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--background-tertiary)]/50">
+                        <button
+                            className={cn(
+                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
+                                'text-[var(--primary)] bg-[var(--primary)]/10'
+                            )}
+                        >
+                            ID
+                        </button>
+                        <button
+                            className={cn(
+                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
+                                'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
+                            )}
+                        >
+                            EN
+                        </button>
+                    </div>
+                </div>
 
                 {/* Mobile CTA Button */}
                 <a
