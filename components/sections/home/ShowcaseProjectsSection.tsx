@@ -9,7 +9,8 @@
  * Data imported from lib/data/projects.ts
  */
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { projects } from '@/lib/data';
 import type { Project } from '@/lib/types';
@@ -27,6 +28,9 @@ interface ShowcaseProjectsSectionProps {
 // ============================================
 
 export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionProps) {
+    const t = useTranslations('sections');
+    const tCommon = useTranslations('common');
+
     // Get 4 latest projects sorted by year (descending)
     const latestProjects = [...projects]
         .sort((a, b) => (b.year || 0) - (a.year || 0))
@@ -44,13 +48,13 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">
-                        My Work
+                        {t('myWork')}
                     </span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
-                        Featured <span className="text-gradient">Projects</span>
+                        {t('featuredProjects').split(' ')[0]} <span className="text-gradient">{t('featuredProjects').split(' ').slice(1).join(' ') || 'Projects'}</span>
                     </h2>
                     <p className="mt-4 text-[var(--foreground-secondary)] max-w-2xl mx-auto">
-                        A showcase of my best work, from mobile apps to full-stack solutions
+                        {t('featuredProjectsDesc')}
                     </p>
                 </div>
 
@@ -73,7 +77,7 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                             'shadow-lg shadow-[var(--primary)]/25'
                         )}
                     >
-                        See All Projects
+                        {tCommon('viewAllProjects')}
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>

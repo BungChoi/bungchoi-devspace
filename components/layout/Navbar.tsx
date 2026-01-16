@@ -9,7 +9,9 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui';
+import { useTranslations } from 'next-intl';
+import { LanguageSwitcher } from '@/components/ui';
+import { Link, usePathname } from '@/lib/i18n/navigation';
 import { SITE_CONFIG, NAV_ITEMS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
@@ -28,38 +30,28 @@ interface NavbarProps {
 export function Navbar({ className }: NavbarProps) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState('home');
+    const pathname = usePathname(); // Locale-aware pathname (e.g., /about not /id/about)
 
-    // Handle scroll effect & scroll spy (only for home page sections)
+    // Determine active section based on current path
+    const getActiveSection = () => {
+        if (pathname === '/') return 'home';
+        if (pathname.startsWith('/about')) return 'about';
+        if (pathname.startsWith('/projects')) return 'projects';
+        if (pathname.startsWith('/blog')) return 'blog';
+        return 'home';
+    };
+
+    const activeSection = getActiveSection();
+
+    // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
-
-            // Only run scroll spy on home page
-            if (window.location.pathname === '/') {
-                const scrollPosition = window.scrollY + 150;
-                const homeElement = document.getElementById('home');
-                if (homeElement) {
-                    const { offsetTop, offsetHeight } = homeElement;
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                        setActiveSection('home');
-                    }
-                }
-            }
         };
 
         window.addEventListener('scroll', handleScroll);
         handleScroll(); // Run on mount
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    // Determine active section based on current path
-    useEffect(() => {
-        const path = window.location.pathname;
-        if (path === '/') setActiveSection('home');
-        else if (path === '/about') setActiveSection('about');
-        else if (path === '/projects') setActiveSection('projects');
-        else if (path === '/blog') setActiveSection('blog');
     }, []);
 
     // Handle navigation click
@@ -134,24 +126,7 @@ export function Navbar({ className }: NavbarProps) {
                     </div>
 
                     {/* Language Switch */}
-                    <div className="hidden md:flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--background-tertiary)]/50">
-                        <button
-                            className={cn(
-                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
-                                'text-[var(--primary)] bg-[var(--primary)]/10'
-                            )}
-                        >
-                            ID
-                        </button>
-                        <button
-                            className={cn(
-                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
-                                'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
-                            )}
-                        >
-                            EN
-                        </button>
-                    </div>
+                    <LanguageSwitcher className="hidden md:flex" />
 
                     {/* CTA Button - Link to About */}
                     <a
@@ -254,27 +229,7 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                     );
                 })}
                 {/* Mobile Language Switch */}
-                <div className="flex items-center justify-center gap-2 mt-2 py-2">
-                    <span className="text-xs text-[var(--foreground-muted)]">Language:</span>
-                    <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--background-tertiary)]/50">
-                        <button
-                            className={cn(
-                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
-                                'text-[var(--primary)] bg-[var(--primary)]/10'
-                            )}
-                        >
-                            ID
-                        </button>
-                        <button
-                            className={cn(
-                                'px-2 py-1 text-xs font-medium rounded-full transition-all',
-                                'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
-                            )}
-                        >
-                            EN
-                        </button>
-                    </div>
-                </div>
+                <LanguageSwitcher showLabel className="justify-center mt-2 py-2" />
 
                 {/* Mobile CTA Button */}
                 <a
