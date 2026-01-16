@@ -1,0 +1,69 @@
+{
+    "common": {
+        "hireMe": "Hire Me",
+        "viewProject": "View Project",
+        "viewDetails": "View Details",
+        "viewAll": "View All",
+        "viewAllProjects": "See All Projects",
+        "viewAllArticles": "See All Articles",
+        "backTo": "Back to",
+        "backToProjects": "Back to All Projects",
+        "downloadCV": "Download CV",
+        "viewCertificate": "View Certificate",
+        "viewSourceCode": "View Source Code",
+        "liveDemo": "Live Demo",
+        "code": "Code"
+    },
+    "navbar": {
+        "home": "Home",
+        "about": "About",
+        "projects": "Projects",
+        "blog": "Blog"
+    },
+    "hero": {
+        "greeting": "Hi, I'm",
+        "available": "Available for projects",
+        "subtitle": "I'm passionate about creating seamless user experiences and writing clean, maintainable code."
+    },
+    "sections": {
+        "myWork": "My Work",
+        "featuredProjects": "Featured Projects",
+        "featuredProjectsDesc": "A showcase of my best work, from mobile apps to full-stack solutions",
+        "latestArticles": "Latest Articles",
+        "latestArticlesDesc": "Thoughts, tutorials, and insights about mobile development",
+        "aboutMe": "About Me",
+        "recognition": "Recognition",
+        "awardsAndCertifications": "Awards & Certifications",
+        "awardsDesc": "Achievements and recognitions earned throughout my academic and professional journey.",
+        "experience": "Experience",
+        "experienceAndEducation": "Experience & Education",
+        "experienceDesc": "My professional journey and academic background in software development.",
+        "techStack": "Tech Stack"
+    },
+    "about": {
+        "stats": {
+            "projects": "Projects",
+            "yearsExp": "Years Exp",
+            "certificates": "Certificates"
+        }
+    },
+    "projects": {
+        "title": "Featured Projects",
+        "description": "A collection of {count} projects I've worked on, from mobile apps to web applications.",
+        "featured": "Featured",
+        "aboutProject": "About This Project"
+    },
+    "blog": {
+        "title": "Blog & Articles",
+        "readMore": "Read More",
+        "minRead": "min read"
+    },
+    "footer": {
+        "tagline": "Passionate Mobile Developer crafting beautiful, performant, and scalable digital experiences.",
+        "navigation": "Navigation",
+        "contact": "Contact",
+        "availableForWork": "Available for work",
+        "copyright": "© {year} Ahmad Choirul Umam Ali Rozaqi. All rights reserved.",
+        "builtWith": "Built with Next.js, Tailwind CSS & ☕"
+    }
+}
