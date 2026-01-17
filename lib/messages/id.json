@@ -1,0 +1,69 @@
+{
+    "common": {
+        "hireMe": "Hubungi Saya",
+        "viewProject": "Lihat Proyek",
+        "viewDetails": "Lihat Detail",
+        "viewAll": "Lihat Semua",
+        "viewAllProjects": "Lihat Semua Proyek",
+        "viewAllArticles": "Lihat Semua Artikel",
+        "backTo": "Kembali ke",
+        "backToProjects": "Kembali ke Semua Proyek",
+        "downloadCV": "Download CV",
+        "viewCertificate": "Lihat Sertifikat",
+        "viewSourceCode": "Lihat Kode Sumber",
+        "liveDemo": "Demo Langsung",
+        "code": "Kode"
+    },
+    "navbar": {
+        "home": "Beranda",
+        "about": "Tentang",
+        "projects": "Proyek",
+        "blog": "Blog"
+    },
+    "hero": {
+        "greeting": "Halo, Saya",
+        "available": "Available for projects",
+        "subtitle": "Saya bersemangat dalam menciptakan pengalaman pengguna yang mulus dan menulis kode yang bersih dan mudah dipelihara."
+    },
+    "sections": {
+        "myWork": "Karya Saya",
+        "featuredProjects": "Proyek Unggulan",
+        "featuredProjectsDesc": "Kumpulan karya terbaik saya, dari aplikasi mobile hingga solusi full-stack",
+        "latestArticles": "Artikel Terbaru",
+        "latestArticlesDesc": "Pemikiran, tutorial, dan insight tentang pengembangan mobile",
+        "aboutMe": "Tentang Saya",
+        "recognition": "Penghargaan",
+        "awardsAndCertifications": "Penghargaan & Sertifikasi",
+        "awardsDesc": "Pencapaian dan penghargaan yang diperoleh selama perjalanan akademik dan profesional saya.",
+        "experience": "Pengalaman",
+        "experienceAndEducation": "Pengalaman & Pendidikan",
+        "experienceDesc": "Perjalanan profesional dan latar belakang akademik saya di bidang pengembangan perangkat lunak.",
+        "techStack": "Teknologi yang Digunakan"
+    },
+    "about": {
+        "stats": {
+            "projects": "Proyek",
+            "yearsExp": "Tahun Exp",
+            "certificates": "Sertifikat"
+        }
+    },
+    "projects": {
+        "title": "Proyek Unggulan",
+        "description": "Koleksi {count} proyek yang telah saya kerjakan, dari aplikasi mobile hingga web applications.",
+        "featured": "Unggulan",
+        "aboutProject": "Tentang Proyek Ini"
+    },
+    "blog": {
+        "title": "Blog & Artikel",
+        "readMore": "Baca Selengkapnya",
+        "minRead": "menit baca"
+    },
+    "footer": {
+        "tagline": "Mobile Developer yang bersemangat menciptakan pengalaman digital yang indah, berkinerja tinggi, dan dapat diskalakan.",
+        "navigation": "Navigasi",
+        "contact": "Kontak",
+        "availableForWork": "Tersedia untuk kerja",
+        "copyright": "© {year} Ahmad Choirul Umam Ali Rozaqi. Hak cipta dilindungi.",
+        "builtWith": "Dibuat dengan Next.js, Tailwind CSS & ☕"
+    }
+}

@@ -6,6 +6,7 @@
  */
 
 import { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import { projects } from '@/lib/data';
 import { ProjectsHeaderSection, ProjectsGridSection } from '@/components/sections/projects';
 
@@ -14,7 +15,14 @@ export const metadata: Metadata = {
     description: 'Explore my portfolio of mobile and web development projects.',
 };
 
-export default function ProjectsPage() {
+interface PageProps {
+    params: Promise<{ locale: string }>;
+}
+
+export default async function ProjectsPage({ params }: PageProps) {
+    const { locale } = await params;
+    setRequestLocale(locale);
+
     return (
         <main className="relative">
             {/* Header Section */}

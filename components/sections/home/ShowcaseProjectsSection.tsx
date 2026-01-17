@@ -4,13 +4,16 @@
  * ===========================================
  * SHOWCASE PROJECTS SECTION
  * ===========================================
- * Displays 4 featured projects in a grid layout
+ * Displays 4 latest projects in a grid layout
  * with a "See All" button linking to /projects page.
+ * Data imported from lib/data/projects.ts
  */
 
-import Link from 'next/link';
-import Image from 'next/image';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
+import { projects } from '@/lib/data';
+import type { Project } from '@/lib/types';
 
 // ============================================
 // TYPES
@@ -20,61 +23,19 @@ interface ShowcaseProjectsSectionProps {
     className?: string;
 }
 
-interface Project {
-    id: string;
-    title: string;
-    description: string;
-    image: string;
-    tags: string[];
-    link: string;
-    featured?: boolean;
-}
-
-// ============================================
-// MOCK DATA - TODO: Replace with CMS/API
-// ============================================
-
-const featuredProjects: Project[] = [
-    {
-        id: '1',
-        title: 'Flutter E-Commerce App',
-        description: 'A full-stack mobile e-commerce application with payment integration, real-time inventory, and beautiful UI.',
-        image: '/projects/ecommerce.png',
-        tags: ['Flutter', 'Firebase', 'Stripe'],
-        link: '/projects/ecommerce',
-        featured: true,
-    },
-    {
-        id: '2',
-        title: 'Task Management Dashboard',
-        description: 'Cross-platform task management app with team collaboration features and analytics dashboard.',
-        image: '/projects/taskmanager.png',
-        tags: ['Flutter', 'GetX', 'REST API'],
-        link: '/projects/taskmanager',
-    },
-    {
-        id: '3',
-        title: 'Social Media Clone',
-        description: 'Instagram-inspired social app with stories, reels, and real-time messaging capabilities.',
-        image: '/projects/social.png',
-        tags: ['Flutter', 'Firebase', 'WebSocket'],
-        link: '/projects/social',
-    },
-    {
-        id: '4',
-        title: 'Crypto Portfolio Tracker',
-        description: 'Real-time cryptocurrency portfolio tracker with price alerts and market analysis tools.',
-        image: '/projects/crypto.png',
-        tags: ['Flutter', 'Bloc', 'CoinGecko API'],
-        link: '/projects/crypto',
-    },
-];
-
 // ============================================
 // COMPONENT
 // ============================================
 
 export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionProps) {
+    const t = useTranslations('sections');
+    const tCommon = useTranslations('common');
+
+    // Get 4 latest projects sorted by year (descending)
+    const latestProjects = [...projects]
+        .sort((a, b) => (b.year || 0) - (a.year || 0))
+        .slice(0, 4);
+
     return (
         <section
             id="projects"
@@ -87,19 +48,19 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">
-                        My Work
+                        {t('myWork')}
                     </span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
-                        Featured <span className="text-gradient">Projects</span>
+                        {t('featuredProjects').split(' ')[0]} <span className="text-gradient">{t('featuredProjects').split(' ').slice(1).join(' ') || 'Projects'}</span>
                     </h2>
                     <p className="mt-4 text-[var(--foreground-secondary)] max-w-2xl mx-auto">
-                        A showcase of my best work, from mobile apps to full-stack solutions
+                        {t('featuredProjectsDesc')}
                     </p>
                 </div>
 
                 {/* Projects Grid */}
                 <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 mb-12">
-                    {featuredProjects.map((project) => (
+                    {latestProjects.map((project) => (
                         <ProjectCard key={project.id} project={project} />
                     ))}
                 </div>
@@ -116,7 +77,7 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                             'shadow-lg shadow-[var(--primary)]/25'
                         )}
                     >
-                        See All Projects
+                        {tCommon('viewAllProjects')}
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
@@ -138,7 +99,7 @@ interface ProjectCardProps {
 function ProjectCard({ project }: ProjectCardProps) {
     return (
         <Link
-            href={project.link}
+            href={`/projects/${project.id}`}
             className={cn(
                 'group block',
                 'rounded-xl overflow-hidden',
@@ -154,6 +115,12 @@ function ProjectCard({ project }: ProjectCardProps) {
                 <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">
                     📱
                 </div>
+                {/* Year badge */}
+                {project.year && (
+                    <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-[var(--background)]/80 backdrop-blur text-xs text-[var(--foreground-muted)]">
+                        {project.year}
+                    </div>
+                )}
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] to-transparent opacity-60" />
             </div>
@@ -162,7 +129,7 @@ function ProjectCard({ project }: ProjectCardProps) {
             <div className="p-6">
                 {/* Tags */}
                 <div className="flex flex-wrap gap-2 mb-3">
-                    {project.tags.map((tag) => (
+                    {project.tags.slice(0, 3).map((tag) => (
                         <span
                             key={tag}
                             className={cn(
@@ -207,4 +174,4 @@ function ProjectCard({ project }: ProjectCardProps) {
 // EXPORTS
 // ============================================
 
-export type { ShowcaseProjectsSectionProps, Project };
+export type { ShowcaseProjectsSectionProps };

@@ -2,11 +2,12 @@
 
 /**
  * ===========================================
- * HERO SECTION COMPONENT - SIMPLIFIED
+ * HERO SECTION COMPONENT - WITH i18n
  * ===========================================
  * Minimalist landing section with portfolio title.
  */
 
+import { useTranslations } from 'next-intl';
 import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { TechMarqueeSection } from './TechMarqueeSection';
@@ -24,6 +25,7 @@ interface HeroSectionProps {
 // ============================================
 
 export function HeroSection({ className }: HeroSectionProps) {
+    const t = useTranslations('hero');
     const { name, title } = personalInfo;
 
     return (
@@ -47,7 +49,7 @@ export function HeroSection({ className }: HeroSectionProps) {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--primary)] opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--primary)]"></span>
                         </span>
-                        Available for projects
+                        {t('available')}
                     </div>
 
                     {/* Main Heading - Portfolio (Largest with Playfair font) */}

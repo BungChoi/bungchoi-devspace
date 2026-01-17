@@ -7,16 +7,18 @@
 
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import Link from 'next/link';
+import { setRequestLocale } from 'next-intl/server';
+import { Link } from '@/lib/i18n/navigation';
 import { projects } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { locales } from '@/lib/i18n/config';
 
 // ============================================
 // METADATA
 // ============================================
 
 interface PageProps {
-    params: Promise<{ id: string }>;
+    params: Promise<{ locale: string; id: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -34,9 +36,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-    return projects.map((project) => ({
-        id: project.id,
-    }));
+    return locales.flatMap((locale) =>
+        projects.map((project) => ({
+            locale,
+            id: project.id,
+        }))
+    );
 }
 
 // ============================================
@@ -44,7 +49,9 @@ export async function generateStaticParams() {
 // ============================================
 
 export default async function ProjectDetailPage({ params }: PageProps) {
-    const { id } = await params;
+    const { locale, id } = await params;
+    setRequestLocale(locale);
+
     const project = projects.find((p) => p.id === id);
 
     if (!project) {

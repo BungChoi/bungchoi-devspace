@@ -3,7 +3,6 @@ import { Geist, Geist_Mono, Playfair_Display, Space_Grotesk } from "next/font/go
 import "./globals.css";
 
 import { SITE_CONFIG } from "@/lib/constants";
-import { Navbar, BackgroundEffects, Footer } from "@/components/layout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,20 +44,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: SITE_CONFIG.author }],
   creator: SITE_CONFIG.author,
-  openGraph: {
-    type: "website",
-    locale: SITE_CONFIG.locale,
-    url: SITE_CONFIG.url,
-    title: SITE_CONFIG.title,
-    description: SITE_CONFIG.description,
-    siteName: SITE_CONFIG.name,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: SITE_CONFIG.title,
-    description: SITE_CONFIG.description,
-    creator: `@${SITE_CONFIG.author}`,
-  },
   robots: {
     index: true,
     follow: true,
@@ -74,21 +59,11 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Root layout - minimal wrapper, locale-specific layout handles the rest
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="id" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}
-      >
-        <BackgroundEffects />
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
-    </html>
-  );
+  return children;
 }

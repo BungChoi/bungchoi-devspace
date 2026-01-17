@@ -27,3 +27,7 @@ export type { CardProps, CardVariant, CardSectionProps, CardTitleProps } from '.
 // Badge
 export { Badge, BadgeGroup } from './Badge';
 export type { BadgeProps, BadgeVariant, BadgeSize, BadgeGroupProps } from './Badge';
+
+// Language Switcher
+export { LanguageSwitcher } from './LanguageSwitcher';
+export type { LanguageSwitcherProps } from './LanguageSwitcher';

@@ -9,7 +9,9 @@
  */
 
 import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui';
+import { useTranslations } from 'next-intl';
+import { LanguageSwitcher } from '@/components/ui';
+import { Link, usePathname } from '@/lib/i18n/navigation';
 import { SITE_CONFIG, NAV_ITEMS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
@@ -28,38 +30,28 @@ interface NavbarProps {
 export function Navbar({ className }: NavbarProps) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState('home');
+    const pathname = usePathname(); // Locale-aware pathname (e.g., /about not /id/about)
 
-    // Handle scroll effect & scroll spy (only for home page sections)
+    // Determine active section based on current path
+    const getActiveSection = () => {
+        if (pathname === '/') return 'home';
+        if (pathname.startsWith('/about')) return 'about';
+        if (pathname.startsWith('/projects')) return 'projects';
+        if (pathname.startsWith('/blog')) return 'blog';
+        return 'home';
+    };
+
+    const activeSection = getActiveSection();
+
+    // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
-
-            // Only run scroll spy on home page
-            if (window.location.pathname === '/') {
-                const scrollPosition = window.scrollY + 150;
-                const homeElement = document.getElementById('home');
-                if (homeElement) {
-                    const { offsetTop, offsetHeight } = homeElement;
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-                        setActiveSection('home');
-                    }
-                }
-            }
         };
 
         window.addEventListener('scroll', handleScroll);
         handleScroll(); // Run on mount
         return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    // Determine active section based on current path
-    useEffect(() => {
-        const path = window.location.pathname;
-        if (path === '/') setActiveSection('home');
-        else if (path === '/about') setActiveSection('about');
-        else if (path === '/projects') setActiveSection('projects');
-        else if (path === '/blog') setActiveSection('blog');
     }, []);
 
     // Handle navigation click
@@ -132,6 +124,9 @@ export function Navbar({ className }: NavbarProps) {
                             );
                         })}
                     </div>
+
+                    {/* Language Switch */}
+                    <LanguageSwitcher className="hidden md:flex" />
 
                     {/* CTA Button - Link to About */}
                     <a
@@ -233,6 +228,8 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                         </a>
                     );
                 })}
+                {/* Mobile Language Switch */}
+                <LanguageSwitcher showLabel className="justify-center mt-2 py-2" />
 
                 {/* Mobile CTA Button */}
                 <a
