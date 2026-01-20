@@ -7,6 +7,7 @@
 
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { setRequestLocale } from 'next-intl/server';
 import { Link } from '@/lib/i18n/navigation';
 import { projects } from '@/lib/data';
@@ -101,12 +102,25 @@ export default async function ProjectDetailPage({ params }: PageProps) {
                     </div>
                 </header>
 
-                {/* Project Image Placeholder */}
+                {/* Project Image */}
                 <div className="aspect-video rounded-2xl overflow-hidden bg-[var(--background-tertiary)] mb-12 relative border border-[var(--primary)]/20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center text-8xl opacity-20">
-                        📱
-                    </div>
+                    {project.image ? (
+                        <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 896px"
+                            priority
+                        />
+                    ) : (
+                        <>
+                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent" />
+                            <div className="absolute inset-0 flex items-center justify-center text-8xl opacity-20">
+                                📱
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Long Description */}

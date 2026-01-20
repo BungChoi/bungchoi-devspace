@@ -9,6 +9,7 @@
  * Data imported from lib/data/projects.ts
  */
 
+import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -112,9 +113,19 @@ function ProjectCard({ project }: ProjectCardProps) {
         >
             {/* Image */}
             <div className="relative aspect-video bg-[var(--background-tertiary)] overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">
-                    📱
-                </div>
+                {project.image ? (
+                    <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">
+                        📱
+                    </div>
+                )}
                 {/* Year badge */}
                 {project.year && (
                     <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-[var(--background)]/80 backdrop-blur text-xs text-[var(--foreground-muted)]">
