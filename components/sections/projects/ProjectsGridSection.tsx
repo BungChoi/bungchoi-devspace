@@ -7,6 +7,7 @@
  * Grid of all project cards.
  */
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
@@ -65,12 +66,24 @@ function ProjectCard({ project }: ProjectCardProps) {
                     </div>
                 )}
 
-                {/* Project Image Placeholder */}
+                {/* Project Image */}
                 <div className="aspect-video rounded-lg overflow-hidden bg-[var(--background-tertiary)] mb-5 relative border border-[var(--primary)]/10 group-hover:border-[var(--primary)]/30 transition-colors">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-30 group-hover:scale-110 transition-transform duration-500">
-                        📱
-                    </div>
+                    {project.image ? (
+                        <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                        />
+                    ) : (
+                        <>
+                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent" />
+                            <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-30 group-hover:scale-110 transition-transform duration-500">
+                                📱
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Content */}
