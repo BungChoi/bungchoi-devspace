@@ -10,6 +10,22 @@ import type { Experience, Education } from '../types';
 export const experiences: Experience[] = [
     {
         id: 'work-1',
+        company: 'SIESTA',
+        position: 'Mobile Developer (Full-time)',
+        startDate: 'Agustus 2025',
+        endDate: 'Sekarang',
+        description: 'Mengembangkan aplikasi ERP Mobile untuk perusahaan Indonesia dengan fokus fitur absensi, izin kerja, rincian gaji, dan shift management.',
+        achievements: [
+            'Mengembangkan aplikasi ERP Mobile menggunakan Flutter dan GetX untuk state management',
+            'Melakukan slicing design sesuai dokumentasi kode dan menerapkan Clean Architecture',
+            'Mengimplementasikan fitur izin kerja dan rincian gaji dengan integrasi REST API',
+            'Mengimplementasikan localization untuk pengguna multibahasa',
+            'Berhasil menyelesaikan aplikasi dalam 3 bulan sesuai ketentuan proyek',
+        ],
+        technologies: ['Flutter', 'Dart', 'GetX', 'REST API', 'Clean Architecture'],
+    },
+    {
+        id: 'work-2',
         company: 'Nodewave',
         position: 'Mobile Developer (Internship)',
         startDate: 'Agustus 2024',

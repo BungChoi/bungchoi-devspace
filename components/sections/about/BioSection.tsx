@@ -131,8 +131,6 @@ export function BioSection({ className }: BioSectionProps) {
                             </p>
                             <p className="text-lg text-[var(--foreground-secondary)] leading-relaxed mt-4">
                                 I'm passionate about creating seamless user experiences and writing clean, maintainable code.
-                                When I'm not coding, you'll find me exploring new technologies, contributing to open source,
-                                or enjoying music on Spotify.
                             </p>
                         </div>
 
