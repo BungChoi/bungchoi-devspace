@@ -6,6 +6,14 @@
  */
 
 // ============================================
+// LOCALIZATION TYPES
+// ============================================
+export interface LocalizedString {
+    id: string;
+    en: string;
+}
+
+// ============================================
 // NAVIGATION TYPES
 // ============================================
 export interface NavItem {
@@ -60,31 +68,43 @@ export type SkillCategory =
     | 'other';
 
 // ============================================
-// EXPERIENCE TYPES
+// ACHIEVEMENT TYPES (with i18n support)
+// ============================================
+export interface Achievement {
+    id: string;
+    title: LocalizedString;
+    issuer: LocalizedString;
+    date: LocalizedString;
+    description?: LocalizedString;
+    certificateUrl?: string;
+}
+
+// ============================================
+// EXPERIENCE TYPES (with i18n support)
 // ============================================
 export interface Experience {
     id: string;
     company: string;
-    position: string;
-    startDate: string;
-    endDate?: string; // undefined = current
-    description: string;
-    achievements?: string[];
+    position: LocalizedString;
+    startDate: LocalizedString;
+    endDate?: LocalizedString; // undefined = current
+    description: LocalizedString;
+    achievements?: LocalizedString[];
     technologies?: string[];
     companyLogo?: string;
 }
 
 // ============================================
-// EDUCATION TYPES
+// EDUCATION TYPES (with i18n support)
 // ============================================
 export interface Education {
     id: string;
     institution: string;
-    degree: string;
-    field: string;
-    startDate: string;
-    endDate?: string;
-    description?: string;
+    degree: LocalizedString;
+    field: LocalizedString;
+    startDate: LocalizedString;
+    endDate?: LocalizedString;
+    description?: LocalizedString;
     gpa?: string;
 }
 
@@ -104,27 +124,30 @@ export interface ContactFormState {
 }
 
 // ============================================
-// PROFILE / PERSONAL INFO TYPES
+// PROFILE / PERSONAL INFO TYPES (with i18n support)
 // ============================================
 export interface Stat {
-    label: string;
+    label: LocalizedString;
     value: string;
     icon?: string;
 }
 
 export interface PersonalInfo {
     name: string;
-    title: string;
-    subtitle?: string;
-    bio: string;
+    title: LocalizedString;
+    subtitle?: LocalizedString;
+    bio: LocalizedString;
     email: string;
     phone?: string;
-    location: string;
+    location: LocalizedString;
     avatar?: string;
     resumeUrl?: string;
     socialLinks: SocialLink[];
     stats?: Stat[];
 }
+
+// Helper type for accessing localized content
+export type Locale = 'id' | 'en';
 
 // ============================================
 // COMPONENT PROP TYPES

@@ -8,9 +8,11 @@
  * and copyright information.
  */
 
-import Link from 'next/link';
+import { useLocale } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { personalInfo } from '@/lib/data';
+import type { Locale } from '@/lib/types';
 
 // ============================================
 // TYPES
@@ -25,6 +27,7 @@ interface FooterProps {
 // ============================================
 
 export function Footer({ className }: FooterProps) {
+    const locale = useLocale() as Locale;
     const currentYear = new Date().getFullYear();
 
     return (
@@ -105,7 +108,7 @@ export function Footer({ className }: FooterProps) {
                                 </a>
                             </li>
                             <li className="text-sm text-[var(--foreground-secondary)]">
-                                Based in {personalInfo.location}
+                                Based in {personalInfo.location[locale]}
                             </li>
                         </ul>
 

@@ -8,8 +8,10 @@
  * Data imported from lib/data/achievements.ts
  */
 
+import { useTranslations, useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
-import { achievements, type Achievement } from '@/lib/data';
+import { achievements } from '@/lib/data';
+import type { Achievement, Locale } from '@/lib/types';
 
 // ============================================
 // TYPES
@@ -24,19 +26,23 @@ interface AchievementsSectionProps {
 // ============================================
 
 export function AchievementsSection({ className }: AchievementsSectionProps) {
+    const t = useTranslations('sections');
+    const tCommon = useTranslations('common');
+    const locale = useLocale() as Locale;
+
     return (
         <section className={cn('py-20 sm:py-28', className)}>
             <div className="container max-w-4xl mx-auto px-4">
                 {/* Section Header */}
                 <div className="text-center mb-12">
                     <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">
-                        Recognition
+                        {t('recognition')}
                     </span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
-                        Awards & <span className="text-gradient">Certifications</span>
+                        {t('awardsAndCertifications').split('&')[0]} & <span className="text-gradient">{t('awardsAndCertifications').split('&')[1]?.trim() || 'Certifications'}</span>
                     </h2>
                     <p className="mt-4 text-[var(--foreground-secondary)] max-w-xl mx-auto">
-                        Achievements and recognitions earned throughout my academic and professional journey.
+                        {t('awardsDesc')}
                     </p>
                 </div>
 
@@ -47,6 +53,8 @@ export function AchievementsSection({ className }: AchievementsSectionProps) {
                             key={achievement.id}
                             achievement={achievement}
                             index={index}
+                            locale={locale}
+                            viewCertificateLabel={tCommon('viewCertificate')}
                         />
                     ))}
                 </div>
@@ -62,9 +70,11 @@ export function AchievementsSection({ className }: AchievementsSectionProps) {
 interface AchievementItemProps {
     achievement: Achievement;
     index: number;
+    locale: Locale;
+    viewCertificateLabel: string;
 }
 
-function AchievementItem({ achievement, index }: AchievementItemProps) {
+function AchievementItem({ achievement, index, locale, viewCertificateLabel }: AchievementItemProps) {
     return (
         <div
             className={cn(
@@ -87,22 +97,22 @@ function AchievementItem({ achievement, index }: AchievementItemProps) {
                         {/* Title & Date */}
                         <div className="flex flex-wrap items-center gap-2 mb-1">
                             <h3 className="font-bold text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">
-                                {achievement.title}
+                                {achievement.title[locale]}
                             </h3>
                             <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--foreground)]/10 text-[var(--foreground-muted)]">
-                                {achievement.date}
+                                {achievement.date[locale]}
                             </span>
                         </div>
 
                         {/* Issuer */}
                         <p className="text-sm text-[var(--primary)] mb-2">
-                            {achievement.issuer}
+                            {achievement.issuer[locale]}
                         </p>
 
                         {/* Description */}
                         {achievement.description && (
                             <p className="text-sm text-[var(--foreground-secondary)]">
-                                {achievement.description}
+                                {achievement.description[locale]}
                             </p>
                         )}
                     </div>
@@ -127,7 +137,7 @@ function AchievementItem({ achievement, index }: AchievementItemProps) {
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    View Certificate
+                    {viewCertificateLabel}
                 </a>
             )}
         </div>

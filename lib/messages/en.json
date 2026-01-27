@@ -41,6 +41,10 @@
         "techStack": "Tech Stack"
     },
     "about": {
+        "title": "About Me",
+        "greeting": "Hi, I'm",
+        "bioSubtitle": "I'm passionate about creating seamless user experiences and writing clean, maintainable code.",
+        "downloadCV": "Download CV",
         "stats": {
             "projects": "Projects",
             "yearsExp": "Years Exp",

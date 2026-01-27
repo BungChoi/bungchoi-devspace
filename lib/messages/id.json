@@ -41,6 +41,10 @@
         "techStack": "Teknologi yang Digunakan"
     },
     "about": {
+        "title": "Tentang Saya",
+        "greeting": "Halo, Saya",
+        "bioSubtitle": "Saya sangat antusias dalam menciptakan pengalaman pengguna yang mulus dan menulis kode yang bersih serta mudah dipelihara.",
+        "downloadCV": "Download CV",
         "stats": {
             "projects": "Proyek",
             "yearsExp": "Tahun Exp",
