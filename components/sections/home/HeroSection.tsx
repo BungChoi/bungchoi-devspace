@@ -7,10 +7,11 @@
  * Minimalist landing section with portfolio title.
  */
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { TechMarqueeSection } from './TechMarqueeSection';
+import type { Locale } from '@/lib/types';
 
 // ============================================
 // TYPES
@@ -26,6 +27,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ className }: HeroSectionProps) {
     const t = useTranslations('hero');
+    const locale = useLocale() as Locale;
     const { name, title } = personalInfo;
 
     return (
@@ -70,7 +72,7 @@ export function HeroSection({ className }: HeroSectionProps) {
 
                     {/* Title - Mobile Developer only */}
                     <p className="text-lg sm:text-xl text-[var(--foreground-secondary)] font-medium">
-                        {title}
+                        {title[locale]}
                     </p>
                 </div>
             </div>
