@@ -10,11 +10,13 @@
  */
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import { projects } from '@/lib/data';
 import type { Project } from '@/lib/types';
+import { t as tl } from '@/lib/utils/localization';
+import { Locale } from '@/lib/i18n/config';
 
 // ============================================
 // TYPES
@@ -31,6 +33,7 @@ interface ShowcaseProjectsSectionProps {
 export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionProps) {
     const t = useTranslations('sections');
     const tCommon = useTranslations('common');
+    const locale = useLocale() as Locale;
 
     // Get 4 latest projects sorted by year (descending)
     const latestProjects = [...projects]
@@ -62,7 +65,7 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                 {/* Projects Grid */}
                 <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 mb-12">
                     {latestProjects.map((project) => (
-                        <ProjectCard key={project.id} project={project} />
+                        <ProjectCard key={project.id} project={project} locale={locale} />
                     ))}
                 </div>
 
@@ -95,9 +98,10 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
 
 interface ProjectCardProps {
     project: Project;
+    locale: Locale;
 }
 
-function ProjectCard({ project }: ProjectCardProps) {
+function ProjectCard({ project, locale }: ProjectCardProps) {
     return (
         <Link
             href={`/projects/${project.id}`}
@@ -161,12 +165,12 @@ function ProjectCard({ project }: ProjectCardProps) {
 
                 {/* Description */}
                 <p className="mt-2 text-sm text-[var(--foreground-secondary)] line-clamp-2">
-                    {project.description}
+                    {tl(project.description, locale)}
                 </p>
 
                 {/* View Project Link */}
                 <div className="mt-4 flex items-center gap-2 text-sm text-[var(--primary)] font-medium">
-                    View Project
+                    {locale === 'id' ? 'Lihat Proyek' : 'View Project'}
                     <svg
                         className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
                         fill="none"

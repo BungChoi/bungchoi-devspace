@@ -35,64 +35,64 @@ export interface SocialLink {
 // PROJECT TYPES
 // ============================================
 
-// Sub-types for structured project content
+// Sub-types for structured project content (with LocalizedString support)
 export interface ProjectOverview {
-    summary: string;
-    context?: string;
-    goals?: string[];
+    summary: LocalizedString;
+    context?: LocalizedString;
+    goals?: LocalizedString[];
     targetUsers?: {
-        primary: string;
-        secondary?: string;
-        useCase?: string;
+        primary: LocalizedString;
+        secondary?: LocalizedString;
+        useCase?: LocalizedString;
     };
 }
 
 export interface ProjectChallenge {
-    painPoints?: string[];
-    constraints?: string[];
-    risks?: string[];
+    painPoints?: LocalizedString[];
+    constraints?: LocalizedString[];
+    risks?: LocalizedString[];
 }
 
 export interface ProjectSolution {
-    approach?: string;
-    keyDecisions?: { decision: string; reason: string }[];
-    highlights?: string[];
+    approach?: LocalizedString;
+    keyDecisions?: { decision: LocalizedString; reason: LocalizedString }[];
+    highlights?: LocalizedString[];
 }
 
 export interface ProjectFeature {
-    name: string;
-    benefit: string;
-    techNote?: string;
+    name: LocalizedString;
+    benefit: LocalizedString;
+    techNote?: string; // Technical notes stay in English
 }
 
 export interface ProjectUserFlow {
-    title: string;
-    steps: string[];
+    title: LocalizedString;
+    steps: LocalizedString[];
 }
 
 export interface ProjectArchitecture {
     stack: {
-        frontend?: string;
+        frontend?: string; // Tech names don't need translation
         stateManagement?: string;
         backend?: string;
         tools?: string[];
     };
-    notes?: string[];
+    notes?: LocalizedString[];
 }
 
 export interface ProjectResult {
-    outcomes?: string[];
-    impact?: string[];
+    outcomes?: LocalizedString[];
+    impact?: LocalizedString[];
 }
 
 export interface Project {
     id: string;
-    title: string;
-    subtitle?: string;
-    description: string;
-    longDescription?: string;
+    title: string; // Project names stay the same
+    subtitle?: LocalizedString;
+    description: LocalizedString;
+    longDescription?: LocalizedString;
     image: string;
-    tags: string[];
+    tags: string[]; // Tech tags don't need translation
     liveUrl?: string;
     githubUrl?: string;
     playStoreUrl?: string;
@@ -101,27 +101,27 @@ export interface Project {
     year: number;
 
     // Extended content fields
-    role?: string;
-    platform?: string;
-    status?: string;
+    role?: LocalizedString;
+    platform?: LocalizedString;
+    status?: LocalizedString;
     timeline?: string;
-    team?: string;
+    team?: LocalizedString;
 
     // Rich content sections
     overview?: ProjectOverview;
     challenges?: ProjectChallenge;
     solution?: ProjectSolution;
-    contributions?: string[];
+    contributions?: LocalizedString[];
     features?: ProjectFeature[];
     roleBasedFeatures?: {
-        [role: string]: string[];
+        [role: string]: LocalizedString[];
     };
     userFlows?: ProjectUserFlow[];
     architecture?: ProjectArchitecture;
     results?: ProjectResult;
-    lessonsLearned?: string[];
-    nextImprovements?: string[];
-    screenshots?: { title: string; caption: string; image?: string }[];
+    lessonsLearned?: LocalizedString[];
+    nextImprovements?: LocalizedString[];
+    screenshots?: { title: LocalizedString; caption: LocalizedString; image?: string }[];
 }
 
 // ============================================

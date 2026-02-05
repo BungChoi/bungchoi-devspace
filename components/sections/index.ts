@@ -28,7 +28,6 @@ export type {
     HobiSectionProps,
     ShowcaseProjectsSectionProps,
     BlogPreviewSectionProps,
-    Project,
 } from './home';
 
 // ============================================

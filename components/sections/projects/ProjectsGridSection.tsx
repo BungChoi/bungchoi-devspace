@@ -8,9 +8,12 @@
  */
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { useLocale } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
+import { t } from '@/lib/utils/localization';
+import { Locale } from '@/lib/i18n/config';
 
 // ============================================
 // TYPES
@@ -26,13 +29,15 @@ interface ProjectsGridSectionProps {
 // ============================================
 
 export function ProjectsGridSection({ className, projects }: ProjectsGridSectionProps) {
+    const locale = useLocale() as Locale;
+
     return (
         <section className={cn('py-12', className)}>
             <div className="container max-w-6xl mx-auto px-4">
                 {/* Projects Grid */}
                 <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
                     {projects.map((project) => (
-                        <ProjectCard key={project.id} project={project} />
+                        <ProjectCard key={project.id} project={project} locale={locale} />
                     ))}
                 </div>
             </div>
@@ -46,9 +51,10 @@ export function ProjectsGridSection({ className, projects }: ProjectsGridSection
 
 interface ProjectCardProps {
     project: Project;
+    locale: Locale;
 }
 
-function ProjectCard({ project }: ProjectCardProps) {
+function ProjectCard({ project, locale }: ProjectCardProps) {
     return (
         <Link href={`/projects/${project.id}`} className="block">
             <article
@@ -100,7 +106,7 @@ function ProjectCard({ project }: ProjectCardProps) {
 
                     {/* Description */}
                     <p className="text-sm text-[var(--foreground-secondary)] line-clamp-2 mb-4">
-                        {project.description}
+                        {t(project.description, locale)}
                     </p>
 
                     {/* Tags */}
@@ -117,7 +123,7 @@ function ProjectCard({ project }: ProjectCardProps) {
 
                     {/* View Details Prompt */}
                     <div className="flex items-center gap-2 text-sm text-[var(--primary)] font-medium">
-                        <span>View Details</span>
+                        <span>{locale === 'id' ? 'Lihat Detail' : 'View Details'}</span>
                         <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
