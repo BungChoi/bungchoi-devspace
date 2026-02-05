@@ -34,9 +34,61 @@ export interface SocialLink {
 // ============================================
 // PROJECT TYPES
 // ============================================
+
+// Sub-types for structured project content
+export interface ProjectOverview {
+    summary: string;
+    context?: string;
+    goals?: string[];
+    targetUsers?: {
+        primary: string;
+        secondary?: string;
+        useCase?: string;
+    };
+}
+
+export interface ProjectChallenge {
+    painPoints?: string[];
+    constraints?: string[];
+    risks?: string[];
+}
+
+export interface ProjectSolution {
+    approach?: string;
+    keyDecisions?: { decision: string; reason: string }[];
+    highlights?: string[];
+}
+
+export interface ProjectFeature {
+    name: string;
+    benefit: string;
+    techNote?: string;
+}
+
+export interface ProjectUserFlow {
+    title: string;
+    steps: string[];
+}
+
+export interface ProjectArchitecture {
+    stack: {
+        frontend?: string;
+        stateManagement?: string;
+        backend?: string;
+        tools?: string[];
+    };
+    notes?: string[];
+}
+
+export interface ProjectResult {
+    outcomes?: string[];
+    impact?: string[];
+}
+
 export interface Project {
     id: string;
     title: string;
+    subtitle?: string;
     description: string;
     longDescription?: string;
     image: string;
@@ -47,6 +99,29 @@ export interface Project {
     appStoreUrl?: string;
     featured?: boolean;
     year: number;
+
+    // Extended content fields
+    role?: string;
+    platform?: string;
+    status?: string;
+    timeline?: string;
+    team?: string;
+
+    // Rich content sections
+    overview?: ProjectOverview;
+    challenges?: ProjectChallenge;
+    solution?: ProjectSolution;
+    contributions?: string[];
+    features?: ProjectFeature[];
+    roleBasedFeatures?: {
+        [role: string]: string[];
+    };
+    userFlows?: ProjectUserFlow[];
+    architecture?: ProjectArchitecture;
+    results?: ProjectResult;
+    lessonsLearned?: string[];
+    nextImprovements?: string[];
+    screenshots?: { title: string; caption: string; image?: string }[];
 }
 
 // ============================================
