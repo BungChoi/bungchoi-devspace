@@ -104,7 +104,7 @@ export interface Project {
     role?: LocalizedString;
     platform?: LocalizedString;
     status?: LocalizedString;
-    timeline?: string;
+    timeline?: LocalizedString | string;
     team?: LocalizedString;
 
     // Rich content sections

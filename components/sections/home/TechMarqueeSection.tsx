@@ -196,7 +196,7 @@ export function TechMarqueeSection({ className, speed = 50 }: TechMarqueeSection
     return (
         <div
             ref={containerRef}
-            className={cn('marquee-container w-full overflow-hidden py-6 relative z-10', className)}
+            className={cn('tech-marquee-enter marquee-container w-full overflow-hidden py-6 relative z-10', className)}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
@@ -207,13 +207,50 @@ export function TechMarqueeSection({ className, speed = 50 }: TechMarqueeSection
             {/* Animated track with GPU acceleration */}
             <div
                 ref={trackRef}
-                className="flex will-change-transform"
+                className="tech-marquee-track flex will-change-transform"
                 style={{ backfaceVisibility: 'hidden' }}
             >
                 {allItems.map((tech, index) => (
                     <TechItemDisplay key={`item-${index}`} tech={tech} />
                 ))}
             </div>
+
+            <style jsx>{`
+                .tech-marquee-enter {
+                    animation: tech-marquee-enter 760ms cubic-bezier(0.2, 0.8, 0.2, 1) 760ms both;
+                }
+
+                .tech-marquee-track {
+                    animation: tech-marquee-track-focus 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 880ms both;
+                }
+
+                @keyframes tech-marquee-enter {
+                    from {
+                        opacity: 0;
+                        transform: translateY(24px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+
+                @keyframes tech-marquee-track-focus {
+                    from {
+                        filter: blur(8px);
+                    }
+                    to {
+                        filter: blur(0);
+                    }
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    .tech-marquee-enter,
+                    .tech-marquee-track {
+                        animation: none;
+                    }
+                }
+            `}</style>
         </div>
     );
 }

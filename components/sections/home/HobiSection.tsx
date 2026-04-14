@@ -233,20 +233,22 @@ function SpotifyCard() {
 // GITHUB CARD - Fetches from API
 // ============================================
 
-interface GitHubApiResponse extends NowPlayingResponse {
+interface GitHubApiResponse {
     isConfigured?: boolean;
     error?: string;
     username?: string;
     profileUrl?: string;
     totalContributions?: number;
+    lastCommit?: string;
     lastCommitDate?: string;
     longestStreak?: number;
     currentStreak?: number;
+    contributions?: number[][];
     contributionCalendar?: number[][];
     monthLabels?: { month: string; position: number }[];
 }
 
-function GitHubCard({ data: initialData }: { data?: any }) {
+function GitHubCard({ data: initialData }: { data?: GitHubApiResponse }) {
     const [data, setData] = useState<GitHubApiResponse | null>(null);
     const [loading, setLoading] = useState(true);
 

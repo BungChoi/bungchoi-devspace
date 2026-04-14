@@ -51,7 +51,7 @@ export function SkillsSection({ className }: SkillsSectionProps) {
     }, {} as Record<SkillCategory, Skill[]>);
 
     return (
-        <section className={cn('py-20 sm:py-28', className)}>
+        <section id="skills" className={cn('scroll-mt-24 py-20 sm:py-28', className)}>
             <div className="container max-w-6xl mx-auto px-4">
                 {/* Section Header */}
                 <div className="text-center mb-16">

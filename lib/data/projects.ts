@@ -25,6 +25,7 @@ export const projects: Project[] = [
         githubUrl: 'https://github.com/orangdeso/e-porter',
         featured: true,
         year: 2025,
+        timeline: ls('Januari 2025 - Februari 2025', 'January 2025 - February 2025'),
 
         // Extended fields
         role: ls('Flutter Mobile Developer', 'Flutter Mobile Developer'),

@@ -10,7 +10,7 @@
 import { useTranslations, useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
 import { experiences, educations } from '@/lib/data';
-import type { Experience, Education, Locale, LocalizedString } from '@/lib/types';
+import type { Experience, Education, Locale } from '@/lib/types';
 
 // ============================================
 // TYPES
@@ -29,7 +29,7 @@ export function ExperienceSection({ className }: ExperienceSectionProps) {
     const locale = useLocale() as Locale;
 
     return (
-        <section className={cn('py-20 sm:py-28', className)}>
+        <section id="experience" className={cn('scroll-mt-24 py-20 sm:py-28', className)}>
             <div className="container max-w-6xl mx-auto px-4">
                 {/* Section Header */}
                 <div className="text-center mb-16">

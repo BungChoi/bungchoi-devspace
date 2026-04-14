@@ -7,7 +7,15 @@
  */
 
 import { setRequestLocale } from 'next-intl/server';
-import { HeroSection, HobiSection, ShowcaseProjectsSection, BlogPreviewSection } from '@/components/sections';
+import {
+    HeroSection,
+    TechMarqueeSection,
+    AboutSummarySection,
+    ExperienceSection,
+    ShowcaseProjectsSection,
+    AchievementsSection,
+    ContactSection,
+} from '@/components/sections';
 
 interface PageProps {
     params: Promise<{ locale: string }>;
@@ -22,14 +30,23 @@ export default async function Home({ params }: PageProps) {
             {/* Hero Section */}
             <HeroSection />
 
-            {/* My Activity Section - Spotify & GitHub */}
-            <HobiSection />
+            {/* Tech Stack Marquee */}
+            <TechMarqueeSection className="-mt-12 sm:-mt-16" />
+
+            {/* About Summary */}
+            <AboutSummarySection />
+
+            {/* Experience & Education */}
+            <ExperienceSection />
 
             {/* Showcase Projects Section */}
             <ShowcaseProjectsSection />
 
-            {/* Blog Preview Section */}
-            <BlogPreviewSection />
+            {/* Awards & Certifications */}
+            <AchievementsSection />
+
+            {/* Contact */}
+            <ContactSection />
         </main>
     );
 }

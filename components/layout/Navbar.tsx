@@ -28,20 +28,17 @@ interface NavbarProps {
 // ============================================
 
 export function Navbar({ className }: NavbarProps) {
+    const t = useTranslations('navbar');
+    const tCommon = useTranslations('common');
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [observedSection, setObservedSection] = useState('home');
     const pathname = usePathname(); // Locale-aware pathname (e.g., /about not /id/about)
-
-    // Determine active section based on current path
-    const getActiveSection = () => {
-        if (pathname === '/') return 'home';
-        if (pathname.startsWith('/about')) return 'about';
-        if (pathname.startsWith('/projects')) return 'projects';
-        if (pathname.startsWith('/blog')) return 'blog';
-        return 'home';
-    };
-
-    const activeSection = getActiveSection();
+    const activeSection = pathname.startsWith('/projects')
+        ? 'projects'
+        : pathname === '/'
+            ? observedSection
+            : 'home';
 
     // Handle scroll effect
     useEffect(() => {
@@ -54,20 +51,39 @@ export function Navbar({ className }: NavbarProps) {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Handle navigation click
-    const handleNavClick = (
-        e: React.MouseEvent<HTMLAnchorElement>,
-        href: string,
-        isPage: boolean
-    ) => {
-        if (!isPage && href === '/') {
-            // Home - scroll to top on home page, or navigate to home
-            if (window.location.pathname === '/') {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+    // Track active anchor section on the Home page. On project detail pages,
+    // keep Projects active because that is the current content context.
+    useEffect(() => {
+        if (pathname !== '/') {
+            return;
         }
-        // For page links, let the default navigation happen
+
+        const sectionIds = NAV_ITEMS.map((item) => item.sectionId);
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const visible = entries
+                    .filter((entry) => entry.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+                if (visible?.target.id) {
+                    setObservedSection(visible.target.id);
+                }
+            },
+            {
+                rootMargin: '-35% 0px -55% 0px',
+                threshold: [0.1, 0.25, 0.5],
+            }
+        );
+
+        sectionIds.forEach((sectionId) => {
+            const element = document.getElementById(sectionId);
+            if (element) observer.observe(element);
+        });
+
+        return () => observer.disconnect();
+    }, [pathname]);
+
+    const handleNavClick = () => {
         setIsMobileMenuOpen(false);
     };
 
@@ -92,25 +108,24 @@ export function Navbar({ className }: NavbarProps) {
                     )}
                 >
                     {/* Logo/Brand */}
-                    <a
+                    <Link
                         href="/"
-                        onClick={(e) => handleNavClick(e, '/', false)}
+                        onClick={handleNavClick}
                         className="px-4 py-2 font-bold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
                     >
                         {SITE_CONFIG.author}
-                    </a>
+                    </Link>
 
                     {/* Desktop Navigation Links */}
                     <div className="hidden md:flex items-center gap-1">
                         {NAV_ITEMS.map((item) => {
-                            const linkPath = item.href === '/' ? 'home' : item.href.replace('/', '');
-                            const isActive = activeSection === linkPath;
+                            const isActive = activeSection === item.sectionId;
 
                             return (
-                                <a
+                                <Link
                                     key={item.href}
                                     href={item.href}
-                                    onClick={(e) => handleNavClick(e, item.href, item.isPage)}
+                                    onClick={handleNavClick}
                                     className={cn(
                                         'px-4 py-2 text-sm font-medium rounded-full',
                                         'transition-all duration-200',
@@ -119,8 +134,8 @@ export function Navbar({ className }: NavbarProps) {
                                             : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
                                     )}
                                 >
-                                    {item.label}
-                                </a>
+                                    {t(item.labelKey)}
+                                </Link>
                             );
                         })}
                     </div>
@@ -128,13 +143,13 @@ export function Navbar({ className }: NavbarProps) {
                     {/* Language Switch */}
                     <LanguageSwitcher className="hidden md:flex" />
 
-                    {/* CTA Button - Link to About */}
-                    <a
-                        href="/about"
+                    {/* CTA Button */}
+                    <Link
+                        href="/#contact"
                         className="hidden md:inline-flex ml-2 px-4 py-2 text-sm font-medium rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-hover)] transition-colors"
                     >
-                        Hire Me
-                    </a>
+                        {tCommon('hireMe')}
+                    </Link>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -153,6 +168,7 @@ export function Navbar({ className }: NavbarProps) {
                 activeSection={activeSection}
                 onNavClick={handleNavClick}
                 onClose={() => setIsMobileMenuOpen(false)}
+                hireMeLabel={tCommon('hireMe')}
             />
         </header>
     );
@@ -190,11 +206,14 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 interface MobileMenuProps {
     isOpen: boolean;
     activeSection: string;
-    onNavClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string, isPage: boolean) => void;
+    onNavClick: () => void;
     onClose: () => void;
+    hireMeLabel: string;
 }
 
-function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuProps) {
+function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel }: MobileMenuProps) {
+    const t = useTranslations('navbar');
+
     if (!isOpen) return null;
 
     return (
@@ -208,14 +227,13 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                 )}
             >
                 {NAV_ITEMS.map((item) => {
-                    const linkPath = item.href === '/' ? 'home' : item.href.replace('/', '');
-                    const isActive = activeSection === linkPath;
+                    const isActive = activeSection === item.sectionId;
 
                     return (
-                        <a
+                        <Link
                             key={item.href}
                             href={item.href}
-                            onClick={(e) => onNavClick(e, item.href, item.isPage)}
+                            onClick={onNavClick}
                             className={cn(
                                 'px-4 py-3 text-sm font-medium rounded-xl',
                                 'transition-all duration-200',
@@ -224,21 +242,21 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose }: MobileMenuPr
                                     : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
                             )}
                         >
-                            {item.label}
-                        </a>
+                            {t(item.labelKey)}
+                        </Link>
                     );
                 })}
                 {/* Mobile Language Switch */}
                 <LanguageSwitcher showLabel className="justify-center mt-2 py-2" />
 
                 {/* Mobile CTA Button */}
-                <a
-                    href="/about"
+                <Link
+                    href="/#contact"
                     className="mt-2 text-center py-3 px-4 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-medium"
                     onClick={() => onClose()}
                 >
-                    Hire Me
-                </a>
+                    {hireMeLabel}
+                </Link>
             </div>
         </div>
     );

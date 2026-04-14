@@ -9,6 +9,10 @@
 export { HeroSection } from './HeroSection';
 export type { HeroSectionProps } from './HeroSection';
 
+// About Summary
+export { AboutSummarySection } from './AboutSummarySection';
+export type { AboutSummarySectionProps } from './AboutSummarySection';
+
 // Tech Stack Marquee
 export { TechMarqueeSection } from './TechMarqueeSection';
 export type { TechMarqueeSectionProps } from './TechMarqueeSection';
@@ -24,3 +28,7 @@ export type { ShowcaseProjectsSectionProps } from './ShowcaseProjectsSection';
 // Blog Preview
 export { BlogPreviewSection } from './BlogPreviewSection';
 export type { BlogPreviewSectionProps } from './BlogPreviewSection';
+
+// Contact
+export { ContactSection } from './ContactSection';
+export type { ContactSectionProps } from './ContactSection';

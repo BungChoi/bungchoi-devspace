@@ -16,18 +16,22 @@
 // ============================================
 export {
     HeroSection,
+    AboutSummarySection,
     TechMarqueeSection,
     HobiSection,
     ShowcaseProjectsSection,
     BlogPreviewSection,
+    ContactSection,
 } from './home';
 
 export type {
     HeroSectionProps,
+    AboutSummarySectionProps,
     TechMarqueeSectionProps,
     HobiSectionProps,
     ShowcaseProjectsSectionProps,
     BlogPreviewSectionProps,
+    ContactSectionProps,
 } from './home';
 
 // ============================================
@@ -35,12 +39,14 @@ export type {
 // ============================================
 export {
     BioSection,
+    SkillsSection,
     AchievementsSection,
     ExperienceSection,
 } from './about';
 
 export type {
     BioSectionProps,
+    SkillsSectionProps,
     AchievementsSectionProps,
     ExperienceSectionProps,
 } from './about';
@@ -62,4 +68,3 @@ export type {
 // BLOG PAGE SECTIONS (Future)
 // ============================================
 // export { ... } from './blog';
-

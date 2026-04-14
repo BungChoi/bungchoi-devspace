@@ -45,6 +45,7 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
             id="projects"
             className={cn(
                 'relative py-20 sm:py-28',
+                'scroll-mt-24',
                 className
             )}
         >

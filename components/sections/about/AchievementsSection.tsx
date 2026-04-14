@@ -31,7 +31,7 @@ export function AchievementsSection({ className }: AchievementsSectionProps) {
     const locale = useLocale() as Locale;
 
     return (
-        <section className={cn('py-20 sm:py-28', className)}>
+        <section id="achievements" className={cn('scroll-mt-24 py-20 sm:py-28', className)}>
             <div className="container max-w-4xl mx-auto px-4">
                 {/* Section Header */}
                 <div className="text-center mb-12">
