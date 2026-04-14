@@ -27,7 +27,7 @@ I believe a good application is not just functional, but also maintainable — t
         id: 'Bandung, Indonesia',
         en: 'Bandung, Indonesia'
     },
-    avatar: '/images/avatar.jpg',
+    avatar: '/images/about/foto.jpeg',
     resumeUrl: '/resume.pdf',
     stats: [
         {
