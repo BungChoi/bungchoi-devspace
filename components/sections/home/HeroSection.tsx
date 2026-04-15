@@ -8,11 +8,16 @@
  */
 
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/lib/i18n/navigation';
 import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/lib/types';
+
+const TYPE_SPEED_MS = 22;
+const STATEMENT_HOLD_MS = 1900;
+const STATEMENT_EXIT_MS = 260;
 
 // ============================================
 // TYPES
@@ -31,10 +36,89 @@ export function HeroSection({ className }: HeroSectionProps) {
     const tCommon = useTranslations('common');
     const locale = useLocale() as Locale;
     const { name, title, avatar, email, socialLinks } = personalInfo;
+    const [activeStatementIndex, setActiveStatementIndex] = useState(0);
+    const [visibleStatement, setVisibleStatement] = useState('');
+    const [isStatementLeaving, setIsStatementLeaving] = useState(false);
     const contactLinks = [
         { name: 'Email', url: `mailto:${email}`, icon: 'mail' },
         ...socialLinks,
     ];
+    const rotatingStatements = locale === 'id'
+        ? [
+            {
+                text: 'Membangun aplikasi mobile yang rapi, intuitif, dan mudah dirawat dari sisi UI sampai integrasi API.',
+            },
+            {
+                text: 'Mengubah desain UI menjadi aplikasi Flutter yang polished dengan struktur kode yang konsisten.',
+            },
+            {
+                text: 'Merancang flow mobile yang jelas agar setiap state pengguna mudah dipahami dan tidak membingungkan.',
+            },
+            {
+                text: 'Menjaga implementasi tetap clean melalui komponen reusable, state handling, dan folder structure yang tertata.',
+            },
+            {
+                text: 'Membuat pengalaman mobile yang terasa selesai lewat detail loading, empty, error, dan success state.',
+            },
+        ]
+        : [
+            {
+                text: 'Building clean, intuitive, and maintainable mobile apps from UI implementation to API integration.',
+            },
+            {
+                text: 'Turning UI designs into polished Flutter applications with consistent code structure.',
+            },
+            {
+                text: 'Designing clear mobile flows so every user state feels understandable and predictable.',
+            },
+            {
+                text: 'Keeping implementation clean through reusable components, state handling, and organized folder structure.',
+            },
+            {
+                text: 'Creating finished-feeling mobile experiences through careful loading, empty, error, and success states.',
+            },
+        ];
+    const activeStatement = rotatingStatements[activeStatementIndex] ?? rotatingStatements[0];
+
+    useEffect(() => {
+        const timeouts: number[] = [];
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            timeouts.push(window.setTimeout(() => {
+                setVisibleStatement(activeStatement.text);
+                setIsStatementLeaving(false);
+            }, 0));
+
+            return () => {
+                timeouts.forEach((timeout) => window.clearTimeout(timeout));
+            };
+        }
+
+        timeouts.push(window.setTimeout(() => {
+            setVisibleStatement('');
+            setIsStatementLeaving(false);
+
+            for (let characterIndex = 1; characterIndex <= activeStatement.text.length; characterIndex += 1) {
+                timeouts.push(window.setTimeout(() => {
+                    setVisibleStatement(activeStatement.text.slice(0, characterIndex));
+                }, characterIndex * TYPE_SPEED_MS));
+            }
+
+            const typingDuration = activeStatement.text.length * TYPE_SPEED_MS;
+
+            timeouts.push(window.setTimeout(() => {
+                setIsStatementLeaving(true);
+            }, typingDuration + STATEMENT_HOLD_MS));
+
+            timeouts.push(window.setTimeout(() => {
+                setActiveStatementIndex((current) => (current + 1) % rotatingStatements.length);
+            }, typingDuration + STATEMENT_HOLD_MS + STATEMENT_EXIT_MS));
+        }, 0));
+
+        return () => {
+            timeouts.forEach((timeout) => window.clearTimeout(timeout));
+        };
+    }, [activeStatement.text, rotatingStatements.length]);
 
     return (
         <section
@@ -62,15 +146,21 @@ export function HeroSection({ className }: HeroSectionProps) {
                             {title[locale]}
                         </p>
 
-                        <p className="hero-copy-slogan mt-5 max-w-xl text-base leading-relaxed text-[var(--foreground-secondary)] sm:text-lg">
-                            {locale === 'id'
-                                ? 'Membangun aplikasi mobile yang rapi, intuitif, dan mudah dirawat.'
-                                : 'Building mobile apps that are clean, intuitive, and maintainable.'}
-                            <br />
-                            {locale === 'id'
-                                ? 'Fokus pada pengalaman pengguna, struktur kode, dan detail implementasi.'
-                                : 'Focused on user experience, code structure, and implementation details.'}
-                        </p>
+                        <div
+                            className="hero-copy-slogan mt-5 h-[6rem] max-w-xl overflow-hidden pt-1 text-base leading-relaxed text-[var(--foreground-secondary)] sm:h-[6.25rem] sm:text-lg"
+                            aria-live="polite"
+                        >
+                            <p
+                                className={cn(
+                                    'hero-typewriter-statement',
+                                    isStatementLeaving && 'hero-typewriter-leaving'
+                                )}
+                                aria-label={activeStatement.text}
+                            >
+                                {visibleStatement}
+                                <span className="hero-typewriter-cursor" aria-hidden="true" />
+                            </p>
+                        </div>
 
                         <div className="hero-copy-cta mt-8 flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
                             <Link
@@ -171,6 +261,47 @@ export function HeroSection({ className }: HeroSectionProps) {
                     animation-delay: 620ms;
                 }
 
+                .hero-typewriter-statement {
+                    display: -webkit-box;
+                    width: fit-content;
+                    max-width: 100%;
+                    margin-inline: auto;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+                    border-radius: 8px;
+                    background: color-mix(in srgb, var(--background-secondary) 48%, transparent);
+                    padding: 0.35rem 0.65rem;
+                    overflow: hidden;
+                    backdrop-filter: blur(8px);
+                    transition:
+                        opacity 260ms ease,
+                        transform 260ms ease,
+                        filter 260ms ease;
+                }
+
+                .hero-typewriter-leaving {
+                    opacity: 0;
+                    transform: translateY(-8px);
+                    filter: blur(4px);
+                }
+
+                .hero-typewriter-cursor {
+                    display: inline-block;
+                    width: 2px;
+                    height: 1em;
+                    margin-left: 4px;
+                    transform: translateY(2px);
+                    background: var(--primary);
+                    animation: hero-cursor-blink 900ms steps(2, start) infinite;
+                }
+
+                @media (min-width: 1024px) {
+                    .hero-typewriter-statement {
+                        margin-inline: 0;
+                    }
+                }
+
                 .hero-profile-card {
                     animation: profile-card-enter 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
                     transform-origin: top center;
@@ -194,6 +325,17 @@ export function HeroSection({ className }: HeroSectionProps) {
                         opacity: 1;
                         transform: translateY(0);
                         filter: blur(0);
+                    }
+                }
+
+                @keyframes hero-cursor-blink {
+                    0%,
+                    45% {
+                        opacity: 1;
+                    }
+                    46%,
+                    100% {
+                        opacity: 0;
                     }
                 }
 
@@ -239,8 +381,13 @@ export function HeroSection({ className }: HeroSectionProps) {
                     .hero-copy-socials,
                     .hero-profile-card,
                     .hero-profile-photo,
-                    .hero-profile-caption {
+                    .hero-profile-caption,
+                    .hero-typewriter-cursor {
                         animation: none;
+                    }
+
+                    .hero-typewriter-statement {
+                        transition: none;
                     }
                 }
             `}</style>
