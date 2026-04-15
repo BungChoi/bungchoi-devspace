@@ -4,12 +4,13 @@
  * ===========================================
  * SHOWCASE PROJECTS SECTION
  * ===========================================
- * Displays 4 latest projects in a grid layout
+ * Displays 6 latest projects in a grid layout
  * with a "See All" button linking to /projects page.
  * Data imported from lib/data/projects.ts
  */
 
 import Image from 'next/image';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -34,24 +35,56 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
     const t = useTranslations('sections');
     const tCommon = useTranslations('common');
     const locale = useLocale() as Locale;
+    const sectionRef = useRef<HTMLElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
 
-    // Get 4 latest projects sorted by year (descending)
+    // Get 6 latest projects sorted by year (descending)
     const latestProjects = [...projects]
         .sort((a, b) => (b.year || 0) - (a.year || 0))
-        .slice(0, 4);
+        .slice(0, 6);
+
+    useEffect(() => {
+        const element = sectionRef.current;
+
+        if (!element) {
+            return;
+        }
+
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            const timeout = window.setTimeout(() => setIsVisible(true), 0);
+
+            return () => window.clearTimeout(timeout);
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry?.isIntersecting) {
+                    setIsVisible(true);
+                    observer.disconnect();
+                }
+            },
+            { rootMargin: '0px 0px -16% 0px', threshold: 0.18 }
+        );
+
+        observer.observe(element);
+
+        return () => observer.disconnect();
+    }, []);
 
     return (
         <section
             id="projects"
+            ref={sectionRef}
             className={cn(
-                'relative py-20 sm:py-28',
+                'project-showcase-section relative py-20 sm:py-28',
                 'scroll-mt-24',
+                isVisible && 'is-visible',
                 className
             )}
         >
             <div className="container max-w-7xl mx-auto px-4 sm:px-5 lg:px-6">
                 {/* Section Header */}
-                <div className="text-center mb-16">
+                <div className="project-reveal text-center mb-16" style={{ '--project-delay': '60ms' } as CSSProperties}>
                     <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">
                         {t('myWork')}
                     </span>
@@ -64,14 +97,20 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                 </div>
 
                 {/* Projects Grid */}
-                <div className="grid sm:grid-cols-2 gap-6 lg:gap-8 mb-12">
-                    {latestProjects.map((project) => (
-                        <ProjectCard key={project.id} project={project} locale={locale} />
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 mb-12">
+                    {latestProjects.map((project, index) => (
+                        <div
+                            key={project.id}
+                            className="project-reveal"
+                            style={{ '--project-delay': `${180 + index * 140}ms` } as CSSProperties}
+                        >
+                            <ProjectCard project={project} locale={locale} />
+                        </div>
                     ))}
                 </div>
 
                 {/* See All Button */}
-                <div className="text-center">
+                <div className="project-reveal text-center" style={{ '--project-delay': `${260 + latestProjects.length * 140}ms` } as CSSProperties}>
                     <Link
                         href="/projects"
                         className={cn(
@@ -89,6 +128,35 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                     </Link>
                 </div>
             </div>
+
+            <style jsx>{`
+                .project-reveal {
+                    opacity: 0;
+                    transform: translateY(18px) scale(0.985);
+                    filter: blur(6px);
+                    transition:
+                        opacity 820ms cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 820ms cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 820ms cubic-bezier(0.16, 1, 0.3, 1);
+                    transition-delay: var(--project-delay, 0ms);
+                    will-change: opacity, transform, filter;
+                }
+
+                .is-visible .project-reveal {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                    filter: blur(0);
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    .project-reveal {
+                        opacity: 1;
+                        transform: none;
+                        filter: none;
+                        transition: none;
+                    }
+                }
+            `}</style>
         </section>
     );
 }
