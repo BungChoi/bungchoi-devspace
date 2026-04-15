@@ -41,6 +41,8 @@ export {
     BioSection,
     SkillsSection,
     AchievementsSection,
+    EducationSection,
+    WorkExperienceSection,
     ExperienceSection,
 } from './about';
 
@@ -48,6 +50,8 @@ export type {
     BioSectionProps,
     SkillsSectionProps,
     AchievementsSectionProps,
+    EducationSectionProps,
+    WorkExperienceSectionProps,
     ExperienceSectionProps,
 } from './about';
 

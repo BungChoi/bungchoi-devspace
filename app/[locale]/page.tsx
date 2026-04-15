@@ -11,7 +11,8 @@ import {
     HeroSection,
     TechMarqueeSection,
     AboutSummarySection,
-    ExperienceSection,
+    EducationSection,
+    WorkExperienceSection,
     ShowcaseProjectsSection,
     AchievementsSection,
     ContactSection,
@@ -36,8 +37,11 @@ export default async function Home({ params }: PageProps) {
             {/* About Summary */}
             <AboutSummarySection />
 
-            {/* Experience & Education */}
-            <ExperienceSection />
+            {/* Education */}
+            <EducationSection />
+
+            {/* Work Experience */}
+            <WorkExperienceSection />
 
             {/* Showcase Projects Section */}
             <ShowcaseProjectsSection />
