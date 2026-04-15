@@ -131,8 +131,8 @@ export function HeroSection({ className }: HeroSectionProps) {
         >
             <HeroBackground />
 
-            <div className="container max-w-6xl mx-auto">
-                <div className="grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+            <div className="container max-w-7xl mx-auto px-4 sm:px-5 lg:px-6">
+                <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
                     <div className="text-center lg:text-left">
                         <p className="hero-copy-eyebrow text-sm font-semibold uppercase tracking-widest text-[var(--primary)]">
                             {t('available')}

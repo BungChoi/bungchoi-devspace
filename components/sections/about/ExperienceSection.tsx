@@ -30,7 +30,7 @@ export function ExperienceSection({ className }: ExperienceSectionProps) {
 
     return (
         <section id="experience" className={cn('scroll-mt-24 py-20 sm:py-28', className)}>
-            <div className="container max-w-6xl mx-auto px-4">
+            <div className="container max-w-7xl mx-auto px-4 sm:px-5 lg:px-6">
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">

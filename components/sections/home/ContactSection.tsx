@@ -23,7 +23,7 @@ export function ContactSection({ className }: ContactSectionProps) {
 
     return (
         <section id="contact" className={cn('scroll-mt-24 py-20 sm:py-28', className)}>
-            <div className="container max-w-5xl mx-auto px-4">
+            <div className="container max-w-7xl mx-auto px-4 sm:px-5 lg:px-6">
                 <div className="grid gap-10 rounded-lg border border-[var(--primary)]/20 bg-[var(--background)]/40 p-6 sm:p-8 lg:grid-cols-[1fr_0.9fr]">
                     <div>
                         <span className="text-sm font-medium uppercase tracking-widest text-[var(--primary)]">
