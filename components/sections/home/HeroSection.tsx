@@ -169,12 +169,12 @@ export function HeroSection({ className }: HeroSectionProps) {
                             >
                                 {tCommon('viewProject')}
                             </Link>
-                            <Link
-                                href="/#contact"
+                            <a
+                                href={`mailto:${email}`}
                                 className="inline-flex items-center justify-center rounded-lg border border-[var(--foreground)]/15 px-6 py-3 text-sm font-semibold text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
                             >
                                 {tCommon('hireMe')}
-                            </Link>
+                            </a>
                         </div>
 
                         <div className="hero-copy-socials mt-8 flex justify-center gap-3 lg:justify-start">

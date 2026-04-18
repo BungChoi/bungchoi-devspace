@@ -21,7 +21,6 @@ export {
     HobiSection,
     ShowcaseProjectsSection,
     BlogPreviewSection,
-    ContactSection,
 } from './home';
 
 export type {
@@ -31,7 +30,6 @@ export type {
     HobiSectionProps,
     ShowcaseProjectsSectionProps,
     BlogPreviewSectionProps,
-    ContactSectionProps,
 } from './home';
 
 // ============================================

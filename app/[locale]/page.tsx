@@ -15,7 +15,6 @@ import {
     WorkExperienceSection,
     ShowcaseProjectsSection,
     AchievementsSection,
-    ContactSection,
 } from '@/components/sections';
 
 interface PageProps {
@@ -48,9 +47,6 @@ export default async function Home({ params }: PageProps) {
 
             {/* Awards & Certifications */}
             <AchievementsSection />
-
-            {/* Contact */}
-            <ContactSection />
         </main>
     );
 }

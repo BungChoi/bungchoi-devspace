@@ -13,6 +13,7 @@ import { useTranslations } from 'next-intl';
 import { LanguageSwitcher } from '@/components/ui';
 import { Link, usePathname } from '@/lib/i18n/navigation';
 import { SITE_CONFIG, NAV_ITEMS } from '@/lib/constants';
+import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
 
 // ============================================
@@ -34,6 +35,7 @@ export function Navbar({ className }: NavbarProps) {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [observedSection, setObservedSection] = useState('home');
     const pathname = usePathname(); // Locale-aware pathname (e.g., /about not /id/about)
+    const hireHref = `mailto:${personalInfo.email}`;
     const activeSection = pathname.startsWith('/projects')
         ? 'projects'
         : pathname === '/'
@@ -144,12 +146,12 @@ export function Navbar({ className }: NavbarProps) {
                     <LanguageSwitcher className="hidden md:flex" />
 
                     {/* CTA Button */}
-                    <Link
-                        href="/#contact"
+                    <a
+                        href={hireHref}
                         className="hidden md:inline-flex ml-2 px-4 py-2 text-sm font-medium rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-hover)] transition-colors"
                     >
                         {tCommon('hireMe')}
-                    </Link>
+                    </a>
 
                     {/* Mobile Menu Button */}
                     <button
@@ -169,6 +171,7 @@ export function Navbar({ className }: NavbarProps) {
                 onNavClick={handleNavClick}
                 onClose={() => setIsMobileMenuOpen(false)}
                 hireMeLabel={tCommon('hireMe')}
+                hireHref={hireHref}
             />
         </header>
     );
@@ -209,9 +212,10 @@ interface MobileMenuProps {
     onNavClick: () => void;
     onClose: () => void;
     hireMeLabel: string;
+    hireHref: string;
 }
 
-function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel }: MobileMenuProps) {
+function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel, hireHref }: MobileMenuProps) {
     const t = useTranslations('navbar');
 
     if (!isOpen) return null;
@@ -250,13 +254,13 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel }:
                 <LanguageSwitcher showLabel className="justify-center mt-2 py-2" />
 
                 {/* Mobile CTA Button */}
-                <Link
-                    href="/#contact"
+                <a
+                    href={hireHref}
                     className="mt-2 text-center py-3 px-4 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-medium"
                     onClick={() => onClose()}
                 >
                     {hireMeLabel}
-                </Link>
+                </a>
             </div>
         </div>
     );

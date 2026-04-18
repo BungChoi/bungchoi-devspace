@@ -25,7 +25,6 @@ export const NAV_ITEMS = [
     { id: 'about', labelKey: 'about', label: 'About', href: '/#about', sectionId: 'about' },
     { id: 'experience', labelKey: 'experience', label: 'Experience', href: '/#experience', sectionId: 'experience' },
     { id: 'projects', labelKey: 'projects', label: 'Projects', href: '/#projects', sectionId: 'projects' },
-    { id: 'contact', labelKey: 'contact', label: 'Contact', href: '/#contact', sectionId: 'contact' },
 ] as const;
 
 // ============================================
