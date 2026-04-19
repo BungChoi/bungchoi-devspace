@@ -380,6 +380,28 @@ body {
   }
 }
 
+/* Wider horizontal rhythm for the single-page Home layout */
+.home-page {
+  --home-container-padding: 1rem;
+}
+
+.home-page .container {
+  max-width: none;
+  padding-inline: var(--home-container-padding);
+}
+
+@media (min-width: 640px) {
+  .home-page {
+    --home-container-padding: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-page {
+    --home-container-padding: 12rem;
+  }
+}
+
 /* Section Padding */
 .section-padding {
   padding-block: var(--space-16);

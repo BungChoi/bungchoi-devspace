@@ -26,7 +26,7 @@ export default async function Home({ params }: PageProps) {
     setRequestLocale(locale);
 
     return (
-        <main className="relative">
+        <main className="home-page relative">
             {/* Hero Section */}
             <HeroSection />
 

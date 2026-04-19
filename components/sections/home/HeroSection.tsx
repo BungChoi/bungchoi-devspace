@@ -36,6 +36,7 @@ export function HeroSection({ className }: HeroSectionProps) {
     const tCommon = useTranslations('common');
     const locale = useLocale() as Locale;
     const { name, title, avatar, email, socialLinks } = personalInfo;
+    const heroDisplayName = name.replace(/\s+Rozaqi$/, ' R');
     const [activeStatementIndex, setActiveStatementIndex] = useState(0);
     const [visibleStatement, setVisibleStatement] = useState('');
     const [isStatementLeaving, setIsStatementLeaving] = useState(false);
@@ -139,7 +140,8 @@ export function HeroSection({ className }: HeroSectionProps) {
                         </p>
 
                         <h1 className="hero-copy-heading mt-5 text-4xl font-bold leading-tight text-[var(--foreground)] sm:text-5xl lg:text-6xl">
-                            {t('greeting')} <span className="text-gradient">{name.split(' ')[0]}</span>
+                            <span className="block">{t('greeting')}</span>
+                            <span className="block text-gradient lg:whitespace-nowrap">{heroDisplayName}</span>
                         </h1>
 
                         <p className="hero-copy-title mt-4 text-xl font-medium text-[var(--foreground)]">
@@ -193,7 +195,7 @@ export function HeroSection({ className }: HeroSectionProps) {
                         </div>
                     </div>
 
-                    <div className="hero-profile-card mx-auto w-full max-w-[320px] lg:mx-0 lg:ml-auto">
+                    <div className="hero-profile-card mx-auto w-full max-w-[320px] lg:mx-0 lg:justify-self-center">
                         <div className="relative overflow-hidden rounded-lg border border-[var(--primary)]/25 bg-[var(--background)]/55 shadow-2xl shadow-[var(--primary)]/10">
                             <div className="px-4 pt-4">
                                 <div className="hero-profile-photo relative aspect-[4/5] overflow-hidden rounded-md border border-[var(--foreground)]/10 bg-[var(--background-tertiary)]">
