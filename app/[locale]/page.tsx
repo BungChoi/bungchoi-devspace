@@ -11,6 +11,7 @@ import {
     HeroSection,
     TechMarqueeSection,
     AboutSummarySection,
+    HobiSection,
     EducationSection,
     WorkExperienceSection,
     ShowcaseProjectsSection,
@@ -35,6 +36,9 @@ export default async function Home({ params }: PageProps) {
 
             {/* About Summary */}
             <AboutSummarySection />
+
+            {/* Activity: Spotify + GitHub Stats */}
+            <HobiSection />
 
             {/* Education */}
             <EducationSection />

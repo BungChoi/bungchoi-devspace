@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 import type { NowPlayingResponse } from '@/lib/types/spotify';
 
@@ -59,6 +60,8 @@ function generateContributionData(): number[][] {
 // ============================================
 
 export function HobiSection({ className }: HobiSectionProps) {
+    const t = useTranslations('activity');
+
     return (
         <section
             id="hobi"
@@ -71,17 +74,17 @@ export function HobiSection({ className }: HobiSectionProps) {
                 {/* Section Header */}
                 <div className="text-center mb-16">
                     <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">
-                        What I Do
+                        {t('eyebrow')}
                     </span>
                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
-                        Beyond <span className="text-gradient">Coding</span>
+                        {t('titlePrefix')} <span className="text-gradient">{t('titleHighlight')}</span>
                     </h2>
                 </div>
 
                 {/* Cards Grid */}
                 <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-                    <SpotifyCard />
-                    <GitHubCard data={githubData} />
+                    <SpotifyCard t={t} />
+                    <GitHubCard data={githubData} t={t} />
                 </div>
             </div>
         </section>
@@ -92,7 +95,7 @@ export function HobiSection({ className }: HobiSectionProps) {
 // SPOTIFY CARD - Fetches from API
 // ============================================
 
-function SpotifyCard() {
+function SpotifyCard({ t }: { t: ReturnType<typeof useTranslations<'activity'>> }) {
     const [data, setData] = useState<SpotifyApiResponse | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -151,7 +154,7 @@ function SpotifyCard() {
             )}>
                 <div className="flex items-center justify-between mb-6">
                     <span className="text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-widest">
-                        Now Playing
+                        {t('nowPlaying')}
                     </span>
                     <SpotifyIcon className="w-5 h-5 text-[#1DB954]" />
                 </div>
@@ -160,20 +163,20 @@ function SpotifyCard() {
                         <span className="text-2xl">🎵</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-[var(--foreground)]">Coming Soon</h3>
-                        <p className="text-sm text-[var(--foreground-secondary)]">Spotify integration</p>
+                        <h3 className="font-semibold text-[var(--foreground)]">{t('comingSoon')}</h3>
+                        <p className="text-sm text-[var(--foreground-secondary)]">{t('spotifyIntegration')}</p>
                     </div>
                 </div>
                 <p className="mt-6 text-xs text-[var(--foreground-muted)] text-right">
-                    Real-time now playing 🎧
+                    {t('realTimeNowPlaying')} 🎧
                 </p>
             </div>
         );
     }
 
     const isPlaying = data?.isPlaying || false;
-    const title = data?.title || 'Not Playing';
-    const artist = data?.artist || 'No track';
+    const title = data?.title || t('notPlaying');
+    const artist = data?.artist || t('noTrack');
     const albumArt = data?.albumArt;
     const songUrl = data?.songUrl || 'https://open.spotify.com';
 
@@ -193,7 +196,7 @@ function SpotifyCard() {
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#1DB954]"></span>
                         </span>
                     )}
-                    {isPlaying ? 'Now Playing' : 'Last Played'}
+                    {isPlaying ? t('nowPlaying') : t('lastPlayed')}
                 </span>
                 <SpotifyIcon className="w-5 h-5 text-[#1DB954]" />
             </div>
@@ -220,7 +223,7 @@ function SpotifyCard() {
                 rel="noopener noreferrer"
                 className="mt-6 flex items-center justify-end gap-2 text-sm text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors"
             >
-                Listen along
+                {t('listenAlong')}
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
@@ -248,7 +251,7 @@ interface GitHubApiResponse {
     monthLabels?: { month: string; position: number }[];
 }
 
-function GitHubCard({ data: initialData }: { data?: GitHubApiResponse }) {
+function GitHubCard({ data: initialData, t }: { data?: GitHubApiResponse; t: ReturnType<typeof useTranslations<'activity'>> }) {
     const [data, setData] = useState<GitHubApiResponse | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -293,7 +296,7 @@ function GitHubCard({ data: initialData }: { data?: GitHubApiResponse }) {
         )}>
             <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-medium text-[var(--foreground-muted)] uppercase tracking-widest">
-                    GitHub Activity
+                    {t('githubActivity')}
                 </span>
                 <a
                     href={displayData?.profileUrl || "https://github.com"}
@@ -301,7 +304,7 @@ function GitHubCard({ data: initialData }: { data?: GitHubApiResponse }) {
                     rel="noopener noreferrer"
                     className="text-sm text-[var(--primary)] hover:underline"
                 >
-                    View Profile
+                    {t('viewProfile')}
                 </a>
             </div>
 
@@ -348,29 +351,29 @@ function GitHubCard({ data: initialData }: { data?: GitHubApiResponse }) {
                     {/* Footer: Total + Legend */}
                     <div className="flex items-center justify-between text-xs text-[var(--foreground-muted)] mb-4">
                         <span>
-                            {displayData?.totalContributions?.toLocaleString()} contributions in the last year
+                            {t('contributionsLastYear', { count: displayData?.totalContributions?.toLocaleString() ?? '0' })}
                         </span>
                         <div className="flex items-center gap-1">
-                            <span>Less</span>
+                            <span>{t('less')}</span>
                             {levelColors.map((color, idx) => (
                                 <div key={idx} className={cn('w-[9px] h-[9px] rounded-sm', color)} />
                             ))}
-                            <span>More</span>
+                            <span>{t('more')}</span>
                         </div>
                     </div>
 
                     {/* Stats Cards */}
                     <div className="grid grid-cols-3 gap-3">
                         <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
-                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Last Commit</p>
+                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">{t('lastCommit')}</p>
                             <p className="font-semibold text-[var(--foreground)] text-sm">{displayData?.lastCommitDate || '-'}</p>
                         </div>
                         <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
-                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Longest Streak</p>
-                            <p className="font-semibold text-[var(--foreground)]">{displayData?.longestStreak} days</p>
+                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">{t('longestStreak')}</p>
+                            <p className="font-semibold text-[var(--foreground)]">{displayData?.longestStreak} {t('days')}</p>
                         </div>
                         <div className="p-3 rounded-xl bg-[var(--background)]/60 border border-[var(--border)]/30 text-center">
-                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">Contributions</p>
+                            <p className="text-xs text-[var(--foreground-muted)] uppercase tracking-wider mb-1">{t('contributions')}</p>
                             <p className="font-semibold text-[var(--foreground)]">{displayData?.totalContributions?.toLocaleString()}</p>
                         </div>
                     </div>

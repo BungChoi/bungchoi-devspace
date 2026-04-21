@@ -54,6 +54,28 @@
             "certificates": "Sertifikat"
         }
     },
+    "activity": {
+        "eyebrow": "Aktivitas",
+        "titlePrefix": "Di Luar",
+        "titleHighlight": "Coding",
+        "nowPlaying": "Sedang Diputar",
+        "lastPlayed": "Terakhir Diputar",
+        "comingSoon": "Segera Hadir",
+        "spotifyIntegration": "Integrasi Spotify",
+        "realTimeNowPlaying": "Now playing real-time",
+        "notPlaying": "Tidak Ada Lagu",
+        "noTrack": "Tidak ada track",
+        "listenAlong": "Dengarkan",
+        "githubActivity": "Aktivitas GitHub",
+        "viewProfile": "Lihat Profil",
+        "contributionsLastYear": "{count} kontribusi dalam setahun terakhir",
+        "less": "Sedikit",
+        "more": "Banyak",
+        "lastCommit": "Commit Terakhir",
+        "longestStreak": "Streak Terpanjang",
+        "contributions": "Kontribusi",
+        "days": "hari"
+    },
     "projects": {
         "title": "Proyek Unggulan",
         "description": "Koleksi {count} proyek yang telah saya kerjakan, dari aplikasi mobile hingga web applications.",

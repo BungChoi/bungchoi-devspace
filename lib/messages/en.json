@@ -54,6 +54,28 @@
             "certificates": "Certificates"
         }
     },
+    "activity": {
+        "eyebrow": "What I Do",
+        "titlePrefix": "Beyond",
+        "titleHighlight": "Coding",
+        "nowPlaying": "Now Playing",
+        "lastPlayed": "Last Played",
+        "comingSoon": "Coming Soon",
+        "spotifyIntegration": "Spotify integration",
+        "realTimeNowPlaying": "Real-time now playing",
+        "notPlaying": "Not Playing",
+        "noTrack": "No track",
+        "listenAlong": "Listen along",
+        "githubActivity": "GitHub Activity",
+        "viewProfile": "View Profile",
+        "contributionsLastYear": "{count} contributions in the last year",
+        "less": "Less",
+        "more": "More",
+        "lastCommit": "Last Commit",
+        "longestStreak": "Longest Streak",
+        "contributions": "Contributions",
+        "days": "days"
+    },
     "projects": {
         "title": "Featured Projects",
         "description": "A collection of {count} projects I've worked on, from mobile apps to web applications.",
