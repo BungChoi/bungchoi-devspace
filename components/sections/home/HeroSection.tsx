@@ -15,9 +15,8 @@ import { personalInfo } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import type { Locale } from '@/lib/types';
 
-const TYPE_SPEED_MS = 22;
-const STATEMENT_HOLD_MS = 1900;
-const STATEMENT_EXIT_MS = 260;
+const STATEMENT_HOLD_MS = 4400;
+const STATEMENT_EXIT_MS = 520;
 
 // ============================================
 // TYPES
@@ -37,8 +36,12 @@ export function HeroSection({ className }: HeroSectionProps) {
     const locale = useLocale() as Locale;
     const { name, title, avatar, email, socialLinks } = personalInfo;
     const heroDisplayName = name.replace(/\s+Rozaqi$/, ' R');
+    const highlightedNamePart = 'Umam Ali R';
+    const baseNamePart = heroDisplayName.endsWith(highlightedNamePart)
+        ? heroDisplayName.slice(0, -highlightedNamePart.length).trim()
+        : heroDisplayName;
+    const shouldHighlightName = heroDisplayName.endsWith(highlightedNamePart);
     const [activeStatementIndex, setActiveStatementIndex] = useState(0);
-    const [visibleStatement, setVisibleStatement] = useState('');
     const [isStatementLeaving, setIsStatementLeaving] = useState(false);
     const contactLinks = [
         { name: 'Email', url: `mailto:${email}`, icon: 'mail' },
@@ -85,41 +88,22 @@ export function HeroSection({ className }: HeroSectionProps) {
         const timeouts: number[] = [];
 
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            timeouts.push(window.setTimeout(() => {
-                setVisibleStatement(activeStatement.text);
-                setIsStatementLeaving(false);
-            }, 0));
-
-            return () => {
-                timeouts.forEach((timeout) => window.clearTimeout(timeout));
-            };
+            return undefined;
         }
 
         timeouts.push(window.setTimeout(() => {
-            setVisibleStatement('');
+            setIsStatementLeaving(true);
+        }, STATEMENT_HOLD_MS));
+
+        timeouts.push(window.setTimeout(() => {
+            setActiveStatementIndex((current) => (current + 1) % rotatingStatements.length);
             setIsStatementLeaving(false);
-
-            for (let characterIndex = 1; characterIndex <= activeStatement.text.length; characterIndex += 1) {
-                timeouts.push(window.setTimeout(() => {
-                    setVisibleStatement(activeStatement.text.slice(0, characterIndex));
-                }, characterIndex * TYPE_SPEED_MS));
-            }
-
-            const typingDuration = activeStatement.text.length * TYPE_SPEED_MS;
-
-            timeouts.push(window.setTimeout(() => {
-                setIsStatementLeaving(true);
-            }, typingDuration + STATEMENT_HOLD_MS));
-
-            timeouts.push(window.setTimeout(() => {
-                setActiveStatementIndex((current) => (current + 1) % rotatingStatements.length);
-            }, typingDuration + STATEMENT_HOLD_MS + STATEMENT_EXIT_MS));
-        }, 0));
+        }, STATEMENT_HOLD_MS + STATEMENT_EXIT_MS));
 
         return () => {
             timeouts.forEach((timeout) => window.clearTimeout(timeout));
         };
-    }, [activeStatement.text, rotatingStatements.length]);
+    }, [activeStatementIndex, rotatingStatements.length]);
 
     return (
         <section
@@ -141,7 +125,14 @@ export function HeroSection({ className }: HeroSectionProps) {
 
                         <h1 className="hero-copy-heading mt-5 text-4xl font-bold leading-tight text-[var(--foreground)] sm:text-5xl lg:text-6xl">
                             <span className="block">{t('greeting')}</span>
-                            <span className="block text-gradient lg:whitespace-nowrap">{heroDisplayName}</span>
+                            <span className="block lg:whitespace-nowrap">
+                                <span className="text-gradient">{baseNamePart}</span>
+                                {shouldHighlightName && (
+                                    <span className="hero-name-highlight ml-0 mt-1 inline-block sm:ml-3 sm:mt-0">
+                                        {highlightedNamePart}
+                                    </span>
+                                )}
+                            </span>
                         </h1>
 
                         <p className="hero-copy-title mt-4 text-xl font-medium text-[var(--foreground)]">
@@ -153,14 +144,14 @@ export function HeroSection({ className }: HeroSectionProps) {
                             aria-live="polite"
                         >
                             <p
+                                key={activeStatementIndex}
                                 className={cn(
-                                    'hero-typewriter-statement',
-                                    isStatementLeaving && 'hero-typewriter-leaving'
+                                    'hero-slogan-statement',
+                                    isStatementLeaving && 'hero-slogan-leaving'
                                 )}
                                 aria-label={activeStatement.text}
                             >
-                                {visibleStatement}
-                                <span className="hero-typewriter-cursor" aria-hidden="true" />
+                                <span className="hero-slogan-text">{activeStatement.text}</span>
                             </p>
                         </div>
 
@@ -263,43 +254,71 @@ export function HeroSection({ className }: HeroSectionProps) {
                     animation-delay: 620ms;
                 }
 
-                .hero-typewriter-statement {
-                    display: -webkit-box;
+                .hero-name-highlight {
+                    border-radius: 2px;
+                    background: var(--primary);
+                    color: var(--background);
+                    padding: 0 0.12em 0.05em;
+                    box-decoration-break: clone;
+                    -webkit-box-decoration-break: clone;
+                }
+
+                .hero-slogan-statement {
+                    position: relative;
+                    display: block;
                     width: fit-content;
                     max-width: 100%;
                     margin-inline: auto;
-                    -webkit-line-clamp: 2;
-                    -webkit-box-orient: vertical;
-                    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
-                    border-radius: 8px;
-                    background: color-mix(in srgb, var(--background-secondary) 48%, transparent);
-                    padding: 0.35rem 0.65rem;
-                    overflow: hidden;
-                    backdrop-filter: blur(8px);
+                    padding: 0.15rem 0;
+                    overflow: visible;
+                    animation: hero-slogan-enter 520ms ease both;
                     transition:
-                        opacity 260ms ease,
-                        transform 260ms ease,
-                        filter 260ms ease;
+                        opacity 520ms ease,
+                        transform 520ms ease,
+                        filter 520ms ease;
                 }
 
-                .hero-typewriter-leaving {
+                .hero-slogan-text {
+                    position: relative;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    font-weight: 500;
+                    color: color-mix(in srgb, var(--foreground-secondary) 82%, transparent);
+                    background: linear-gradient(
+                        100deg,
+                        color-mix(in srgb, var(--foreground-secondary) 58%, transparent) 0%,
+                        color-mix(in srgb, var(--foreground-secondary) 68%, transparent) 9%,
+                        color-mix(in srgb, var(--foreground) 82%, transparent) 13%,
+                        color-mix(in srgb, #ffffff 96%, var(--foreground) 4%) 16%,
+                        color-mix(in srgb, var(--foreground) 82%, transparent) 19%,
+                        color-mix(in srgb, var(--foreground-secondary) 66%, transparent) 27%,
+                        color-mix(in srgb, var(--foreground) 78%, transparent) 35%,
+                        color-mix(in srgb, #ffffff 92%, var(--foreground) 8%) 39%,
+                        color-mix(in srgb, var(--foreground) 78%, transparent) 43%,
+                        color-mix(in srgb, var(--foreground-secondary) 64%, transparent) 52%,
+                        color-mix(in srgb, var(--foreground) 80%, transparent) 64%,
+                        color-mix(in srgb, #ffffff 95%, var(--foreground) 5%) 68%,
+                        color-mix(in srgb, var(--foreground) 80%, transparent) 72%,
+                        color-mix(in srgb, var(--foreground-secondary) 58%, transparent) 100%
+                    );
+                    background-size: 420% 100%;
+                    background-position: 140% 0;
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    animation: hero-slogan-text-shimmer 5800ms linear infinite;
+                }
+
+                .hero-slogan-leaving {
                     opacity: 0;
                     transform: translateY(-8px);
                     filter: blur(4px);
                 }
 
-                .hero-typewriter-cursor {
-                    display: inline-block;
-                    width: 2px;
-                    height: 1em;
-                    margin-left: 4px;
-                    transform: translateY(2px);
-                    background: var(--primary);
-                    animation: hero-cursor-blink 900ms steps(2, start) infinite;
-                }
-
                 @media (min-width: 1024px) {
-                    .hero-typewriter-statement {
+                    .hero-slogan-statement {
                         margin-inline: 0;
                     }
                 }
@@ -330,14 +349,25 @@ export function HeroSection({ className }: HeroSectionProps) {
                     }
                 }
 
-                @keyframes hero-cursor-blink {
-                    0%,
-                    45% {
-                        opacity: 1;
-                    }
-                    46%,
-                    100% {
+                @keyframes hero-slogan-enter {
+                    from {
                         opacity: 0;
+                        transform: translateY(8px);
+                        filter: blur(4px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                        filter: blur(0);
+                    }
+                }
+
+                @keyframes hero-slogan-text-shimmer {
+                    0% {
+                        background-position: 140% 0;
+                    }
+                    100% {
+                        background-position: -85% 0;
                     }
                 }
 
@@ -383,13 +413,20 @@ export function HeroSection({ className }: HeroSectionProps) {
                     .hero-copy-socials,
                     .hero-profile-card,
                     .hero-profile-photo,
-                    .hero-profile-caption,
-                    .hero-typewriter-cursor {
+                    .hero-profile-caption {
                         animation: none;
                     }
 
-                    .hero-typewriter-statement {
+                    .hero-slogan-statement {
                         transition: none;
+                        animation: none;
+                    }
+
+                    .hero-slogan-text {
+                        animation: none;
+                        color: color-mix(in srgb, var(--foreground-secondary) 82%, transparent);
+                        background: none;
+                        -webkit-text-fill-color: currentColor;
                     }
                 }
             `}</style>
