@@ -8,6 +8,7 @@
  */
 
 import { cn } from '@/lib/utils';
+import { Link } from '@/lib/i18n/navigation';
 
 // ============================================
 // TYPES
@@ -28,7 +29,7 @@ export function ProjectsHeaderSection({ className, totalProjects }: ProjectsHead
             <div className="container max-w-6xl mx-auto px-4">
                 {/* Breadcrumb */}
                 <div className="flex items-center gap-2 text-sm text-[var(--foreground-muted)] mb-6">
-                    <a href="/" className="hover:text-[var(--primary)] transition-colors">Home</a>
+                    <Link href="/" className="hover:text-[var(--primary)] transition-colors">Home</Link>
                     <span>/</span>
                     <span className="text-[var(--foreground)]">Projects</span>
                 </div>
@@ -42,7 +43,7 @@ export function ProjectsHeaderSection({ className, totalProjects }: ProjectsHead
                         Featured <span className="text-gradient">Projects</span>
                     </h1>
                     <p className="mt-4 text-lg text-[var(--foreground-secondary)]">
-                        A collection of {totalProjects} projects I've worked on, from mobile apps to web applications.
+                        A collection of {totalProjects} projects I&apos;ve worked on, from mobile apps to web applications.
                     </p>
                 </div>
             </div>

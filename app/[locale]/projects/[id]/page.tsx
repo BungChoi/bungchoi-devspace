@@ -1,28 +1,40 @@
 /**
  * ===========================================
- * PROJECT DETAIL PAGE
+ * PROJECT DETAIL PAGE - Simple Layout Draft
  * ===========================================
- * Dynamic page showing full project details.
+ * Temporary dummy layout for reviewing project detail presentation.
  */
 
 import { notFound } from 'next/navigation';
-import { Metadata } from 'next';
+import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
+import Image from 'next/image';
 import { setRequestLocale } from 'next-intl/server';
 import { Link } from '@/lib/i18n/navigation';
 import { projects } from '@/lib/data';
-import { cn } from '@/lib/utils';
-import { locales } from '@/lib/i18n/config';
-
-// ============================================
-// METADATA
-// ============================================
+import { locales, Locale } from '@/lib/i18n/config';
+import { t } from '@/lib/utils/localization';
 
 interface PageProps {
     params: Promise<{ locale: string; id: string }>;
 }
 
+interface DetailDraft {
+    title: string;
+    badge: string;
+    sourceLabel: string;
+    sourceUrl: string;
+    sections: {
+        overview: string;
+        problem: string;
+        solution: string;
+        features: string[];
+        technologies: string[];
+    };
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const { id } = await params;
+    const { locale, id } = await params;
     const project = projects.find((p) => p.id === id);
 
     if (!project) {
@@ -31,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     return {
         title: project.title,
-        description: project.description,
+        description: t(project.description, locale as Locale),
     };
 }
 
@@ -44,13 +56,10 @@ export async function generateStaticParams() {
     );
 }
 
-// ============================================
-// PAGE COMPONENT
-// ============================================
-
 export default async function ProjectDetailPage({ params }: PageProps) {
     const { locale, id } = await params;
     setRequestLocale(locale);
+    const loc = locale as Locale;
 
     const project = projects.find((p) => p.id === id);
 
@@ -58,144 +67,216 @@ export default async function ProjectDetailPage({ params }: PageProps) {
         notFound();
     }
 
+    const label = getLabels(loc);
+    const draft = getDummyDetail(loc);
+
     return (
-        <main className="relative pt-32 pb-20">
-            <div className="container max-w-4xl mx-auto px-4">
-                {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-sm text-[var(--foreground-muted)] mb-8">
-                    <Link href="/" className="hover:text-[var(--primary)] transition-colors">
-                        Home
-                    </Link>
-                    <span>/</span>
-                    <Link href="/projects" className="hover:text-[var(--primary)] transition-colors">
-                        Projects
-                    </Link>
-                    <span>/</span>
-                    <span className="text-[var(--foreground)]">{project.title}</span>
-                </nav>
+        <main className="relative min-h-screen pt-28 pb-20">
+            <div className="container mx-auto max-w-5xl">
+                <Link
+                    href="/#projects"
+                    className="mb-8 inline-flex text-sm text-[var(--foreground-muted)] transition-colors hover:text-[var(--primary)]"
+                >
+                    {label.back}
+                </Link>
 
-                {/* Header */}
-                <header className="mb-12">
-                    {/* Featured Badge */}
-                    {project.featured && (
-                        <span className="inline-block px-3 py-1 rounded-full bg-[var(--primary)] text-white text-xs font-bold mb-4">
-                            Featured Project
-                        </span>
-                    )}
-
-                    <h1 className="text-4xl sm:text-5xl font-bold text-[var(--foreground)] mb-4">
-                        {project.title}
-                    </h1>
-
-                    <p className="text-lg text-[var(--foreground-secondary)] mb-6">
-                        {project.description}
-                    </p>
-
-                    {/* Meta Info */}
-                    <div className="flex flex-wrap items-center gap-4 text-sm">
-                        {project.year && (
-                            <span className="px-3 py-1 rounded-full bg-[var(--foreground)]/5 text-[var(--foreground-muted)]">
-                                📅 {project.year}
-                            </span>
-                        )}
-                    </div>
-                </header>
-
-                {/* Project Image Placeholder */}
-                <div className="aspect-video rounded-2xl overflow-hidden bg-[var(--background-tertiary)] mb-12 relative border border-[var(--primary)]/20">
-                    <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent" />
-                    <div className="absolute inset-0 flex items-center justify-center text-8xl opacity-20">
-                        📱
-                    </div>
-                </div>
-
-                {/* Long Description */}
-                {project.longDescription && (
-                    <section className="mb-12">
-                        <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">
-                            About This Project
-                        </h2>
-                        <div className="prose prose-invert max-w-none">
-                            <p className="text-[var(--foreground-secondary)] leading-relaxed whitespace-pre-line">
-                                {project.longDescription}
-                            </p>
+                <article className="rounded-lg border border-[var(--foreground)]/10 bg-[var(--background)]/45 p-6 sm:p-8 lg:p-10">
+                    <header className="flex flex-col gap-5 border-b border-[var(--foreground)]/10 pb-8 sm:flex-row sm:items-start sm:justify-between">
+                        <div>
+                            <h1 className="text-3xl font-bold leading-tight text-[var(--foreground)] sm:text-4xl lg:text-5xl">
+                                {draft.title}
+                            </h1>
+                            <div className="mt-5">
+                                <span className="inline-flex rounded-lg border border-[var(--primary)]/30 bg-[var(--primary)]/10 px-3 py-2 text-sm font-semibold text-[var(--primary)]">
+                                    {draft.badge}
+                                </span>
+                            </div>
                         </div>
-                    </section>
-                )}
 
-                {/* Tech Stack */}
-                <section className="mb-12">
-                    <h2 className="text-2xl font-bold text-[var(--foreground)] mb-4">
-                        Tech Stack
-                    </h2>
-                    <div className="flex flex-wrap gap-2">
-                        {project.tags.map((tag) => (
-                            <span
-                                key={tag}
-                                className={cn(
-                                    'px-4 py-2 rounded-full text-sm font-medium',
-                                    'bg-[var(--primary)]/10 text-[var(--primary)]',
-                                    'border border-[var(--primary)]/20'
-                                )}
-                            >
-                                {tag}
-                            </span>
-                        ))}
+                        <a
+                            href={draft.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 rounded-lg border border-[var(--foreground)]/10 px-4 py-2 text-sm font-semibold text-[var(--foreground)] transition-colors hover:border-[var(--primary)]/40 hover:text-[var(--primary)]"
+                        >
+                            <GithubIcon />
+                            {draft.sourceLabel}
+                        </a>
+                    </header>
+
+                    {project.image && (
+                        <figure className="border-b border-[var(--foreground)]/10 py-8">
+                            <div className="relative aspect-video overflow-hidden rounded-lg border border-[var(--foreground)]/10 bg-[var(--background-tertiary)]">
+                                <Image
+                                    src={project.image}
+                                    alt={project.title}
+                                    fill
+                                    className="object-cover"
+                                    sizes="(max-width: 1024px) 100vw, 960px"
+                                    priority
+                                />
+                            </div>
+                        </figure>
+                    )}
+
+                    <div>
+                        <ContentSection title={label.overview} accent="primary">
+                            <Paragraph>{draft.sections.overview}</Paragraph>
+                        </ContentSection>
+
+                        <ContentSection title={label.problem} accent="amber">
+                            <Paragraph>{draft.sections.problem}</Paragraph>
+                        </ContentSection>
+
+                        <ContentSection title={label.solution} accent="primary">
+                            <Paragraph>{draft.sections.solution}</Paragraph>
+                        </ContentSection>
+
+                        <ContentSection title={label.features} accent="primary">
+                            <FeatureGrid items={draft.sections.features} />
+                        </ContentSection>
+
+                        <ContentSection title={label.technologies} accent="primary" isLast>
+                            <TagList tags={draft.sections.technologies} />
+                        </ContentSection>
                     </div>
-                </section>
-
-                {/* Action Buttons */}
-                <section className="flex flex-wrap gap-4">
-                    {project.githubUrl && (
-                        <a
-                            href={project.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={cn(
-                                'inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium',
-                                'bg-[var(--foreground)]/10 text-[var(--foreground)]',
-                                'hover:bg-[var(--foreground)]/20 transition-colors'
-                            )}
-                        >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                            </svg>
-                            View Source Code
-                        </a>
-                    )}
-                    {(project.liveUrl || project.playStoreUrl) && (
-                        <a
-                            href={project.liveUrl || project.playStoreUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={cn(
-                                'inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium',
-                                'bg-[var(--primary)] text-white',
-                                'hover:bg-[var(--primary)]/90 transition-colors',
-                                'shadow-lg shadow-[var(--primary)]/25'
-                            )}
-                        >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                            {project.playStoreUrl ? 'View on Play Store' : 'Live Demo'}
-                        </a>
-                    )}
-                </section>
-
-                {/* Back Link */}
-                <div className="mt-16 pt-8 border-t border-[var(--foreground)]/10">
-                    <Link
-                        href="/projects"
-                        className="inline-flex items-center gap-2 text-[var(--foreground-muted)] hover:text-[var(--primary)] transition-colors"
-                    >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                        Back to All Projects
-                    </Link>
-                </div>
+                </article>
             </div>
         </main>
     );
+}
+
+function ContentSection({
+    title,
+    accent,
+    isLast = false,
+    children,
+}: {
+    title: string;
+    accent: 'primary' | 'amber';
+    isLast?: boolean;
+    children: ReactNode;
+}) {
+    const accentClass = accent === 'amber' ? 'border-amber-400' : 'border-[var(--primary)]';
+
+    return (
+        <section className={isLast ? 'py-8' : 'border-b border-[var(--foreground)]/10 py-8'}>
+            <h2 className={`border-l-4 ${accentClass} pl-4 text-xl font-bold leading-tight text-[var(--foreground)]`}>
+                {title}
+            </h2>
+            <div className="mt-5">{children}</div>
+        </section>
+    );
+}
+
+function Paragraph({ children }: { children: ReactNode }) {
+    return (
+        <p className="max-w-none text-base leading-8 text-[var(--foreground-secondary)] sm:text-lg">
+            {children}
+        </p>
+    );
+}
+
+function FeatureGrid({ items }: { items: string[] }) {
+    return (
+        <div className="grid gap-4 md:grid-cols-2">
+            {items.map((item) => (
+                <div
+                    key={item}
+                    className="flex items-start gap-4 rounded-lg border border-[var(--foreground)]/10 bg-[var(--foreground)]/[0.03] px-4 py-4"
+                >
+                    <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-[var(--primary)]" />
+                    <p className="text-sm font-medium leading-relaxed text-[var(--foreground-secondary)] sm:text-base">
+                        {item}
+                    </p>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function TagList({ tags }: { tags: string[] }) {
+    return (
+        <div className="flex flex-wrap gap-3">
+            {tags.map((tag) => (
+                <span
+                    key={tag}
+                    className="rounded-lg border border-[var(--foreground)]/10 bg-[var(--foreground)]/[0.04] px-4 py-2 text-sm font-semibold text-[var(--foreground-secondary)]"
+                >
+                    {tag}
+                </span>
+            ))}
+        </div>
+    );
+}
+
+function GithubIcon() {
+    return (
+        <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.49 0-.24-.01-1.04-.01-1.9-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.93.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.33 9.33 0 0 1 12 6.94c.85 0 1.7.12 2.5.34 1.9-1.33 2.74-1.05 2.74-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.38-.01 2.49-.01 2.82 0 .27.18.59.69.49A10.05 10.05 0 0 0 22 12.26C22 6.58 17.52 2 12 2Z" />
+        </svg>
+    );
+}
+
+function getDummyDetail(loc: Locale): DetailDraft {
+    if (loc === 'en') {
+        return {
+            title: 'Mobile App Case Study',
+            badge: 'Open Source',
+            sourceLabel: 'Source',
+            sourceUrl: 'https://github.com/example/mobile-app',
+            sections: {
+                overview:
+                    'This project is a dummy mobile application case study created to review the project detail layout. The page is designed to explain the project in a simple sequence: what the product is, what problem it addresses, how the solution works, which features matter, and which technologies are used. The final content can later be replaced with real project data without changing the main reading structure.',
+                problem:
+                    'The main problem is that project detail pages can become too dense when every technical note, feature, role, and result is shown at once. A portfolio reader usually needs a cleaner flow that quickly explains context and value before going into implementation details. This layout keeps the story short, structured, and easier to scan.',
+                solution:
+                    'The solution is to use a compact report-style layout. Each section has one clear purpose, short descriptions, and a consistent visual marker. Features are grouped into simple cards so the page still feels alive, while technologies are placed at the end as supporting information.',
+                features: [
+                    'Clear project summary with enough context for first-time readers',
+                    'Problem statement that explains why the project matters',
+                    'Solution section focused on product direction and implementation approach',
+                    'Feature cards for important capabilities without long paragraphs',
+                    'Technology badges for quick stack recognition',
+                    'Source link placed near the title for fast access',
+                ],
+                technologies: ['Flutter', 'Dart', 'REST API', 'Firebase', 'Figma'],
+            },
+        };
+    }
+
+    return {
+        title: 'Studi Kasus Mobile App',
+        badge: 'Open Source',
+        sourceLabel: 'Source',
+        sourceUrl: 'https://github.com/example/mobile-app',
+        sections: {
+            overview:
+                'Project ini adalah dummy studi kasus aplikasi mobile untuk mengecek layout detail project. Halaman dibuat dengan alur sederhana: menjelaskan apa projectnya, masalah apa yang ingin diselesaikan, bagaimana solusinya, feature apa yang penting, dan teknologi apa yang digunakan. Nanti seluruh konten ini bisa diganti dengan data asli tanpa mengubah struktur utama halaman.',
+            problem:
+                'Masalah utamanya adalah halaman detail project sering terasa terlalu padat ketika semua catatan teknis, feature, role, dan hasil project ditampilkan sekaligus. Pembaca portfolio biasanya butuh alur yang lebih bersih agar cepat memahami konteks dan value sebelum melihat detail implementasi. Layout ini menjaga cerita tetap singkat, terstruktur, dan mudah dipindai.',
+            solution:
+                'Solusinya adalah memakai layout bergaya laporan ringkas. Setiap section punya fungsi yang jelas, deskripsi pendek, dan penanda visual yang konsisten. Feature dibuat dalam card sederhana agar halaman tetap hidup, sedangkan teknologi ditempatkan di akhir sebagai informasi pendukung.',
+            features: [
+                'Ringkasan project yang jelas untuk pembaca pertama kali',
+                'Penjelasan masalah agar alasan project mudah dipahami',
+                'Bagian solusi yang fokus pada arah produk dan pendekatan implementasi',
+                'Card feature untuk menampilkan kemampuan penting tanpa paragraf panjang',
+                'Badge teknologi agar stack cepat dikenali',
+                'Link source diletakkan dekat judul agar mudah diakses',
+            ],
+            technologies: ['Flutter', 'Dart', 'REST API', 'Firebase', 'Figma'],
+        },
+    };
+}
+
+function getLabels(loc: Locale) {
+    return {
+        back: loc === 'id' ? '<- Kembali ke Beranda' : '<- Back to Home',
+        overview: loc === 'id' ? 'Ringkasan' : 'Overview',
+        problem: loc === 'id' ? 'Masalah' : 'Problem',
+        solution: loc === 'id' ? 'Solusi' : 'Solution',
+        features: loc === 'id' ? 'Feature' : 'Features',
+        technologies: loc === 'id' ? 'Teknologi' : 'Technologies',
+    };
 }

@@ -17,7 +17,10 @@
     "navbar": {
         "home": "Home",
         "about": "About",
+        "skills": "Skills",
+        "experience": "Experience",
         "projects": "Projects",
+        "contact": "Contact",
         "blog": "Blog"
     },
     "hero": {
@@ -41,11 +44,37 @@
         "techStack": "Tech Stack"
     },
     "about": {
+        "title": "About Me",
+        "greeting": "Hi, I'm",
+        "bioSubtitle": "I'm passionate about creating seamless user experiences and writing clean, maintainable code.",
+        "downloadCV": "Download CV",
         "stats": {
             "projects": "Projects",
             "yearsExp": "Years Exp",
             "certificates": "Certificates"
         }
+    },
+    "activity": {
+        "eyebrow": "What I Do",
+        "titlePrefix": "Beyond",
+        "titleHighlight": "Coding",
+        "nowPlaying": "Now Playing",
+        "lastPlayed": "Last Played",
+        "comingSoon": "Coming Soon",
+        "spotifyIntegration": "Spotify integration",
+        "realTimeNowPlaying": "Real-time now playing",
+        "notPlaying": "Not Playing",
+        "noTrack": "No track",
+        "listenAlong": "Listen along",
+        "githubActivity": "GitHub Activity",
+        "viewProfile": "View Profile",
+        "contributionsLastYear": "{count} contributions in the last year",
+        "less": "Less",
+        "more": "More",
+        "lastCommit": "Last Commit",
+        "longestStreak": "Longest Streak",
+        "contributions": "Contributions",
+        "days": "days"
     },
     "projects": {
         "title": "Featured Projects",

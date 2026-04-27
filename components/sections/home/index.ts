@@ -9,6 +9,10 @@
 export { HeroSection } from './HeroSection';
 export type { HeroSectionProps } from './HeroSection';
 
+// About Summary
+export { AboutSummarySection } from './AboutSummarySection';
+export type { AboutSummarySectionProps } from './AboutSummarySection';
+
 // Tech Stack Marquee
 export { TechMarqueeSection } from './TechMarqueeSection';
 export type { TechMarqueeSectionProps } from './TechMarqueeSection';

@@ -8,7 +8,7 @@
 
 import { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
-import { BioSection, AchievementsSection, ExperienceSection } from '@/components/sections/about';
+import { BioSection, AchievementsSection, EducationSection, WorkExperienceSection } from '@/components/sections/about';
 
 export const metadata: Metadata = {
     title: 'About Me',
@@ -28,8 +28,11 @@ export default async function AboutPage({ params }: PageProps) {
             {/* Bio Section - Who I am */}
             <BioSection />
 
-            {/* Experience & Education - My journey */}
-            <ExperienceSection />
+            {/* Education - Academic background */}
+            <EducationSection />
+
+            {/* Work Experience - My journey */}
+            <WorkExperienceSection />
 
             {/* Awards & Certifications */}
             <AchievementsSection />

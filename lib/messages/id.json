@@ -17,7 +17,10 @@
     "navbar": {
         "home": "Beranda",
         "about": "Tentang",
+        "skills": "Skill",
+        "experience": "Pengalaman",
         "projects": "Proyek",
+        "contact": "Kontak",
         "blog": "Blog"
     },
     "hero": {
@@ -41,11 +44,37 @@
         "techStack": "Teknologi yang Digunakan"
     },
     "about": {
+        "title": "Tentang Saya",
+        "greeting": "Halo, Saya",
+        "bioSubtitle": "Saya sangat antusias dalam menciptakan pengalaman pengguna yang mulus dan menulis kode yang bersih serta mudah dipelihara.",
+        "downloadCV": "Download CV",
         "stats": {
             "projects": "Proyek",
             "yearsExp": "Tahun Exp",
             "certificates": "Sertifikat"
         }
+    },
+    "activity": {
+        "eyebrow": "Aktivitas",
+        "titlePrefix": "Di Luar",
+        "titleHighlight": "Coding",
+        "nowPlaying": "Sedang Diputar",
+        "lastPlayed": "Terakhir Diputar",
+        "comingSoon": "Segera Hadir",
+        "spotifyIntegration": "Integrasi Spotify",
+        "realTimeNowPlaying": "Now playing real-time",
+        "notPlaying": "Tidak Ada Lagu",
+        "noTrack": "Tidak ada track",
+        "listenAlong": "Dengarkan",
+        "githubActivity": "Aktivitas GitHub",
+        "viewProfile": "Lihat Profil",
+        "contributionsLastYear": "{count} kontribusi dalam setahun terakhir",
+        "less": "Sedikit",
+        "more": "Banyak",
+        "lastCommit": "Commit Terakhir",
+        "longestStreak": "Streak Terpanjang",
+        "contributions": "Kontribusi",
+        "days": "hari"
     },
     "projects": {
         "title": "Proyek Unggulan",

@@ -6,6 +6,14 @@
  */
 
 // ============================================
+// LOCALIZATION TYPES
+// ============================================
+export interface LocalizedString {
+    id: string;
+    en: string;
+}
+
+// ============================================
 // NAVIGATION TYPES
 // ============================================
 export interface NavItem {
@@ -26,19 +34,94 @@ export interface SocialLink {
 // ============================================
 // PROJECT TYPES
 // ============================================
+
+// Sub-types for structured project content (with LocalizedString support)
+export interface ProjectOverview {
+    summary: LocalizedString;
+    context?: LocalizedString;
+    goals?: LocalizedString[];
+    targetUsers?: {
+        primary: LocalizedString;
+        secondary?: LocalizedString;
+        useCase?: LocalizedString;
+    };
+}
+
+export interface ProjectChallenge {
+    painPoints?: LocalizedString[];
+    constraints?: LocalizedString[];
+    risks?: LocalizedString[];
+}
+
+export interface ProjectSolution {
+    approach?: LocalizedString;
+    keyDecisions?: { decision: LocalizedString; reason: LocalizedString }[];
+    highlights?: LocalizedString[];
+}
+
+export interface ProjectFeature {
+    name: LocalizedString;
+    benefit: LocalizedString;
+    techNote?: string; // Technical notes stay in English
+}
+
+export interface ProjectUserFlow {
+    title: LocalizedString;
+    steps: LocalizedString[];
+}
+
+export interface ProjectArchitecture {
+    stack: {
+        frontend?: string; // Tech names don't need translation
+        stateManagement?: string;
+        backend?: string;
+        tools?: string[];
+    };
+    notes?: LocalizedString[];
+}
+
+export interface ProjectResult {
+    outcomes?: LocalizedString[];
+    impact?: LocalizedString[];
+}
+
 export interface Project {
     id: string;
-    title: string;
-    description: string;
-    longDescription?: string;
+    title: string; // Project names stay the same
+    subtitle?: LocalizedString;
+    description: LocalizedString;
+    longDescription?: LocalizedString;
     image: string;
-    tags: string[];
+    tags: string[]; // Tech tags don't need translation
     liveUrl?: string;
     githubUrl?: string;
     playStoreUrl?: string;
     appStoreUrl?: string;
     featured?: boolean;
     year: number;
+
+    // Extended content fields
+    role?: LocalizedString;
+    platform?: LocalizedString;
+    status?: LocalizedString;
+    timeline?: LocalizedString | string;
+    team?: LocalizedString;
+
+    // Rich content sections
+    overview?: ProjectOverview;
+    challenges?: ProjectChallenge;
+    solution?: ProjectSolution;
+    contributions?: LocalizedString[];
+    features?: ProjectFeature[];
+    roleBasedFeatures?: {
+        [role: string]: LocalizedString[];
+    };
+    userFlows?: ProjectUserFlow[];
+    architecture?: ProjectArchitecture;
+    results?: ProjectResult;
+    lessonsLearned?: LocalizedString[];
+    nextImprovements?: LocalizedString[];
+    screenshots?: { title: LocalizedString; caption: LocalizedString; image?: string }[];
 }
 
 // ============================================
@@ -60,31 +143,43 @@ export type SkillCategory =
     | 'other';
 
 // ============================================
-// EXPERIENCE TYPES
+// ACHIEVEMENT TYPES (with i18n support)
+// ============================================
+export interface Achievement {
+    id: string;
+    title: LocalizedString;
+    issuer: LocalizedString;
+    date: LocalizedString;
+    description?: LocalizedString;
+    certificateUrl?: string;
+}
+
+// ============================================
+// EXPERIENCE TYPES (with i18n support)
 // ============================================
 export interface Experience {
     id: string;
     company: string;
-    position: string;
-    startDate: string;
-    endDate?: string; // undefined = current
-    description: string;
-    achievements?: string[];
+    position: LocalizedString;
+    startDate: LocalizedString;
+    endDate?: LocalizedString; // undefined = current
+    description: LocalizedString;
+    achievements?: LocalizedString[];
     technologies?: string[];
     companyLogo?: string;
 }
 
 // ============================================
-// EDUCATION TYPES
+// EDUCATION TYPES (with i18n support)
 // ============================================
 export interface Education {
     id: string;
     institution: string;
-    degree: string;
-    field: string;
-    startDate: string;
-    endDate?: string;
-    description?: string;
+    degree: LocalizedString;
+    field: LocalizedString;
+    startDate: LocalizedString;
+    endDate?: LocalizedString;
+    description?: LocalizedString;
     gpa?: string;
 }
 
@@ -104,27 +199,30 @@ export interface ContactFormState {
 }
 
 // ============================================
-// PROFILE / PERSONAL INFO TYPES
+// PROFILE / PERSONAL INFO TYPES (with i18n support)
 // ============================================
 export interface Stat {
-    label: string;
+    label: LocalizedString;
     value: string;
     icon?: string;
 }
 
 export interface PersonalInfo {
     name: string;
-    title: string;
-    subtitle?: string;
-    bio: string;
+    title: LocalizedString;
+    subtitle?: LocalizedString;
+    bio: LocalizedString;
     email: string;
     phone?: string;
-    location: string;
+    location: LocalizedString;
     avatar?: string;
     resumeUrl?: string;
     socialLinks: SocialLink[];
     stats?: Stat[];
 }
+
+// Helper type for accessing localized content
+export type Locale = 'id' | 'en';
 
 // ============================================
 // COMPONENT PROP TYPES
