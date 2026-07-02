@@ -99,11 +99,7 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
         projectYear: locale === 'id' ? 'Tahun' : 'Year',
     };
 
-    const projectRole = t(project.role, locale);
-    const projectPlatform = t(project.platform, locale);
-    const projectStatus = t(project.status, locale);
     const projectTimeline = t(project.timeline, locale);
-    const projectTeam = t(project.team, locale);
     const projectSubtitle = t(project.subtitle, locale);
     const projectDescription = t(project.longDescription || project.description, locale);
 
@@ -169,13 +165,11 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                         {/* Tags / Badges */}
                         <div className="flex flex-wrap items-center gap-2 mb-3">
                             <Badge variant="primary" size="sm">
-                                {project.year}
+                                {projectTimeline || project.year}
                             </Badge>
-                            {project.featured && (
-                                <Badge variant="success" size="sm">
-                                    Featured
-                                </Badge>
-                            )}
+                            <Badge variant="info" size="sm">
+                                Android
+                            </Badge>
                         </div>
 
                         {/* Title & Subtitle */}
@@ -189,40 +183,6 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                         )}
 
                         <hr className="border-[var(--border)] my-5" />
-
-                        {/* Metadata Grid */}
-                        <div className="grid grid-cols-2 gap-y-4 gap-x-6 text-sm mb-6 bg-[var(--background-tertiary)]/50 p-4 rounded-xl border border-[var(--border)]/50">
-                            {projectPlatform && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.platform}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectPlatform}</span>
-                                </div>
-                            )}
-                            {projectRole && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.role}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectRole}</span>
-                                </div>
-                            )}
-                            {projectTeam && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.team}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectTeam}</span>
-                                </div>
-                            )}
-                            {projectTimeline && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.timeline}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectTimeline}</span>
-                                </div>
-                            )}
-                            {projectStatus && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.status}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectStatus}</span>
-                                </div>
-                            )}
-                        </div>
 
                         {/* Description */}
                         <div className="mb-6">
