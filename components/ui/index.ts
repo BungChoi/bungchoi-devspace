@@ -31,3 +31,7 @@ export type { BadgeProps, BadgeVariant, BadgeSize, BadgeGroupProps } from './Bad
 // Language Switcher
 export { LanguageSwitcher } from './LanguageSwitcher';
 export type { LanguageSwitcherProps } from './LanguageSwitcher';
+
+// Project Modal
+export { ProjectModal } from './ProjectModal';
+

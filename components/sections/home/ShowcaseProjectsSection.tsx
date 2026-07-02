@@ -18,6 +18,7 @@ import { projects } from '@/lib/data';
 import type { Project } from '@/lib/types';
 import { t as tl } from '@/lib/utils/localization';
 import { Locale } from '@/lib/i18n/config';
+import { ProjectModal } from '@/components/ui';
 
 // ============================================
 // TYPES
@@ -37,6 +38,7 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
     const locale = useLocale() as Locale;
     const sectionRef = useRef<HTMLElement>(null);
     const [isVisible, setIsVisible] = useState(false);
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     // Get 6 latest projects sorted by year (descending)
     const latestProjects = [...projects]
@@ -104,10 +106,22 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
                             className="project-reveal"
                             style={{ '--project-delay': `${180 + index * 140}ms` } as CSSProperties}
                         >
-                            <ProjectCard project={project} locale={locale} />
+                            <ProjectCard 
+                                project={project} 
+                                locale={locale} 
+                                onClick={() => setSelectedProject(project)}
+                            />
                         </div>
                     ))}
                 </div>
+
+                {/* Project Detail Modal */}
+                <ProjectModal
+                    project={selectedProject}
+                    isOpen={selectedProject !== null}
+                    onClose={() => setSelectedProject(null)}
+                    locale={locale}
+                />
 
                 {/* See All Button */}
                 <div className="project-reveal text-center" style={{ '--project-delay': `${260 + latestProjects.length * 140}ms` } as CSSProperties}>
@@ -168,14 +182,23 @@ export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionPr
 interface ProjectCardProps {
     project: Project;
     locale: Locale;
+    onClick: () => void;
 }
 
-function ProjectCard({ project, locale }: ProjectCardProps) {
+function ProjectCard({ project, locale, onClick }: ProjectCardProps) {
     return (
-        <Link
-            href={`/projects/${project.id}`}
+        <div
+            onClick={onClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onClick();
+                }
+            }}
             className={cn(
-                'group block',
+                'group block cursor-pointer',
                 'rounded-xl overflow-hidden',
                 'bg-[var(--background)]/40 backdrop-blur-xl',
                 'border border-[var(--primary)]/30',
@@ -239,7 +262,7 @@ function ProjectCard({ project, locale }: ProjectCardProps) {
 
                 {/* View Project Link */}
                 <div className="mt-4 flex items-center gap-2 text-sm text-[var(--primary)] font-medium">
-                    {locale === 'id' ? 'Lihat Proyek' : 'View Project'}
+                    {locale === 'id' ? 'Lihat Detail' : 'View Details'}
                     <svg
                         className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
                         fill="none"
@@ -250,7 +273,7 @@ function ProjectCard({ project, locale }: ProjectCardProps) {
                     </svg>
                 </div>
             </div>
-        </Link>
+        </div>
     );
 }
 

@@ -7,13 +7,14 @@
  * Grid of all project cards.
  */
 
+import { useState } from 'react';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
-import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
 import { t } from '@/lib/utils/localization';
 import { Locale } from '@/lib/i18n/config';
+import { ProjectModal } from '@/components/ui';
 
 // ============================================
 // TYPES
@@ -30,6 +31,7 @@ interface ProjectsGridSectionProps {
 
 export function ProjectsGridSection({ className, projects }: ProjectsGridSectionProps) {
     const locale = useLocale() as Locale;
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     return (
         <section className={cn('py-12', className)}>
@@ -37,10 +39,23 @@ export function ProjectsGridSection({ className, projects }: ProjectsGridSection
                 {/* Projects Grid */}
                 <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
                     {projects.map((project) => (
-                        <ProjectCard key={project.id} project={project} locale={locale} />
+                        <ProjectCard 
+                            key={project.id} 
+                            project={project} 
+                            locale={locale} 
+                            onClick={() => setSelectedProject(project)}
+                        />
                     ))}
                 </div>
             </div>
+
+            {/* Project Detail Modal */}
+            <ProjectModal
+                project={selectedProject}
+                isOpen={selectedProject !== null}
+                onClose={() => setSelectedProject(null)}
+                locale={locale}
+            />
         </section>
     );
 }
@@ -52,11 +67,23 @@ export function ProjectsGridSection({ className, projects }: ProjectsGridSection
 interface ProjectCardProps {
     project: Project;
     locale: Locale;
+    onClick: () => void;
 }
 
-function ProjectCard({ project, locale }: ProjectCardProps) {
+function ProjectCard({ project, locale, onClick }: ProjectCardProps) {
     return (
-        <Link href={`/projects/${project.id}`} className="block">
+        <div 
+            onClick={onClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onClick();
+                }
+            }}
+            className="block"
+        >
             <article
                 className={cn(
                     'group relative p-6 rounded-xl cursor-pointer',
@@ -130,7 +157,7 @@ function ProjectCard({ project, locale }: ProjectCardProps) {
                     </div>
                 </div>
             </article>
-        </Link>
+        </div>
     );
 }
 
