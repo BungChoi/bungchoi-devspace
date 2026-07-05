@@ -98,6 +98,7 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
         close: locale === 'id' ? 'Tutup' : 'Close',
         projectYear: locale === 'id' ? 'Tahun' : 'Year',
         source: locale === 'id' ? 'Sumber' : 'Source',
+        contributions: locale === 'id' ? 'Kontribusi Saya' : 'My Contribution',
     };
 
     const projectTimeline = t(project.timeline, locale);
@@ -208,6 +209,25 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                                             <div>
                                                 <strong className="text-[var(--foreground)] font-medium">{t(feature.name, locale)}:</strong>{' '}
                                                 {t(feature.benefit, locale)}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
+                        {/* Contributions */}
+                        {project.contributions && project.contributions.length > 0 && (
+                            <div className="mb-6">
+                                <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2">
+                                    {labels.contributions}
+                                </h3>
+                                <ul className="space-y-2 text-sm text-[var(--foreground-secondary)]">
+                                    {project.contributions.map((contribution, idx) => (
+                                        <li key={idx} className="flex items-start gap-2.5">
+                                            <span className="inline-block text-[var(--primary)] text-base leading-none select-none mt-0.5">•</span>
+                                            <div className="text-[var(--foreground-secondary)]">
+                                                {t(contribution, locale)}
                                             </div>
                                         </li>
                                     ))}

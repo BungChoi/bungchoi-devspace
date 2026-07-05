@@ -178,7 +178,7 @@ export const projects: Project[] = [
             'PesantrenQu is a digital pesantren application designed to help manage pesantren activities for students, parents, and the pesantren environment within one integrated ecosystem. This application simplifies the process of monitoring student activities, managing finances, paying administrative fees, and supporting daily worship needs more practically, securely, and transparently. The application is available on Google Play and developed to provide a more convenient digital experience for parents in monitoring their child\'s needs while at the pesantren.'
         ),
         image: '/images/projects/orymu.png',
-        tags: ['Flutter', 'Dart', 'BLoC', 'Clean Architecture', 'REST API'],
+        tags: ['Flutter', 'Dart', 'GetX', 'Clean Architecture'],
         featured: true,
         year: 2024,
         timeline: ls('Tahun 2024', 'Year 2024'),
@@ -212,6 +212,15 @@ export const projects: Project[] = [
                 name: ls('ZISWAF', 'ZISWAF Payments'),
                 benefit: ls('Mendukung Zakat, Infaq, Sedekah, dan Wakaf secara lebih mudah.', 'Supports Zakat, Infaq, Alms, and Waqf payments easily.')
             }
+        ],
+        contributions: [
+            ls('Mengembangkan fitur aplikasi mobile menggunakan Flutter dan Dart.', 'Developed mobile application features using Flutter and Dart.'),
+            ls('Mengimplementasikan state management dan alur aplikasi menggunakan GetX.', 'Implemented state management and application flow using GetX.'),
+            ls('Membangun komponen UI yang responsif dan reusable berdasarkan desain produk.', 'Built responsive and reusable UI components based on the product design.'),
+            ls('Mengintegrasikan REST API untuk data santri, transaksi, uang saku, dan fitur terkait pembayaran.', 'Integrated REST API for student data, transactions, allowance, and payment-related features.'),
+            ls('Mengimplementasikan struktur clean architecture untuk menjaga codebase tetap scalable dan maintainable.', 'Implemented clean architecture structure to keep the codebase scalable and maintainable.'),
+            ls('Menangani proses debugging, peningkatan fitur, dan optimasi aplikasi sebelum rilis.', 'Handled debugging, feature improvements, and app optimization before release.'),
+            ls('Mendukung proses rilis hingga aplikasi berhasil dipublikasikan di Google Play.', 'Supported the release process until the application was published on Google Play.')
         ]
     }
 ];
