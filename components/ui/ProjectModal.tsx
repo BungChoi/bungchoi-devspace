@@ -97,13 +97,11 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
         appStore: locale === 'id' ? 'App Store' : 'App Store',
         close: locale === 'id' ? 'Tutup' : 'Close',
         projectYear: locale === 'id' ? 'Tahun' : 'Year',
+        source: locale === 'id' ? 'Sumber' : 'Source',
+        contributions: locale === 'id' ? 'Kontribusi Saya' : 'My Contribution',
     };
 
-    const projectRole = t(project.role, locale);
-    const projectPlatform = t(project.platform, locale);
-    const projectStatus = t(project.status, locale);
     const projectTimeline = t(project.timeline, locale);
-    const projectTeam = t(project.team, locale);
     const projectSubtitle = t(project.subtitle, locale);
     const projectDescription = t(project.longDescription || project.description, locale);
 
@@ -169,13 +167,11 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                         {/* Tags / Badges */}
                         <div className="flex flex-wrap items-center gap-2 mb-3">
                             <Badge variant="primary" size="sm">
-                                {project.year}
+                                {projectTimeline || project.year}
                             </Badge>
-                            {project.featured && (
-                                <Badge variant="success" size="sm">
-                                    Featured
-                                </Badge>
-                            )}
+                            <Badge variant="info" size="sm">
+                                Android
+                            </Badge>
                         </div>
 
                         {/* Title & Subtitle */}
@@ -189,40 +185,6 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                         )}
 
                         <hr className="border-[var(--border)] my-5" />
-
-                        {/* Metadata Grid */}
-                        <div className="grid grid-cols-2 gap-y-4 gap-x-6 text-sm mb-6 bg-[var(--background-tertiary)]/50 p-4 rounded-xl border border-[var(--border)]/50">
-                            {projectPlatform && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.platform}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectPlatform}</span>
-                                </div>
-                            )}
-                            {projectRole && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.role}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectRole}</span>
-                                </div>
-                            )}
-                            {projectTeam && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.team}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectTeam}</span>
-                                </div>
-                            )}
-                            {projectTimeline && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.timeline}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectTimeline}</span>
-                                </div>
-                            )}
-                            {projectStatus && (
-                                <div>
-                                    <span className="block text-[var(--foreground-muted)] text-xs uppercase tracking-wider font-semibold mb-1">{labels.status}</span>
-                                    <span className="text-[var(--foreground)] font-medium">{projectStatus}</span>
-                                </div>
-                            )}
-                        </div>
 
                         {/* Description */}
                         <div className="mb-6">
@@ -254,6 +216,25 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                             </div>
                         )}
 
+                        {/* Contributions */}
+                        {project.contributions && project.contributions.length > 0 && (
+                            <div className="mb-6">
+                                <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2">
+                                    {labels.contributions}
+                                </h3>
+                                <ul className="space-y-2 text-sm text-[var(--foreground-secondary)]">
+                                    {project.contributions.map((contribution, idx) => (
+                                        <li key={idx} className="flex items-start gap-2.5">
+                                            <span className="inline-block text-[var(--primary)] text-base leading-none select-none mt-0.5">•</span>
+                                            <div className="text-[var(--foreground-secondary)]">
+                                                {t(contribution, locale)}
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        )}
+
                         {/* Tech Stack Tags */}
                         <div className="mb-8">
                             <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-3">
@@ -270,56 +251,63 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                     </div>
 
                     {/* Footer / Links */}
-                    <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-[var(--border)]">
-                        {project.githubUrl && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                leftIcon={
-                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                        <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                                    </svg>
-                                }
-                                onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
-                            >
-                                {labels.github}
-                            </Button>
-                        )}
-                        {project.liveUrl && (
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                leftIcon={
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                    </svg>
-                                }
-                                onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
-                            >
-                                {labels.visitSite}
-                            </Button>
-                        )}
-                        {project.playStoreUrl && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                leftIcon={<span>🤖</span>}
-                                onClick={() => window.open(project.playStoreUrl, '_blank', 'noopener,noreferrer')}
-                            >
-                                {labels.playStore}
-                            </Button>
-                        )}
-                        {project.appStoreUrl && (
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                leftIcon={<span>🍎</span>}
-                                onClick={() => window.open(project.appStoreUrl, '_blank', 'noopener,noreferrer')}
-                            >
-                                {labels.appStore}
-                            </Button>
-                        )}
-                    </div>
+                    {(project.githubUrl || project.liveUrl || project.playStoreUrl || project.appStoreUrl) && (
+                        <div className="mt-4 pt-4 border-t border-[var(--border)]">
+                            <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2.5">
+                                {labels.source}
+                            </h3>
+                            <div className="flex flex-wrap gap-3">
+                                {project.githubUrl && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        leftIcon={
+                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+                                            </svg>
+                                        }
+                                        onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
+                                    >
+                                        {labels.github}
+                                    </Button>
+                                )}
+                                {project.liveUrl && (
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        leftIcon={
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                        }
+                                        onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
+                                    >
+                                        {labels.visitSite}
+                                    </Button>
+                                )}
+                                {project.playStoreUrl && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        leftIcon={<span>🤖</span>}
+                                        onClick={() => window.open(project.playStoreUrl, '_blank', 'noopener,noreferrer')}
+                                    >
+                                        {labels.playStore}
+                                    </Button>
+                                )}
+                                {project.appStoreUrl && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        leftIcon={<span>🍎</span>}
+                                        onClick={() => window.open(project.appStoreUrl, '_blank', 'noopener,noreferrer')}
+                                    >
+                                        {labels.appStore}
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
                 </div>
             </div>
