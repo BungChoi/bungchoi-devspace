@@ -1,3 +1,5 @@
+> **Catatan:** Template ini untuk **penulisan konten** case study. Data yang di-render aplikasi berasal dari `lib/data/projects.ts`. File markdown di `components/sections/projects/data/` adalah draft referensi dan **belum terhubung ke UI**.
+
 ---
 title: "[Nama Project]"
 subtitle: "[One-liner value proposition: apa project ini & untuk siapa]"

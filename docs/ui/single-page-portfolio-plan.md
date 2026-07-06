@@ -1,317 +1,188 @@
-# Single Page Portfolio Plan
+# Single Page Portfolio — Current State & Roadmap
 
-## Ringkasnya
-Portfolio akan diarahkan menjadi **single-page landing portfolio**. Halaman Home menjadi pusat informasi utama: profil, skill, experience, project, achievement, dan kontak. Navigasi utama tidak lagi mendorong user berpindah halaman untuk membaca About atau daftar Project.
-
-Halaman detail yang tetap dipertahankan sebagai halaman terpisah adalah **Project Detail**, karena project membutuhkan penjelasan studi kasus yang panjang.
+> Dokumen ini mencatat **kondisi implementasi saat ini** dan **rencana ke depan**. Bagian "Current State" mencerminkan codebase aktual; bagian "Roadmap" adalah target yang belum dikerjakan.
 
 ---
 
-## 1. Tujuan Perubahan
+## Ringkasan
 
-### Kondisi Saat Ini
-- Home berisi hero, activity/hobi, showcase project, dan blog preview.
-- About dan Projects punya halaman terpisah.
-- Navbar mengarahkan user ke route halaman, misalnya `/about` dan `/projects`.
-- Untuk memahami portfolio, user perlu berpindah-pindah halaman.
+Portfolio menggunakan pendekatan **single-page landing** di Home sebagai pusat informasi utama. Navbar mengarah ke anchor section di Home. Halaman `/about` dan `/projects` tetap ada sebagai halaman sekunder.
 
-### Target Baru
-- Home menjadi halaman utama yang lengkap dan mudah dibaca.
-- Navbar mengarah ke anchor section di Home.
-- Project card tetap bisa membuka halaman detail project.
-- About dan Projects route boleh tetap ada sebagai fallback, tetapi tidak menjadi jalur utama navigasi.
+**Project detail saat ini:** modal popup (`ProjectModal`), bukan halaman `/projects/[id]`.
 
 ---
 
-## 2. Prinsip Layout
+## Current State (Implementasi Saat Ini)
+
+### Routes Aktif
+
+| Route | Halaman | File |
+|-------|---------|------|
+| `/id`, `/en` | Home | `app/[locale]/page.tsx` |
+| `/id/about`, `/en/about` | About | `app/[locale]/about/page.tsx` |
+| `/id/projects`, `/en/projects` | Projects listing | `app/[locale]/projects/page.tsx` |
+
+### Home — Urutan Section
+
+```text
+HeroSection
+TechMarqueeSection
+AboutSummarySection      (#about)
+HobiSection              (#hobi)
+EducationSection         (#experience)
+WorkExperienceSection    (#work-experience)
+ShowcaseProjectsSection  (#projects)
+AchievementsSection
+```
+
+**Tidak ada di Home:** `BlogPreviewSection`, `ContactSection`
+
+### Navbar (`lib/constants/index.ts`)
+
+```text
+Home        → /
+About       → /#about
+Experience  → /#experience
+Projects    → /#projects
+```
+
+- Scroll spy aktif di Home via `IntersectionObserver`
+- Di `/projects`, menu Projects ditandai aktif
+- CTA Hire Me → `mailto:`
+
+### Hero
+
+- Layout dua kolom: intro kiri, foto kanan
+- Foto dari `personalInfo.avatar`
+- Rotating value statements (ID/EN)
+- CTA ke `/#projects` dan `mailto:`
+- Tanpa judul besar "Portfolio"
+
+### Project Detail — Modal
+
+Klik project card (di Home atau `/projects`) membuka **`ProjectModal`**:
+
+```
+ProjectCard onClick → setSelectedProject(project)
+                  → <ProjectModal isOpen onClose locale />
+```
+
+- Komponen: `components/ui/ProjectModal.tsx`
+- Data: `lib/data/projects.ts`
+- Fitur: scroll progress bar, backdrop blur, Escape to close, body scroll lock
+- **Belum ada:** `role="dialog"`, focus trap, shareable URL
+
+### Halaman Sekunder
+
+**About** (`/about`): BioSection, EducationSection, WorkExperienceSection, AchievementsSection
+
+**Projects** (`/projects`): ProjectsHeaderSection, ProjectsGridSection + ProjectModal
+
+### Data Project
+
+- Runtime: `lib/data/projects.ts` dengan dukungan `LocalizedString` (ID/EN)
+- Draft markdown: `components/sections/projects/data/*.md` — **belum terhubung ke UI**
+- Template penulisan: `docs/technical/structure_projects.md`
+
+---
+
+## Roadmap (Belum Diimplementasi)
+
+### Project Detail Page
+
+Rencana awal: halaman terpisah untuk case study panjang.
+
+```
+/id/projects/[id]
+/en/projects/[id]
+```
+
+**Status:** Belum ada. Saat ini modal menampung semua konten detail.
+
+### Contact Section
+
+Rencana: section `#contact` di Home dengan email, social links, CTA hire me.
+
+**Status:** Belum ada `ContactSection`. Navbar belum punya item Contact.
+
+### Blog
+
+- `BlogPreviewSection` ada di codebase, tidak dipakai di Home
+- Route `/blog` belum ada
+
+### Projects Page Enhancements
+
+- Filter by tag/technology
+- Search
+- (Saat ini hanya grid semua project)
+
+### Rich Case Study Content
+
+Type `Project` sudah mendukung `overview`, `challenges`, `solution`, `screenshots`, dll. — belum di-render di modal maupun halaman detail.
+
+### Navbar dari Project Detail Page
+
+Saat `/projects/[id]` ada, klik menu navbar harus kembali ke Home + hash. Behavior ini sudah disiapkan sebagian di `Navbar.tsx` (komentar), tetapi halaman detail belum dibuat.
+
+---
+
+## Prinsip Layout (Tetap Berlaku)
 
 ### Simple First
-Konten harus langsung menunjukkan siapa pemilik portfolio, role, skill utama, pengalaman, dan project. Hindari section yang terlalu dekoratif jika tidak membantu pembaca memahami value.
+Konten langsung menunjukkan siapa pemilik portfolio, role, pengalaman, dan project.
 
-### Single Reading Flow
-User membaca dari atas ke bawah:
-1. Siapa saya.
-2. Apa fokus saya.
-3. Experience dan achievement.
-4. Project yang bisa dibuka detailnya.
-5. Cara menghubungi saya.
-
-### Project Detail Tetap Terpisah
-Project detail tetap berada di route:
-- `/id/projects/[id]`
-- `/en/projects/[id]`
-
-Alasannya, project detail perlu format dokumentasi/case study yang lebih panjang.
+### Single Reading Flow (Target)
+1. Siapa saya
+2. Apa fokus saya
+3. Experience dan achievement
+4. Project yang bisa dibuka detailnya
+5. Cara menghubungi saya ← **belum ada Contact section**
 
 ---
 
-## 3. Struktur Home Baru
+## Komponen Kunci
 
-Urutan section yang direncanakan:
-
-```text
-Hero
-About
-Experience
-Projects
-Achievements
-Contact
-```
-
-### 3.1 Hero
-Hero akan dibuat lebih umum seperti portfolio modern:
-
-```text
-Kiri  : nama, role, CTA, metadata singkat
-Kanan : foto profil
-```
-
-Konten yang ditampilkan:
-- Foto profil dari `public/images/about/foto.jpeg`
-- Nama
-- Role: Mobile Developer
-- CTA:
-  - Lihat Project
-  - Hubungi Saya / Hire Me
-- Metadata singkat:
-  - lokasi
-  - email
-  - social links
-
-Catatan desain:
-- Hero tidak perlu judul besar "Portfolio".
-- Foto menjadi elemen visual utama di kanan.
-- Copy hero dibuat singkat tanpa paragraf deskripsi panjang.
-
-### 3.2 About
-About menjadi ringkasan singkat, bukan halaman panjang.
-
-Isi:
-- Bio pendek
-- Fokus kerja
-- Prinsip implementasi
-- Link download CV jika tersedia
-
-Komponen yang bisa direuse:
-- `BioSection`, tetapi kemungkinan perlu versi compact atau dibuat ulang agar cocok di Home.
-
-### 3.3 Experience
-Menampilkan pengalaman dan pendidikan secara ringkas.
-
-Komponen yang bisa direuse:
-- `ExperienceSection`
-
-Jika terlalu panjang, buat mode compact.
-
-### 3.4 Projects
-Projects menjadi section utama di Home.
-
-Isi:
-- Project featured atau semua project penting.
-- Card project tetap menuju detail project.
-- Link detail tetap:
-  - `/projects/e-porter`
-  - `/projects/e-pkk`
-  - dan seterusnya
-
-Komponen yang bisa direuse:
-- `ShowcaseProjectsSection`
-- `ProjectsGridSection` jika ingin menampilkan semua project.
-
-### 3.5 Achievements
-Menampilkan sertifikat atau penghargaan yang paling relevan.
-
-Komponen yang bisa direuse:
-- `AchievementsSection`
-
-### 3.6 Contact
-Section baru yang menjadi tujuan CTA.
-
-Isi:
-- Email
-- LinkedIn
-- GitHub
-- Instagram
-- CTA hire me
-
-Jika belum ada komponen contact, buat `ContactSection`.
+| Komponen | Lokasi | Dipakai di |
+|----------|--------|------------|
+| `HeroSection` | `sections/home/` | Home |
+| `AboutSummarySection` | `sections/home/` | Home |
+| `ShowcaseProjectsSection` | `sections/home/` | Home |
+| `ProjectsGridSection` | `sections/projects/` | `/projects` |
+| `ProjectModal` | `components/ui/` | Home, `/projects` |
+| `BioSection` | `sections/about/` | `/about` |
 
 ---
 
-## 4. Navbar Baru
+## Verifikasi
 
-Navbar diarahkan ke anchor Home.
+Setelah perubahan pada Home atau project flow:
 
-### Label ID
-```text
-Beranda
-Tentang
-Pengalaman
-Proyek
-Kontak
+```bash
+npm run build
+npx eslint [file-yang-berubah]
 ```
 
-### Label EN
-```text
-Home
-About
-Experience
-Projects
-Contact
-```
-
-### Target Link
-```text
-/id
-/id#about
-/id#experience
-/id#projects
-/id#contact
-```
-
-Untuk English:
-
-```text
-/en
-/en#about
-/en#experience
-/en#projects
-/en#contact
-```
-
-### Behavior
-- Jika user sedang di Home, klik menu melakukan smooth scroll ke section.
-- Jika user sedang di halaman detail project, klik menu mengarah kembali ke Home dengan hash.
-- CTA `Hire Me` mengarah ke `#contact` atau `mailto:`.
+Checklist manual:
+- [ ] Navbar anchor scroll di Home (desktop + mobile)
+- [ ] Project card membuka modal di Home dan `/projects`
+- [ ] Modal tutup via backdrop, tombol X, dan Escape
+- [ ] Locale switcher (`id` ↔ `en`) pada semua halaman
+- [ ] `/about` dan `/projects` tetap accessible
 
 ---
 
-## 5. Route Strategy
+## Keputusan Arsitektur Saat Ini
 
-### Tetap Dipakai
-- `/id`
-- `/en`
-- `/id/projects/[id]`
-- `/en/projects/[id]`
-
-### Secondary / Fallback
-Route berikut boleh tetap ada dulu, tetapi tidak jadi menu utama:
-- `/id/about`
-- `/en/about`
-- `/id/projects`
-- `/en/projects`
-
-Setelah single-page Home stabil, bisa diputuskan:
-1. route tetap dipertahankan untuk SEO/fallback, atau
-2. route diarahkan ke anchor Home.
-
-Rekomendasi awal: **jangan redirect dulu**. Pertahankan route lama sampai Home baru sudah final.
+| Keputusan | Pilihan |
+|-----------|---------|
+| Home sebagai pusat portfolio | Ya |
+| Navbar anchor-based | Ya |
+| Project detail via modal | Ya (sementara) |
+| `/about` dan `/projects` sebagai halaman sekunder | Ya |
+| `/projects/[id]` halaman terpisah | Belum |
+| Blog di Home | Tidak (belum prioritas) |
+| Contact section di Home | Belum |
 
 ---
 
-## 6. Komponen yang Perlu Disesuaikan
-
-### `app/[locale]/page.tsx`
-Home perlu menggabungkan section utama.
-
-Rencana awal:
-
-```tsx
-<HeroSection />
-<AboutSection />
-<ExperienceSection />
-<ShowcaseProjectsSection />
-<AchievementsSection />
-<ContactSection />
-```
-
-### `components/sections/home/HeroSection.tsx`
-Ubah hero dari typography besar "Portfolio" menjadi:
-- layout dua kolom
-- foto kiri
-- intro kanan
-- CTA ke projects/contact
-
-### `components/layout/Navbar.tsx`
-Ubah link page menjadi anchor link ke Home.
-
-### `lib/constants/index.ts`
-Kemungkinan perlu update `NAV_ITEMS` supaya sesuai anchor section.
-
-### `components/sections/about/*`
-Evaluasi apakah komponen About bisa langsung dipakai di Home atau perlu mode compact.
-
-### `components/sections/projects/*`
-Pastikan card project tetap menuju detail project.
-
----
-
-## 7. Tahap Implementasi
-
-### Tahap 1 - Struktur Navigasi
-- Update `NAV_ITEMS` menjadi anchor single-page.
-- Update `Navbar` supaya active state bisa membaca hash/section.
-- CTA `Hire Me` diarahkan ke `#contact`.
-
-### Tahap 2 - Home Composition
-- Update `app/[locale]/page.tsx`.
-- Masukkan section About, Experience, Projects, Achievements.
-- Buat placeholder ContactSection jika belum ada.
-
-### Tahap 3 - Hero Baru
-- Ubah `HeroSection` menjadi layout foto kiri dan intro kanan.
-- Gunakan foto dari `personalInfo.avatar`.
-- Tambahkan CTA ke `#projects` dan `#contact`.
-
-### Tahap 4 - Section Polish
-- Tambahkan `id` pada setiap section: `about`, `experience`, `projects`, `achievements`, `contact`.
-- Pastikan anchor tidak tertutup navbar dengan `scroll-mt-*`.
-- Rapikan spacing agar Home tidak terasa terlalu panjang.
-
-### Tahap 5 - Verification
-- Cek desktop dan mobile.
-- Cek link navbar dari Home.
-- Cek link navbar dari Project Detail.
-- Cek project card tetap membuka detail.
-- Jalankan:
-  - `npx eslint` untuk file yang berubah
-  - `npm run build`
-
----
-
-## 8. Keputusan Awal
-
-- Home menjadi pusat portfolio.
-- Project detail tetap menjadi halaman detail terpisah.
-- About dan Projects route tidak dihapus dulu.
-- Hero baru menggunakan foto profil di sisi kiri.
-- Navbar tidak lagi memprioritaskan route About/Projects, tetapi anchor Home.
-- Blog tidak menjadi prioritas untuk fase awal single-page portfolio.
-
----
-
-## 9. Status Implementasi
-
-### Selesai
-- Navbar utama diarahkan ke anchor Home:
-  - `/#about`
-  - `/#experience`
-  - `/#projects`
-  - `/#contact`
-- Home sudah menjadi single-page portfolio dengan susunan:
-  - Hero
-  - About
-  - Experience
-  - Projects
-  - Achievements
-  - Contact
-- Hero sudah diganti dari teks besar "Portfolio" menjadi layout intro kiri dan foto kanan.
-- Section `ContactSection` sudah ditambahkan.
-- Section `AboutSummarySection` sudah ditambahkan.
-- Project detail tetap dipertahankan sebagai halaman terpisah.
-- Blog preview dan Hobi section tidak lagi menjadi bagian utama Home.
-
-### Catatan Berikutnya
-- Review visual spacing tiap section di desktop dan mobile.
-- Putuskan apakah halaman `/about` dan `/projects` akan tetap ada sebagai fallback atau diarahkan ke anchor Home.
-- Evaluasi apakah section Achievements terlalu panjang untuk Home; jika iya, buat mode compact.
+*Terakhir diselaraskan dengan codebase: Juli 2026*

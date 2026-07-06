@@ -41,61 +41,55 @@ This project follows a **Layer-Based Clean Architecture** pattern optimized for 
 ```
 bungchoi-devspace/
 │
-├── app/                      # Next.js App Router
-│   ├── globals.css           # Global styles & Design System
-│   ├── layout.tsx            # Root layout with metadata
-│   ├── page.tsx              # Home page
-│   └── [route]/              # Additional routes
-│       └── page.tsx
+├── app/                          # Next.js App Router
+│   ├── globals.css               # Global styles & Design System
+│   ├── layout.tsx                # Root layout
+│   ├── [locale]/                 # i18n dynamic segment (id, en)
+│   │   ├── layout.tsx            # Locale layout (Navbar, Footer, IntlProvider)
+│   │   ├── page.tsx              # Home (single-page landing)
+│   │   ├── about/page.tsx        # About page
+│   │   └── projects/page.tsx     # Projects listing
+│   └── api/                      # API routes (Spotify, GitHub stats)
 │
-├── components/               # React Components
-│   ├── ui/                   # Generic reusable UI components
+├── components/                   # React Components
+│   ├── ui/                       # Reusable UI primitives
 │   │   ├── Button.tsx
 │   │   ├── Card.tsx
 │   │   ├── Badge.tsx
-│   │   └── index.ts          # Barrel export
-│   │
-│   ├── sections/             # Page-specific sections
-│   │   ├── Hero.tsx
-│   │   ├── About.tsx
-│   │   ├── Projects.tsx
-│   │   ├── Skills.tsx
-│   │   ├── Contact.tsx
+│   │   ├── LanguageSwitcher.tsx
+│   │   ├── ProjectModal.tsx      # Project detail popup
 │   │   └── index.ts
 │   │
-│   └── layout/               # Layout components
+│   ├── sections/                 # Page-specific sections
+│   │   ├── home/                 # Landing page sections
+│   │   ├── about/                # About page sections
+│   │   ├── projects/             # Projects page sections
+│   │   └── index.ts
+│   │
+│   └── layout/                   # Layout components
 │       ├── Navbar.tsx
 │       ├── Footer.tsx
+│       ├── BackgroundEffects.tsx
 │       └── index.ts
 │
-├── lib/                      # Core library code
-│   ├── constants/            # Application constants
-│   │   └── index.ts
-│   │
-│   ├── data/                 # Static data sources
-│   │   ├── profile.ts        # Personal information
-│   │   ├── projects.ts       # Portfolio projects
-│   │   ├── skills.ts         # Technical skills
-│   │   └── index.ts          # Barrel export
-│   │
-│   ├── types/                # TypeScript type definitions
-│   │   └── index.ts
-│   │
-│   └── utils/                # Utility functions
-│       ├── cn.ts             # Class name utility
-│       └── index.ts
+├── lib/                          # Core library code
+│   ├── constants/                # SITE_CONFIG, NAV_ITEMS, etc.
+│   ├── data/                     # Static data (profile, projects, skills, ...)
+│   ├── i18n/                     # next-intl config, navigation, messages
+│   ├── types/                    # TypeScript interfaces
+│   └── utils/                    # cn(), localization helpers
 │
-├── hooks/                    # Custom React hooks
-│   └── index.ts
+├── hooks/                        # Custom React hooks
 │
-├── public/                   # Static assets
-│   ├── images/
-│   │   ├── projects/         # Project screenshots
-│   │   └── icons/            # Icon files
-│   └── [other assets]
+├── public/                       # Static assets
+│   └── images/
+│       ├── projects/             # Project screenshots
+│       └── about/                # Profile photos
 │
-└── docs/                     # Documentation
-    └── ARCHITECTURE.md       # This file
+└── docs/                         # Documentation
+    ├── technical/                # Architecture, design system, i18n
+    ├── ui/                       # UI plans & page architecture
+    └── brand/                    # Brand kit, layout, CV data
 ```
 
 ---
@@ -748,9 +742,13 @@ import { cn, formatDate } from '@/lib/utils';
 import { projects, skills, personalInfo } from '@/lib/data';
 
 // Components
-import { Button, Card, Badge } from '@/components/ui';
-import { Hero, About, Projects, Contact } from '@/components/sections';
+import { Button, Card, Badge, ProjectModal } from '@/components/ui';
+import { HeroSection, ShowcaseProjectsSection } from '@/components/sections';
+import { ProjectsGridSection } from '@/components/sections/projects';
 import { Navbar, Footer } from '@/components/layout';
+
+// i18n navigation (locale-aware)
+import { Link, usePathname } from '@/lib/i18n/navigation';
 ```
 
 ### CSS Variables Quick Reference

@@ -53,8 +53,11 @@ This project follows a **Layer-Based Clean Architecture** pattern:
 
 | File | Purpose |
 |------|---------|
-| `app/layout.tsx` | Root layout with metadata, fonts, global providers |
-| `app/page.tsx` | Home page component |
+| `app/layout.tsx` | Root layout |
+| `app/[locale]/layout.tsx` | Locale layout with Navbar, Footer, NextIntlClientProvider |
+| `app/[locale]/page.tsx` | Home page (single-page landing) |
+| `app/[locale]/about/page.tsx` | About page |
+| `app/[locale]/projects/page.tsx` | Projects listing page |
 | `app/globals.css` | Design System (CSS variables, utility classes) |
 
 ### Library Files
@@ -64,15 +67,19 @@ This project follows a **Layer-Based Clean Architecture** pattern:
 | `lib/types/index.ts` | TypeScript interfaces | `Project`, `Skill`, `PersonalInfo`, `Experience`, etc. |
 | `lib/constants/index.ts` | App constants | `SITE_CONFIG`, `NAV_ITEMS`, `SOCIAL_LINKS`, `ANIMATION`, `BREAKPOINTS` |
 | `lib/utils/index.ts` | Utilities | `cn()`, `formatDate()`, `isClient`, `generateId()` |
-| `lib/data/index.ts` | Data barrel export | `personalInfo`, `projects`, `skills` |
+| `lib/data/index.ts` | Data barrel export | `personalInfo`, `projects`, `skills`, `experiences`, `achievements` |
+| `lib/i18n/navigation.ts` | Locale-aware navigation | `Link`, `usePathname`, `useRouter`, `redirect` |
+| `lib/utils/localization.ts` | LocalizedString helpers | `t()`, `tArray()`, `ls()` |
 
 ### Component Directories
 
 | Directory | Purpose | Example Files |
 |-----------|---------|---------------|
-| `components/ui/` | Reusable UI primitives | `Button.tsx`, `Card.tsx`, `Badge.tsx`, `Input.tsx` |
-| `components/sections/` | Page sections | `Hero.tsx`, `About.tsx`, `Projects.tsx`, `Contact.tsx` |
-| `components/layout/` | Layout components | `Navbar.tsx`, `Footer.tsx` |
+| `components/ui/` | Reusable UI primitives | `Button.tsx`, `Card.tsx`, `Badge.tsx`, `ProjectModal.tsx`, `LanguageSwitcher.tsx` |
+| `components/sections/home/` | Home sections | `HeroSection`, `ShowcaseProjectsSection`, `AboutSummarySection`, `HobiSection`, ... |
+| `components/sections/about/` | About sections | `BioSection`, `EducationSection`, `WorkExperienceSection`, `AchievementsSection` |
+| `components/sections/projects/` | Projects sections | `ProjectsHeaderSection`, `ProjectsGridSection` |
+| `components/layout/` | Layout components | `Navbar.tsx`, `Footer.tsx`, `BackgroundEffects.tsx` |
 
 ---
 
@@ -376,22 +383,61 @@ import { SITE_CONFIG, NAV_ITEMS } from '@/lib/constants';
 import { projects, skills, personalInfo } from '@/lib/data';
 
 // Components
-import { Button, Card, Badge } from '@/components/ui';
-import { Hero, About, Projects } from '@/components/sections';
+import { Button, Card, Badge, ProjectModal } from '@/components/ui';
+import { HeroSection, ShowcaseProjectsSection } from '@/components/sections';
 import { Navbar, Footer } from '@/components/layout';
+
+// i18n
+import { Link, usePathname } from '@/lib/i18n/navigation';
+import { t, ls } from '@/lib/utils/localization';
 ```
 
 ---
 
 ## Project-Specific Context
 
-This is a **personal portfolio website** for a **mobile developer** (Flutter & React Native). Key content sections:
+This is a **personal portfolio website** for a **mobile developer** (Flutter). Built as a **single-page landing** on Home with secondary pages for About and Projects.
 
-1. **Hero** - Introduction with name, title, and CTA
-2. **About** - Bio, background, experience timeline
-3. **Skills** - Technical skills organized by category
-4. **Projects** - Portfolio of mobile apps and projects
-5. **Contact** - Contact information and social links
+### Home Sections (in order)
+
+1. **HeroSection** — Intro, photo, CTA (`#home`)
+2. **TechMarqueeSection** — Tech stack marquee
+3. **AboutSummarySection** — Short bio (`#about`)
+4. **HobiSection** — Spotify + GitHub activity (`#hobi`)
+5. **EducationSection** — Education timeline (`#experience`)
+6. **WorkExperienceSection** — Work history
+7. **ShowcaseProjectsSection** — 6 latest projects + modal (`#projects`)
+8. **AchievementsSection** — Awards & certifications
+
+### Project Detail Pattern
+
+Project cards open **`ProjectModal`** (popup), not a `/projects/[id]` route.
+
+```tsx
+const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+<ProjectModal project={selectedProject} isOpen={selectedProject !== null} onClose={() => setSelectedProject(null)} locale={locale} />
+```
+
+Data source: `lib/data/projects.ts` with `LocalizedString` for ID/EN content.
+
+### Routes
+
+| Route | Purpose |
+|-------|---------|
+| `/id`, `/en` | Home |
+| `/id/about`, `/en/about` | Full about page |
+| `/id/projects`, `/en/projects` | All projects grid |
+
+### Navbar
+
+Anchor-based on Home: `/#about`, `/#experience`, `/#projects`. Configured in `NAV_ITEMS` (`lib/constants/index.ts`).
+
+### Not Yet Implemented
+
+- `/projects/[id]` detail page
+- `ContactSection` on Home
+- Blog page
+- Markdown case studies wired to UI (`components/sections/projects/data/*.md` are drafts only)
 
 The target audience is potential employers and clients looking to hire a mobile developer.
 
