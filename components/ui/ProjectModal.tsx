@@ -4,13 +4,22 @@
  * ===========================================
  * PROJECT MODAL COMPONENT
  * ===========================================
- * A premium glassmorphic popup modal to show project details.
+ * Project detail dialog — shadcn/ui-inspired layout:
+ * Single full-modal scroll — image, header, and content scroll together.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import Image from 'next/image';
-import { Badge, BadgeGroup } from './Badge';
+import { Badge } from './Badge';
 import { Button } from './Button';
+import { PlayStoreButton } from './PlayStoreButton';
+import {
+    GitHubIcon,
+    ExternalLinkIcon,
+    AppStoreIcon,
+    CheckIcon,
+} from '@/components/icons/ProjectLinkIcons';
+import { cn } from '@/lib/utils';
 import { t } from '@/lib/utils/localization';
 import type { Project, Locale } from '@/lib/types';
 
@@ -21,298 +30,375 @@ interface ProjectModalProps {
     locale: Locale;
 }
 
+type LinkType = 'playStore' | 'appStore' | 'live' | 'github';
+
+interface ProjectLink {
+    type: LinkType;
+    url: string;
+    label: string;
+    icon?: ReactNode;
+}
+
+function openExternal(url: string) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function hasUrl(url?: string): url is string {
+    return Boolean(url?.trim());
+}
+
+function getPlatformLabel(project: Project, locale: Locale): string | null {
+    const fromField = t(project.platform, locale);
+    if (fromField) return fromField;
+    if (project.tags.includes('Android')) return 'Android';
+    if (project.tags.includes('Flutter')) return 'Flutter';
+    return null;
+}
+
+function buildProjectLinks(project: Project, labels: Record<string, string>): ProjectLink[] {
+    const links: ProjectLink[] = [];
+    if (hasUrl(project.playStoreUrl)) {
+        links.push({ type: 'playStore', url: project.playStoreUrl.trim(), label: labels.playStore, icon: null });
+    }
+    if (hasUrl(project.appStoreUrl)) {
+        links.push({ type: 'appStore', url: project.appStoreUrl.trim(), label: labels.appStore, icon: <AppStoreIcon /> });
+    }
+    if (hasUrl(project.liveUrl)) {
+        links.push({ type: 'live', url: project.liveUrl.trim(), label: labels.visitSite, icon: <ExternalLinkIcon /> });
+    }
+    if (hasUrl(project.githubUrl)) {
+        links.push({ type: 'github', url: project.githubUrl.trim(), label: labels.github, icon: <GitHubIcon /> });
+    }
+    return links;
+}
+
+function getPrimaryLink(links: ProjectLink[]): ProjectLink | null {
+    for (const type of ['playStore', 'appStore', 'live', 'github'] as LinkType[]) {
+        const match = links.find((link) => link.type === type);
+        if (match) return match;
+    }
+    return null;
+}
+
+function DialogSeparator({ className }: { className?: string }) {
+    return <div role="separator" className={cn('h-px w-full bg-[var(--border)]', className)} />;
+}
+
+function ProjectLinkButton({
+    link,
+    size = 'sm',
+}: {
+    link: ProjectLink;
+    size?: 'sm' | 'default';
+}) {
+    if (link.type === 'playStore') {
+        return (
+            <PlayStoreButton
+                label={link.label}
+                size={size}
+                onClick={() => openExternal(link.url)}
+            />
+        );
+    }
+
+    return (
+        <Button
+            variant="secondary"
+            size="sm"
+            leftIcon={link.icon}
+            onClick={() => openExternal(link.url)}
+            className="w-auto border border-[var(--border)] bg-transparent hover:bg-[var(--background-tertiary)]"
+        >
+            {link.label}
+        </Button>
+    );
+}
+
+function SectionLabel({ children }: { children: ReactNode }) {
+    return (
+        <h3 className="text-sm font-medium leading-none text-[var(--foreground)]">
+            {children}
+        </h3>
+    );
+}
+
+function DialogFooter({ links }: { links: ProjectLink[] }) {
+    if (links.length === 0) return null;
+
+    const primary = getPrimaryLink(links);
+    const secondary = links.filter((link) => link !== primary);
+
+    return (
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:flex-wrap sm:justify-end sm:gap-2">
+            {secondary.map((link) => (
+                <ProjectLinkButton key={link.type} link={link} />
+            ))}
+            {primary && <ProjectLinkButton link={primary} />}
+        </div>
+    );
+}
+
 export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalProps) {
-    // Handle body scroll locking when modal is open
+    const scrollRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
+        document.body.style.overflow = isOpen ? 'hidden' : '';
         return () => {
             document.body.style.overflow = '';
         };
     }, [isOpen]);
 
-    // Handle Escape key to close modal
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                onClose();
-            }
+            if (event.key === 'Escape') onClose();
         };
-
-        if (isOpen) {
-            window.addEventListener('keydown', handleKeyDown);
-        }
-        return () => {
-            window.removeEventListener('keydown', handleKeyDown);
-        };
+        if (isOpen) window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, onClose]);
 
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const progressRef = useRef<HTMLDivElement>(null);
-
-    // Reset scroll progress when modal opens/changes project
     useEffect(() => {
-        if (scrollRef.current) {
-            scrollRef.current.scrollTop = 0;
-        }
-        if (progressRef.current) {
-            progressRef.current.style.setProperty('--scroll-progress', '0%');
-        }
+        scrollRef.current?.scrollTo({ top: 0 });
     }, [project, isOpen]);
-
-    const handleScroll = () => {
-        const element = scrollRef.current;
-        const progressBar = progressRef.current;
-        if (!element || !progressBar) return;
-        
-        const totalScroll = element.scrollHeight - element.clientHeight;
-        if (totalScroll <= 0) {
-            progressBar.style.setProperty('--scroll-progress', '0%');
-            return;
-        }
-        
-        const currentScroll = element.scrollTop;
-        const progress = (currentScroll / totalScroll) * 100;
-        progressBar.style.setProperty('--scroll-progress', `${progress}%`);
-    };
 
     if (!isOpen || !project) return null;
 
-    // Translation Labels
     const labels = {
-        role: locale === 'id' ? 'Peran' : 'Role',
-        platform: locale === 'id' ? 'Platform' : 'Platform',
-        status: locale === 'id' ? 'Status' : 'Status',
-        timeline: locale === 'id' ? 'Linimasa' : 'Timeline',
-        team: locale === 'id' ? 'Tim' : 'Team',
-        techStack: locale === 'id' ? 'Teknologi' : 'Tech Stack',
-        about: locale === 'id' ? 'Tentang Proyek' : 'About Project',
-        keyFeatures: locale === 'id' ? 'Fitur Utama' : 'Key Features',
-        visitSite: locale === 'id' ? 'Kunjungi Situs' : 'Visit Site',
-        github: locale === 'id' ? 'GitHub' : 'GitHub',
-        playStore: locale === 'id' ? 'Play Store' : 'Play Store',
-        appStore: locale === 'id' ? 'App Store' : 'App Store',
+        about: locale === 'id' ? 'Tentang proyek' : 'About',
+        keyFeatures: locale === 'id' ? 'Fitur utama' : 'Key features',
+        contributions: locale === 'id' ? 'Kontribusi saya' : 'My contribution',
+        techStack: locale === 'id' ? 'Teknologi' : 'Tech stack',
+        visitSite: locale === 'id' ? 'Kunjungi situs' : 'Visit site',
+        github: 'GitHub',
+        playStore: locale === 'id' ? 'Buka di Google Play' : 'Get it on Google Play',
+        appStore: 'App Store',
         close: locale === 'id' ? 'Tutup' : 'Close',
-        projectYear: locale === 'id' ? 'Tahun' : 'Year',
-        source: locale === 'id' ? 'Sumber' : 'Source',
-        contributions: locale === 'id' ? 'Kontribusi Saya' : 'My Contribution',
+        liveOnPlayStore: locale === 'id' ? 'Tersedia di Play Store' : 'Live on Play Store',
+        liveOnAppStore: locale === 'id' ? 'Tersedia di App Store' : 'Live on App Store',
+        liveOnBothStores:
+            locale === 'id' ? 'Tersedia di App Store & Play Store' : 'Live on App Store & Play Store',
+        featured: 'Featured',
     };
 
     const projectTimeline = t(project.timeline, locale);
     const projectSubtitle = t(project.subtitle, locale);
     const projectDescription = t(project.longDescription || project.description, locale);
+    const platformLabel = getPlatformLabel(project, locale);
+    const statusLabel = t(project.status, locale);
+    const links = buildProjectLinks(project, labels);
+    const playStoreLink = links.find((link) => link.type === 'playStore');
+    const isPublished = hasUrl(project.playStoreUrl) || hasUrl(project.appStoreUrl);
+    const primaryLink = getPrimaryLink(links);
+    const fallbackHeaderLink =
+        !playStoreLink && primaryLink ? primaryLink : null;
+
+    const publishedChipLabel =
+        project.playStoreUrl && project.appStoreUrl
+            ? labels.liveOnBothStores
+            : project.playStoreUrl
+                ? labels.liveOnPlayStore
+                : labels.liveOnAppStore;
+
+    const metaItems = [
+        projectTimeline || String(project.year),
+        platformLabel,
+        statusLabel,
+    ].filter(Boolean) as string[];
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8">
-            {/* Backdrop Blur overlay */}
-            <div 
-                className="absolute inset-0 bg-black/80 backdrop-blur-md transition-opacity duration-300 animate-[fadeIn_0.2s_ease-out]"
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-6">
+            {/* Overlay — shadcn: bg-black/80 */}
+            <div
+                className="absolute inset-0 bg-black/50 backdrop-blur-[2px] animate-[fadeIn_0.15s_ease-out]"
                 onClick={onClose}
+                aria-hidden="true"
             />
 
-            {/* Modal Box */}
-            <div className="relative w-full max-w-3xl bg-[var(--background-secondary)] border border-[var(--primary)]/20 rounded-2xl overflow-hidden shadow-2xl max-h-[90vh] md:max-h-[85vh] flex flex-col animate-[slideUp_0.3s_cubic-bezier(0.16,1,0.3,1)] z-10">
-                {/* Scroll Progress Bar */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-[var(--border)]/30 rounded-t-2xl overflow-hidden z-30">
-                    <div 
-                        ref={progressRef}
-                        className="h-full bg-[var(--primary)] transition-[width] duration-150 ease-out" 
-                        style={{ width: 'var(--scroll-progress, 0%)' }}
-                    />
-                </div>
-
-                {/* Close Button */}
+            {/* DialogContent — shadcn: border, shadow-lg, rounded-lg, max-h */}
+            <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="project-modal-title"
+                aria-describedby={projectSubtitle ? 'project-modal-desc' : undefined}
+                className={cn(
+                    'relative z-10 flex w-full flex-col overflow-hidden',
+                    'bg-[var(--card)] text-[var(--card-foreground)]',
+                    'border border-[var(--border)] shadow-lg',
+                    'h-[92vh] sm:h-auto sm:max-h-[88vh] sm:max-w-2xl',
+                    'rounded-t-xl sm:rounded-xl',
+                    'animate-[slideUp_0.2s_ease-out]'
+                )}
+            >
+                {/* Close — fixed above scroll */}
                 <button
+                    type="button"
                     onClick={onClose}
-                    className="absolute top-4 right-4 z-20 flex items-center justify-center w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 border border-white/10 text-white transition-colors"
+                    className={cn(
+                        'absolute right-3 top-3 z-20 rounded-sm p-1.5',
+                        'bg-[var(--card)]/80 backdrop-blur-sm',
+                        'text-[var(--foreground-muted)] opacity-70',
+                        'transition-opacity hover:opacity-100',
+                        'focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:ring-offset-2 focus:ring-offset-[var(--ring-offset)]'
+                    )}
                     aria-label={labels.close}
                 >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
 
-                {/* Scrollable Contents Wrapper */}
-                <div 
+                {/* Full modal scroll — image, header, body, footer in one flow */}
+                <div
                     ref={scrollRef}
-                    onScroll={handleScroll}
-                    className="w-full h-full overflow-y-auto flex flex-col no-scrollbar"
+                    className="flex-1 overflow-y-auto overscroll-contain"
                 >
-                    {/* Top Side: Project Image */}
-                    <div className="w-full aspect-video md:h-[380px] relative bg-[var(--background-tertiary)] flex-shrink-0">
-                    {project.image ? (
-                        <Image
-                            src={project.image}
-                            alt={project.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            priority
-                        />
-                    ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-7xl opacity-20">
-                            📱
-                        </div>
-                    )}
-                    {/* Shadow Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--background-secondary)] via-transparent to-transparent opacity-40" />
-                </div>
+                    {/* Cover image */}
+                    <div className="relative h-44 sm:h-52 overflow-hidden bg-[var(--background-tertiary)]">
+                        {project.image ? (
+                            <Image
+                                src={project.image}
+                                alt=""
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 640px) 100vw, 672px"
+                                priority
+                            />
+                        ) : (
+                            <div className="flex h-full items-center justify-center text-5xl opacity-20">📱</div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-transparent to-transparent" />
 
-                {/* Bottom Side: Details */}
-                <div className="w-full p-6 sm:p-8 flex flex-col justify-between">
-                    <div>
-                        {/* Tags / Badges */}
-                        <div className="flex flex-wrap items-center gap-2 mb-3">
-                            <Badge variant="primary" size="sm">
-                                {projectTimeline || project.year}
-                            </Badge>
-                            <Badge variant="info" size="sm">
-                                Android
-                            </Badge>
-                        </div>
+                        {isPublished && (
+                            <div className="absolute bottom-3 left-4">
+                                <Badge variant="success" size="sm" dot>
+                                    {publishedChipLabel}
+                                </Badge>
+                            </div>
+                        )}
+                    </div>
 
-                        {/* Title & Subtitle */}
-                        <h2 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] tracking-tight">
+                    {/* DialogHeader */}
+                    <div className="space-y-1.5 p-4 pt-3">
+                        <h2
+                            id="project-modal-title"
+                            className="text-lg font-semibold leading-none tracking-tight text-[var(--foreground)]"
+                        >
                             {project.title}
                         </h2>
-                        {projectSubtitle && (
-                            <p className="text-sm font-medium text-[var(--primary)] mt-1.5">
-                                {projectSubtitle}
+
+                        {/* Subtitle + Play Store — satu baris */}
+                        {(projectSubtitle || playStoreLink) && (
+                            <div className="flex items-center justify-between gap-3 -mt-0.5">
+                                {projectSubtitle ? (
+                                    <p
+                                        id="project-modal-desc"
+                                        className="min-w-0 flex-1 text-sm text-[var(--foreground-muted)]"
+                                    >
+                                        {projectSubtitle}
+                                    </p>
+                                ) : (
+                                    (metaItems.length > 0 || project.featured) && (
+                                        <p className="min-w-0 flex-1 text-xs text-[var(--foreground-muted)]">
+                                            {[...metaItems, project.featured ? labels.featured : null]
+                                                .filter(Boolean)
+                                                .join(' · ')}
+                                        </p>
+                                    )
+                                )}
+                                {playStoreLink && (
+                                    <ProjectLinkButton link={playStoreLink} size="sm" />
+                                )}
+                            </div>
+                        )}
+
+                        {projectSubtitle && (metaItems.length > 0 || project.featured) && (
+                            <p className="text-xs text-[var(--foreground-muted)]">
+                                {[...metaItems, project.featured ? labels.featured : null]
+                                    .filter(Boolean)
+                                    .join(' · ')}
                             </p>
                         )}
 
-                        <hr className="border-[var(--border)] my-5" />
+                        {fallbackHeaderLink && (
+                            <div className="flex justify-end">
+                                <ProjectLinkButton link={fallbackHeaderLink} size="sm" />
+                            </div>
+                        )}
+                    </div>
 
-                        {/* Description */}
-                        <div className="mb-6">
-                            <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2">
-                                {labels.about}
-                            </h3>
-                            <p className="text-sm sm:text-base text-[var(--foreground-secondary)] leading-relaxed whitespace-pre-line">
+                    <DialogSeparator />
+
+                    <div className="px-6 py-5 space-y-6">
+                        <section className="space-y-2">
+                            <SectionLabel>{labels.about}</SectionLabel>
+                            <p className="text-sm leading-relaxed text-[var(--foreground-secondary)] whitespace-pre-line">
                                 {projectDescription}
                             </p>
-                        </div>
+                        </section>
 
-                        {/* Key Features */}
                         {project.features && project.features.length > 0 && (
-                            <div className="mb-6">
-                                <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2">
-                                    {labels.keyFeatures}
-                                </h3>
-                                <ul className="space-y-2 text-sm text-[var(--foreground-secondary)]">
+                            <section className="space-y-3">
+                                <SectionLabel>{labels.keyFeatures}</SectionLabel>
+                                <ul className="space-y-2">
                                     {project.features.map((feature, idx) => (
-                                        <li key={idx} className="flex items-start gap-2.5">
-                                            <span className="inline-block text-[var(--primary)] text-base leading-none select-none mt-0.5">•</span>
-                                            <div>
-                                                <strong className="text-[var(--foreground)] font-medium">{t(feature.name, locale)}:</strong>{' '}
-                                                {t(feature.benefit, locale)}
+                                        <li
+                                            key={idx}
+                                            className="rounded-lg border border-[var(--border)] bg-[var(--background)]/50 px-3.5 py-3 text-sm"
+                                        >
+                                            <div className="flex items-start gap-2.5">
+                                                <span className="mt-0.5 text-[var(--primary)]">
+                                                    <CheckIcon className="h-3.5 w-3.5" />
+                                                </span>
+                                                <div className="space-y-0.5">
+                                                    <p className="font-medium leading-none text-[var(--foreground)]">
+                                                        {t(feature.name, locale)}
+                                                    </p>
+                                                    <p className="text-[var(--foreground-muted)] leading-relaxed">
+                                                        {t(feature.benefit, locale)}
+                                                    </p>
+                                                </div>
                                             </div>
                                         </li>
                                     ))}
                                 </ul>
-                            </div>
+                            </section>
                         )}
 
-                        {/* Contributions */}
                         {project.contributions && project.contributions.length > 0 && (
-                            <div className="mb-6">
-                                <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2">
-                                    {labels.contributions}
-                                </h3>
+                            <section className="space-y-3">
+                                <SectionLabel>{labels.contributions}</SectionLabel>
                                 <ul className="space-y-2 text-sm text-[var(--foreground-secondary)]">
                                     {project.contributions.map((contribution, idx) => (
                                         <li key={idx} className="flex items-start gap-2.5">
-                                            <span className="inline-block text-[var(--primary)] text-base leading-none select-none mt-0.5">•</span>
-                                            <div className="text-[var(--foreground-secondary)]">
-                                                {t(contribution, locale)}
-                                            </div>
+                                            <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-[var(--foreground-muted)]" />
+                                            <span className="leading-relaxed">{t(contribution, locale)}</span>
                                         </li>
                                     ))}
                                 </ul>
-                            </div>
+                            </section>
                         )}
 
-                        {/* Tech Stack Tags */}
-                        <div className="mb-8">
-                            <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-3">
-                                {labels.techStack}
-                            </h3>
-                            <BadgeGroup gap="sm">
+                        <section className="space-y-3">
+                            <SectionLabel>{labels.techStack}</SectionLabel>
+                            <div className="flex flex-wrap gap-1.5">
                                 {project.tags.map((tag) => (
-                                    <Badge key={tag} variant="outline" size="sm" pill={false}>
+                                    <Badge key={tag} variant="secondary" size="sm">
                                         {tag}
                                     </Badge>
                                 ))}
-                            </BadgeGroup>
-                        </div>
-                    </div>
-
-                    {/* Footer / Links */}
-                    {(project.githubUrl || project.liveUrl || project.playStoreUrl || project.appStoreUrl) && (
-                        <div className="mt-4 pt-4 border-t border-[var(--border)]">
-                            <h3 className="text-xs uppercase tracking-wider font-bold text-[var(--foreground-muted)] mb-2.5">
-                                {labels.source}
-                            </h3>
-                            <div className="flex flex-wrap gap-3">
-                                {project.githubUrl && (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        leftIcon={
-                                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                                                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                                            </svg>
-                                        }
-                                        onClick={() => window.open(project.githubUrl, '_blank', 'noopener,noreferrer')}
-                                    >
-                                        {labels.github}
-                                    </Button>
-                                )}
-                                {project.liveUrl && (
-                                    <Button
-                                        variant="primary"
-                                        size="sm"
-                                        leftIcon={
-                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                            </svg>
-                                        }
-                                        onClick={() => window.open(project.liveUrl, '_blank', 'noopener,noreferrer')}
-                                    >
-                                        {labels.visitSite}
-                                    </Button>
-                                )}
-                                {project.playStoreUrl && (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        leftIcon={<span>🤖</span>}
-                                        onClick={() => window.open(project.playStoreUrl, '_blank', 'noopener,noreferrer')}
-                                    >
-                                        {labels.playStore}
-                                    </Button>
-                                )}
-                                {project.appStoreUrl && (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        leftIcon={<span>🍎</span>}
-                                        onClick={() => window.open(project.appStoreUrl, '_blank', 'noopener,noreferrer')}
-                                    >
-                                        {labels.appStore}
-                                    </Button>
-                                )}
                             </div>
-                        </div>
-                    )}
-                </div>
+                        </section>
+
+                        {/* Extra links at end of scroll (when multiple sources) */}
+                        {links.length > 1 && (
+                            <div className="pt-2 pb-6">
+                                <DialogSeparator className="mb-4" />
+                                <DialogFooter links={links} />
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
-            {/* Animations defined globally/inline to be fully standalone */}
             <style jsx>{`
                 @keyframes fadeIn {
                     from { opacity: 0; }
@@ -321,19 +407,12 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                 @keyframes slideUp {
                     from {
                         opacity: 0;
-                        transform: translateY(24px) scale(0.97);
+                        transform: translateY(8px);
                     }
                     to {
                         opacity: 1;
-                        transform: translateY(0) scale(1);
+                        transform: translateY(0);
                     }
-                }
-                .no-scrollbar::-webkit-scrollbar {
-                    display: none;
-                }
-                .no-scrollbar {
-                    -ms-overflow-style: none;
-                    scrollbar-width: none;
                 }
             `}</style>
         </div>

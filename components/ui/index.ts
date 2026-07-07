@@ -35,3 +35,6 @@ export type { LanguageSwitcherProps } from './LanguageSwitcher';
 // Project Modal
 export { ProjectModal } from './ProjectModal';
 
+// Play Store Button
+export { PlayStoreButton, GooglePlayBrandIcon } from './PlayStoreButton';
+
