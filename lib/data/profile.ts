@@ -27,7 +27,8 @@ I believe a good application is not just functional, but also maintainable — t
         id: 'Bandung, Indonesia',
         en: 'Bandung, Indonesia'
     },
-    avatar: '/images/about/foto.jpeg',
+    // Temporary cutout for R1-style hero; replace with cleaned asset later
+    avatar: '/images/about/foto-transparent.png',
     resumeUrl: '/resume.pdf',
     stats: [
         {

@@ -31,9 +31,8 @@ export function Footer({ className }: FooterProps) {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="relative bg-[var(--background)] border-t border-[var(--primary)]/10">
-            {/* Subtle Gradient Overlay for distinction */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--primary)]/5 pointer-events-none" />
+        <footer className="relative border-t border-[var(--border)] bg-[var(--background-secondary)]">
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/[0.02]" />
 
             <div className="container relative max-w-6xl mx-auto px-4 py-12 md:py-16">
                 <div className="grid md:grid-cols-4 gap-10 md:gap-8">
@@ -118,13 +117,13 @@ export function Footer({ className }: FooterProps) {
                                 className={cn(
                                     "inline-flex items-center gap-2 text-xs font-medium",
                                     "px-4 py-2 rounded-full",
-                                    "bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20",
-                                    "hover:bg-[var(--primary)]/20 transition-colors"
+                                    "bg-[var(--accent)]/10 text-[var(--foreground-secondary)] border border-[var(--accent)]/25",
+                                    "hover:bg-[var(--accent)]/15 transition-colors"
                                 )}
                             >
                                 <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--primary)] opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--primary)]"></span>
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]"></span>
                                 </span>
                                 Available for work
                             </Link>

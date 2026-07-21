@@ -2,33 +2,34 @@
 
 /* ===========================================
    DESIGN SYSTEM - CSS VARIABLES
+   Light-first (R1 panel palette) — Phase 0
    =========================================== */
 
 :root {
   /* ==========================================
-     COLOR PALETTE - DARK MODE DEFAULT
+     COLOR PALETTE - MONOCHROME + STATUS
      ========================================== */
 
-  /* Primary Colors (Teal) */
-  --color-primary-50: #f0fdfa;
-  --color-primary-100: #ccfbf1;
-  --color-primary-200: #99f6e4;
-  --color-primary-300: #5eead4;
-  --color-primary-400: #2dd4bf;
-  --color-primary-500: #14b8a6;
-  --color-primary-600: #0d9488;
-  --color-primary-700: #0f766e;
-  --color-primary-800: #115e59;
-  --color-primary-900: #134e4a;
-  --color-primary-950: #042f2e;
+  /* Primary scale = near-black (CTA on light) */
+  --color-primary-50: #fafafa;
+  --color-primary-100: #f4f4f5;
+  --color-primary-200: #e4e4e7;
+  --color-primary-300: #d4d4d8;
+  --color-primary-400: #a1a1aa;
+  --color-primary-500: #18181b;
+  --color-primary-600: #0a0a0a;
+  --color-primary-700: #09090b;
+  --color-primary-800: #09090b;
+  --color-primary-900: #09090b;
+  --color-primary-950: #000000;
 
-  /* Accent Colors (Cyan) */
-  --color-accent-300: #67e8f9;
-  --color-accent-400: #22d3ee;
-  --color-accent-500: #06b6d4;
-  --color-accent-600: #0891b2;
+  /* Accent = soft status green (availability only) */
+  --color-accent-300: #86efac;
+  --color-accent-400: #4ade80;
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16a34a;
 
-  /* Neutral Colors (Dark Zinc) */
+  /* Neutral Colors (Zinc) */
   --color-neutral-50: #fafafa;
   --color-neutral-100: #f4f4f5;
   --color-neutral-200: #e4e4e7;
@@ -45,82 +46,73 @@
   --color-success: #22c55e;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
-  --color-info: #14b8a6;
+  --color-info: #71717a;
 
   /* ==========================================
-     THEME VARIABLES - DARK MODE (DEFAULT)
+     THEME VARIABLES - LIGHT (DEFAULT)
+     Matched to current hero panel screenshot
      ========================================== */
 
-  /* Background - Deep dark tones */
-  --background: #0a0a0b;
-  --background-secondary: #121214;
-  --background-tertiary: #1a1a1e;
+  /* Page canvas — soft light gray like R1 outer */
+  --background: #eef0f2;
+  --background-secondary: #f5f5f6;
+  --background-tertiary: #e8eaed;
 
-  /* Foreground / Text */
-  --foreground: var(--color-neutral-50);
-  --foreground-secondary: var(--color-neutral-400);
-  --foreground-muted: var(--color-neutral-500);
+  --foreground: #0a0a0a;
+  --foreground-secondary: #6b6b73;
+  --foreground-muted: #8b8b96;
 
-  /* Primary (Teal) */
-  --primary: var(--color-primary-500);
-  --primary-hover: var(--color-primary-400);
-  --primary-foreground: #0a0a0b;
+  /* Primary CTA = black fill on light */
+  --primary: #0a0a0a;
+  --primary-hover: #27272a;
+  --primary-foreground: #fafafa;
 
-  /* Accent (Cyan) */
-  --accent: var(--color-accent-400);
-  --accent-hover: var(--color-accent-300);
-  --accent-foreground: #0a0a0b;
+  /* Accent = status green */
+  --accent: var(--color-accent-500);
+  --accent-hover: var(--color-accent-400);
+  --accent-foreground: #ffffff;
 
-  /* Border */
-  --border: var(--color-neutral-800);
-  --border-hover: var(--color-neutral-700);
+  --border: #e4e4e7;
+  --border-hover: #d4d4d8;
 
-  /* Card */
-  --card: #121214;
-  --card-hover: #1a1a1e;
-  --card-foreground: var(--color-neutral-50);
+  /* Surfaces / cards — hero panel tone */
+  --card: #f5f5f6;
+  --card-hover: #ffffff;
+  --card-foreground: #0a0a0a;
 
-  /* Input */
-  --input: var(--color-neutral-800);
-  --input-border: var(--color-neutral-700);
-  --input-focus: var(--color-primary-500);
+  --input: #ffffff;
+  --input-border: #e4e4e7;
+  --input-focus: #0a0a0a;
 
-  /* Ring (focus outline) */
-  --ring: var(--color-primary-500);
-  --ring-offset: #0a0a0b;
+  --ring: #0a0a0a;
+  --ring-offset: #eef0f2;
+
+  /* Inverse (dark block on light page) */
+  --surface-inverse: #0a0a0a;
+  --surface-inverse-foreground: #fafafa;
 
   /* ==========================================
      TYPOGRAPHY
      ========================================== */
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-space), var(--font-geist-sans), system-ui, sans-serif;
 
-  /* Font Sizes */
   --text-xs: 0.75rem;
-  /* 12px */
   --text-sm: 0.875rem;
-  /* 14px */
   --text-base: 1rem;
-  /* 16px */
   --text-lg: 1.125rem;
-  /* 18px */
   --text-xl: 1.25rem;
-  /* 20px */
   --text-2xl: 1.5rem;
-  /* 24px */
   --text-3xl: 1.875rem;
-  /* 30px */
   --text-4xl: 2.25rem;
-  /* 36px */
   --text-5xl: 3rem;
-  /* 48px */
   --text-6xl: 3.75rem;
-  /* 60px */
   --text-7xl: 4.5rem;
-  /* 72px */
+  --text-8xl: 6rem;
+  --text-display: clamp(2.75rem, 8vw, 5.5rem);
 
-  /* Line Heights */
-  --leading-tight: 1.1;
+  --leading-tight: 1.05;
   --leading-snug: 1.25;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
@@ -129,59 +121,33 @@
      SPACING
      ========================================== */
   --space-1: 0.25rem;
-  /* 4px */
   --space-2: 0.5rem;
-  /* 8px */
   --space-3: 0.75rem;
-  /* 12px */
   --space-4: 1rem;
-  /* 16px */
   --space-5: 1.25rem;
-  /* 20px */
   --space-6: 1.5rem;
-  /* 24px */
   --space-8: 2rem;
-  /* 32px */
   --space-10: 2.5rem;
-  /* 40px */
   --space-12: 3rem;
-  /* 48px */
   --space-16: 4rem;
-  /* 64px */
   --space-20: 5rem;
-  /* 80px */
   --space-24: 6rem;
-  /* 96px */
 
   /* ==========================================
      BORDER RADIUS
      ========================================== */
   --radius-sm: 0.25rem;
-  /* 4px */
   --radius-base: 0.5rem;
-  /* 8px */
   --radius-md: 0.75rem;
-  /* 12px */
   --radius-lg: 1rem;
-  /* 16px */
   --radius-xl: 1.5rem;
-  /* 24px */
   --radius-2xl: 2rem;
-  /* 32px */
   --radius-full: 9999px;
 
-  /* ==========================================
-     SHADOWS
-     ========================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  /* Shadows overridden after theme block for light defaults */
 
   /* ==========================================
-     TRANSITIONS
+     TRANSITIONS (CSS motion — D3)
      ========================================== */
   --transition-fast: 150ms;
   --transition-base: 200ms;
@@ -190,6 +156,7 @@
   --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-in: cubic-bezier(0.4, 0, 1, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 
   /* ==========================================
      Z-INDEX LAYERS
@@ -207,52 +174,62 @@
      ========================================== */
   --container-max: 1200px;
   --container-padding: 1.5rem;
-  /* 24px - mobile */
   --container-padding-md: 2rem;
-  /* 32px - tablet */
   --container-padding-lg: 3rem;
-  /* 48px - desktop */
   --container-padding-xl: 4rem;
-  /* 64px - large screens */
+}
+
+/* Light shadows as default (set after other tokens in root) */
+:root {
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.06);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.06);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.15);
 }
 
 /* ===========================================
-   LIGHT MODE THEME (Optional Override)
+   DARK MODE THEME (Optional — later)
    =========================================== */
-[data-theme="light"] {
-  --background: var(--color-neutral-50);
-  --background-secondary: #ffffff;
-  --background-tertiary: var(--color-neutral-100);
+[data-theme="dark"] {
+  --background: #09090b;
+  --background-secondary: #121214;
+  --background-tertiary: #1c1c1f;
 
-  --foreground: var(--color-neutral-900);
-  --foreground-secondary: var(--color-neutral-600);
-  --foreground-muted: var(--color-neutral-400);
+  --foreground: #fafafa;
+  --foreground-secondary: #a1a1aa;
+  --foreground-muted: #71717a;
 
-  --primary: var(--color-primary-600);
-  --primary-hover: var(--color-primary-700);
-  --primary-foreground: #ffffff;
+  --primary: #f4f4f5;
+  --primary-hover: #ffffff;
+  --primary-foreground: #09090b;
 
   --accent: var(--color-accent-500);
-  --accent-hover: var(--color-accent-600);
-  --accent-foreground: #ffffff;
+  --accent-hover: var(--color-accent-400);
+  --accent-foreground: #09090b;
 
-  --border: var(--color-neutral-200);
-  --border-hover: var(--color-neutral-300);
+  --border: #27272a;
+  --border-hover: #3f3f46;
 
-  --card: #ffffff;
-  --card-hover: var(--color-neutral-50);
-  --card-foreground: var(--color-neutral-900);
+  --card: #121214;
+  --card-hover: #1a1a1e;
+  --card-foreground: #fafafa;
 
-  --input: var(--color-neutral-100);
-  --input-border: var(--color-neutral-300);
+  --input: #27272a;
+  --input-border: #3f3f46;
+  --input-focus: #d4d4d8;
 
-  --ring-offset: #ffffff;
+  --ring: #d4d4d8;
+  --ring-offset: #09090b;
 
-  /* Light mode shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --surface-inverse: #f4f4f5;
+  --surface-inverse-foreground: #09090b;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+  --shadow-base: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.45), 0 4px 6px -4px rgb(0 0 0 / 0.3);
 }
 
 /* ===========================================
@@ -354,7 +331,6 @@ body {
    UTILITY CLASSES
    =========================================== */
 
-/* Container with responsive padding */
 .container {
   width: 100%;
   max-width: var(--container-max);
@@ -380,7 +356,6 @@ body {
   }
 }
 
-/* Wider horizontal rhythm for the single-page Home layout */
 .home-page {
   --home-container-padding: 1rem;
 }
@@ -398,11 +373,17 @@ body {
 
 @media (min-width: 1024px) {
   .home-page {
-    --home-container-padding: 12rem;
+    /* Was 12rem — too tight for R1-style hero/work composition */
+    --home-container-padding: 4rem;
   }
 }
 
-/* Section Padding */
+@media (min-width: 1280px) {
+  .home-page {
+    --home-container-padding: 6rem;
+  }
+}
+
 .section-padding {
   padding-block: var(--space-16);
 }
@@ -413,15 +394,18 @@ body {
   }
 }
 
-/* Text Gradient */
+/* Soft mono emphasis (replaces teal gradient brand) */
 .text-gradient {
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--foreground) 0%,
+    var(--foreground-secondary) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Hover Card Effect */
 .hover-card {
   transition: transform var(--transition-base) var(--ease-default),
     box-shadow var(--transition-base) var(--ease-default);
@@ -432,17 +416,115 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
-/* Glass Effect - Dark mode default */
 .glass {
-  background: rgba(18, 18, 20, 0.8);
+  background: rgba(255, 255, 255, 0.82);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-[data-theme="light"] .glass {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+[data-theme="dark"] .glass {
+  background: rgba(18, 18, 20, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Display type helper */
+.text-display {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+/* ===========================================
+   CSS MOTION UTILITIES (F1 / D3)
+   =========================================== */
+
+@keyframes motion-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes motion-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.motion-enter {
+  animation: motion-fade-up var(--transition-slower) var(--ease-out-expo) both;
+}
+
+.motion-enter-fade {
+  animation: motion-fade-in var(--transition-slow) var(--ease-out) both;
+}
+
+.motion-delay-1 {
+  animation-delay: 80ms;
+}
+.motion-delay-2 {
+  animation-delay: 160ms;
+}
+.motion-delay-3 {
+  animation-delay: 240ms;
+}
+.motion-delay-4 {
+  animation-delay: 320ms;
+}
+.motion-delay-5 {
+  animation-delay: 400ms;
+}
+.motion-delay-6 {
+  animation-delay: 480ms;
+}
+
+/* Scroll-reveal pattern: start hidden, parent .is-visible reveals */
+.motion-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 720ms var(--ease-out-expo),
+    transform 720ms var(--ease-out-expo);
+  transition-delay: var(--motion-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.is-visible .motion-reveal,
+.motion-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .motion-enter,
+  .motion-enter-fade,
+  .animate-marquee {
+    animation: none !important;
+  }
+
+  .motion-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .hover-card:hover {
+    transform: none;
+  }
 }
 
 /* Marquee Animation */
@@ -450,7 +532,6 @@ body {
   0% {
     transform: translateX(0);
   }
-
   100% {
     transform: translateX(-25%);
   }
@@ -464,7 +545,6 @@ body {
   animation-play-state: paused;
 }
 
-/* Pause all marquee tracks when hovering on container */
 .marquee-container:hover .animate-marquee {
   animation-play-state: paused;
 }

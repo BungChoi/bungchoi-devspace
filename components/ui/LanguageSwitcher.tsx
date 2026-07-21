@@ -36,17 +36,20 @@ export function LanguageSwitcher({ className, showLabel }: LanguageSwitcherProps
                     Language:
                 </span>
             )}
-            <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-[var(--background-tertiary)]/50">
+            <div className="flex items-center gap-1 rounded-full bg-[var(--background-tertiary)] px-2 py-1">
                 {locales.map((loc) => (
                     <button
                         key={loc}
+                        type="button"
                         onClick={() => handleSwitch(loc)}
                         className={cn(
-                            'px-2 py-1 text-xs font-medium rounded-full transition-all',
+                            'rounded-full px-2 py-1 text-xs font-medium transition-all',
                             locale === loc
-                                ? 'text-[var(--primary)] bg-[var(--primary)]/10'
+                                ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
                                 : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)]'
                         )}
+                        aria-label={`Switch language to ${loc.toUpperCase()}`}
+                        aria-pressed={locale === loc}
                     >
                         {loc.toUpperCase()}
                     </button>

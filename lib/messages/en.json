@@ -12,7 +12,9 @@
         "viewCertificate": "View Certificate",
         "viewSourceCode": "View Source Code",
         "liveDemo": "Live Demo",
-        "code": "Code"
+        "code": "Code",
+        "switchToDark": "Switch to dark mode",
+        "switchToLight": "Switch to light mode"
     },
     "navbar": {
         "home": "Home",
@@ -26,12 +28,13 @@
     "hero": {
         "greeting": "Hi, I'm",
         "available": "Available for projects",
-        "subtitle": "I'm passionate about creating seamless user experiences and writing clean, maintainable code."
+        "subtitle": "I'm passionate about creating seamless user experiences and writing clean, maintainable code.",
+        "letsCollaborate": "Let's collaborate"
     },
     "sections": {
-        "myWork": "My Work",
-        "featuredProjects": "Featured Projects",
-        "featuredProjectsDesc": "A showcase of my best work, from mobile apps to full-stack solutions",
+        "myWork": "Work",
+        "featuredProjects": "Featured Work",
+        "featuredProjectsDesc": "Selected mobile apps and product builds — clear UI, solid structure, real users.",
         "latestArticles": "Latest Articles",
         "latestArticlesDesc": "Thoughts, tutorials, and insights about mobile development",
         "aboutMe": "About Me",

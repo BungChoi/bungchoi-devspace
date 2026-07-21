@@ -2,8 +2,8 @@
  * ===========================================
  * HOME PAGE
  * ===========================================
- * Main landing page of the portfolio website.
- * Composed of multiple sections.
+ * Work-first IA (F2): Hero → Featured Work → rest.
+ * Hobi remains visible (D6).
  */
 
 import { setRequestLocale } from 'next-intl/server';
@@ -28,28 +28,22 @@ export default async function Home({ params }: PageProps) {
 
     return (
         <main className="home-page relative">
-            {/* Hero Section */}
             <HeroSection />
 
-            {/* Tech Stack Marquee */}
-            <TechMarqueeSection className="-mt-12 sm:-mt-16" />
-
-            {/* About Summary */}
-            <AboutSummarySection />
-
-            {/* Activity: Spotify + GitHub Stats */}
-            <HobiSection />
-
-            {/* Education */}
-            <EducationSection />
-
-            {/* Work Experience */}
-            <WorkExperienceSection />
-
-            {/* Showcase Projects Section */}
+            {/* Work immediately after hero */}
             <ShowcaseProjectsSection />
 
-            {/* Awards & Certifications */}
+            <TechMarqueeSection />
+
+            <AboutSummarySection />
+
+            {/* D6: Hobi stays visible */}
+            <HobiSection />
+
+            <EducationSection />
+
+            <WorkExperienceSection />
+
             <AchievementsSection />
         </main>
     );

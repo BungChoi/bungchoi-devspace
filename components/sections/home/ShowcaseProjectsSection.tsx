@@ -2,15 +2,13 @@
 
 /**
  * ===========================================
- * SHOWCASE PROJECTS SECTION
+ * SHOWCASE PROJECTS SECTION — F2 work grid
  * ===========================================
- * Displays 6 latest projects in a grid layout
- * with a "See All" button linking to /projects page.
- * Data imported from lib/data/projects.ts
+ * Featured work: 2-col craft cards → dedicated /projects/[id]
  */
 
 import Image from 'next/image';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useRef, type CSSProperties } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
@@ -18,231 +16,143 @@ import { projects } from '@/lib/data';
 import type { Project } from '@/lib/types';
 import { t as tl } from '@/lib/utils/localization';
 import { Locale } from '@/lib/i18n/config';
-import { ProjectModal } from '@/components/ui';
-
-// ============================================
-// TYPES
-// ============================================
+import { useInViewOnce } from '@/hooks';
 
 interface ShowcaseProjectsSectionProps {
     className?: string;
 }
-
-// ============================================
-// COMPONENT
-// ============================================
 
 export function ShowcaseProjectsSection({ className }: ShowcaseProjectsSectionProps) {
     const t = useTranslations('sections');
     const tCommon = useTranslations('common');
     const locale = useLocale() as Locale;
     const sectionRef = useRef<HTMLElement>(null);
-    const [isVisible, setIsVisible] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+    const isVisible = useInViewOnce(sectionRef);
 
-    // Get 6 latest projects sorted by year (descending)
-    const latestProjects = [...projects]
+    const featured = projects.filter((p) => p.featured);
+    const latestProjects = (featured.length >= 4 ? featured : [...projects])
         .sort((a, b) => (b.year || 0) - (a.year || 0))
-        .slice(0, 6);
-
-    useEffect(() => {
-        const element = sectionRef.current;
-
-        if (!element) {
-            return;
-        }
-
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            const timeout = window.setTimeout(() => setIsVisible(true), 0);
-
-            return () => window.clearTimeout(timeout);
-        }
-
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry?.isIntersecting) {
-                    setIsVisible(true);
-                    observer.disconnect();
-                }
-            },
-            { rootMargin: '0px 0px -16% 0px', threshold: 0.18 }
-        );
-
-        observer.observe(element);
-
-        return () => observer.disconnect();
-    }, []);
+        .slice(0, 4);
 
     return (
         <section
             id="projects"
             ref={sectionRef}
             className={cn(
-                'project-showcase-section relative py-20 sm:py-28',
+                'relative py-16 sm:py-24',
                 'scroll-mt-24',
                 isVisible && 'is-visible',
                 className
             )}
         >
-            <div className="container max-w-7xl mx-auto px-4 sm:px-5 lg:px-6">
-                {/* Section Header */}
-                <div className="project-reveal text-center mb-16" style={{ '--project-delay': '60ms' } as CSSProperties}>
-                    <span className="text-[var(--primary)] font-medium text-sm uppercase tracking-widest">
-                        {t('myWork')}
-                    </span>
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-3">
-                        {t('featuredProjects').split(' ')[0]} <span className="text-gradient">{t('featuredProjects').split(' ').slice(1).join(' ') || 'Projects'}</span>
-                    </h2>
-                    <p className="mt-4 text-[var(--foreground-secondary)] max-w-2xl mx-auto">
-                        {t('featuredProjectsDesc')}
-                    </p>
-                </div>
-
-                {/* Projects Grid */}
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8 mb-12">
-                    {latestProjects.map((project, index) => (
-                        <div
-                            key={project.id}
-                            className="project-reveal"
-                            style={{ '--project-delay': `${180 + index * 140}ms` } as CSSProperties}
-                        >
-                            <ProjectCard 
-                                project={project} 
-                                locale={locale} 
-                                onClick={() => setSelectedProject(project)}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {/* Project Detail Modal */}
-                <ProjectModal
-                    project={selectedProject}
-                    isOpen={selectedProject !== null}
-                    onClose={() => setSelectedProject(null)}
-                    locale={locale}
-                />
-
-                {/* See All Button */}
-                <div className="project-reveal text-center" style={{ '--project-delay': `${260 + latestProjects.length * 140}ms` } as CSSProperties}>
+            <div className="container mx-auto max-w-6xl px-4 sm:px-5 lg:px-6">
+                <div
+                    className="motion-reveal mb-10 flex flex-col gap-4 sm:mb-12 sm:flex-row sm:items-end sm:justify-between"
+                    style={{ '--motion-delay': '40ms' } as CSSProperties}
+                >
+                    <div>
+                        <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--foreground-muted)]">
+                            /{t('myWork')}
+                        </p>
+                        <h2 className="mt-2 text-3xl font-bold tracking-tight text-[var(--foreground)] sm:text-4xl md:text-5xl">
+                            {t('featuredProjects')}
+                        </h2>
+                        <p className="mt-3 max-w-xl text-[var(--foreground-secondary)]">
+                            {t('featuredProjectsDesc')}
+                        </p>
+                    </div>
                     <Link
                         href="/projects"
                         className={cn(
-                            'inline-flex items-center gap-2',
-                            'px-8 py-3 rounded-full',
-                            'bg-[var(--primary)] text-white font-medium',
-                            'hover:bg-[var(--primary)]/90 transition-colors',
-                            'shadow-lg shadow-[var(--primary)]/25'
+                            'inline-flex shrink-0 items-center gap-2 self-start sm:self-auto',
+                            'text-sm font-medium text-[var(--foreground-secondary)]',
+                            'transition-colors hover:text-[var(--foreground)]'
                         )}
                     >
                         {tCommon('viewAllProjects')}
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                        </svg>
+                        <span aria-hidden>→</span>
                     </Link>
                 </div>
+
+                <div className="grid gap-5 sm:grid-cols-2 sm:gap-6">
+                    {latestProjects.map((project, index) => (
+                        <div
+                            key={project.id}
+                            className="motion-reveal"
+                            style={{ '--motion-delay': `${120 + index * 90}ms` } as CSSProperties}
+                        >
+                            <ProjectCard project={project} locale={locale} />
+                        </div>
+                    ))}
+                </div>
             </div>
-
-            <style jsx>{`
-                .project-reveal {
-                    opacity: 0;
-                    transform: translateY(18px) scale(0.985);
-                    filter: blur(6px);
-                    transition:
-                        opacity 820ms cubic-bezier(0.16, 1, 0.3, 1),
-                        transform 820ms cubic-bezier(0.16, 1, 0.3, 1),
-                        filter 820ms cubic-bezier(0.16, 1, 0.3, 1);
-                    transition-delay: var(--project-delay, 0ms);
-                    will-change: opacity, transform, filter;
-                }
-
-                .is-visible .project-reveal {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                    filter: blur(0);
-                }
-
-                @media (prefers-reduced-motion: reduce) {
-                    .project-reveal {
-                        opacity: 1;
-                        transform: none;
-                        filter: none;
-                        transition: none;
-                    }
-                }
-            `}</style>
         </section>
     );
 }
 
-// ============================================
-// PROJECT CARD
-// ============================================
-
 interface ProjectCardProps {
     project: Project;
     locale: Locale;
-    onClick: () => void;
 }
 
-function ProjectCard({ project, locale, onClick }: ProjectCardProps) {
+function ProjectCard({ project, locale }: ProjectCardProps) {
     return (
-        <div
-            onClick={onClick}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onClick();
-                }
-            }}
+        <Link
+            href={`/projects/${project.id}`}
             className={cn(
-                'group block cursor-pointer',
-                'rounded-xl overflow-hidden',
-                'bg-[var(--background)]/40 backdrop-blur-xl',
-                'border border-[var(--primary)]/30',
-                'shadow-xl',
-                'hover:border-[var(--primary)]/60 transition-all duration-300',
-                'hover:shadow-2xl hover:shadow-[var(--primary)]/10'
+                'group block overflow-hidden rounded-2xl',
+                'border border-[var(--border)] bg-[var(--card)]',
+                'transition-all duration-[var(--transition-slow)]',
+                'hover:-translate-y-1 hover:border-[var(--border-hover)] hover:shadow-xl'
             )}
         >
-            {/* Image */}
-            <div className="relative aspect-video bg-[var(--background-tertiary)] overflow-hidden">
+            <div className="relative aspect-[16/10] overflow-hidden bg-[var(--background-tertiary)]">
                 {project.image ? (
                     <Image
                         src={project.image}
                         alt={project.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                        sizes="(max-width: 640px) 100vw, 50vw"
                     />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-6xl opacity-20">
+                    <div className="absolute inset-0 flex items-center justify-center text-5xl opacity-25">
                         📱
                     </div>
                 )}
-                {/* Year badge */}
+
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)]/80 via-transparent to-transparent opacity-80" />
+
+                {/* Hover arrow */}
+                <div
+                    className={cn(
+                        'absolute right-4 top-4 flex h-10 w-10 items-center justify-center',
+                        'rounded-full border border-white/15 bg-[var(--background)]/70 backdrop-blur',
+                        'text-[var(--foreground)] opacity-0 transition-all duration-300',
+                        'translate-y-1 group-hover:translate-y-0 group-hover:opacity-100'
+                    )}
+                    aria-hidden
+                >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7v10" />
+                    </svg>
+                </div>
+
                 {project.year && (
-                    <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-[var(--background)]/80 backdrop-blur text-xs text-[var(--foreground-muted)]">
+                    <div className="absolute bottom-3 left-3 rounded-full border border-white/10 bg-[var(--background)]/70 px-2.5 py-1 text-xs text-[var(--foreground-secondary)] backdrop-blur">
                         {project.year}
                     </div>
                 )}
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[var(--background)] to-transparent opacity-60" />
             </div>
 
-            {/* Content */}
-            <div className="p-6">
-                {/* Tags */}
-                <div className="flex flex-wrap gap-2 mb-3">
+            <div className="p-5 sm:p-6">
+                <div className="mb-3 flex flex-wrap gap-2">
                     {project.tags.slice(0, 3).map((tag) => (
                         <span
                             key={tag}
                             className={cn(
-                                'text-xs px-2 py-1 rounded-full',
-                                'bg-[var(--primary)]/10 text-[var(--primary)]',
-                                'border border-[var(--primary)]/20'
+                                'rounded-full border border-[var(--border)] px-2.5 py-0.5',
+                                'text-xs text-[var(--foreground-muted)]'
                             )}
                         >
                             {tag}
@@ -250,21 +160,23 @@ function ProjectCard({ project, locale, onClick }: ProjectCardProps) {
                     ))}
                 </div>
 
-                {/* Title */}
-                <h3 className="font-bold text-lg text-[var(--foreground)] group-hover:text-[var(--primary)] transition-colors">
+                <h3 className="text-lg font-bold tracking-tight text-[var(--foreground)] transition-colors group-hover:text-[var(--foreground)] sm:text-xl">
                     {project.title}
+                    {project.subtitle && (
+                        <span className="mt-0.5 block text-sm font-normal text-[var(--foreground-muted)]">
+                            {tl(project.subtitle, locale)}
+                        </span>
+                    )}
                 </h3>
 
-                {/* Description */}
-                <p className="mt-2 text-sm text-[var(--foreground-secondary)] line-clamp-2">
+                <p className="mt-2 line-clamp-2 text-sm text-[var(--foreground-secondary)]">
                     {tl(project.description, locale)}
                 </p>
 
-                {/* View Project Link */}
-                <div className="mt-4 flex items-center gap-2 text-sm text-[var(--primary)] font-medium">
-                    {locale === 'id' ? 'Lihat Detail' : 'View Details'}
+                <div className="mt-4 flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
+                    {locale === 'id' ? 'Lihat detail' : 'View details'}
                     <svg
-                        className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
+                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -273,12 +185,8 @@ function ProjectCard({ project, locale, onClick }: ProjectCardProps) {
                     </svg>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }
-
-// ============================================
-// EXPORTS
-// ============================================
 
 export type { ShowcaseProjectsSectionProps };

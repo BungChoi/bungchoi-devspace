@@ -10,7 +10,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
-import { LanguageSwitcher } from '@/components/ui';
+import { LanguageSwitcher, ThemeToggle } from '@/components/ui';
 import { Link, usePathname } from '@/lib/i18n/navigation';
 import { SITE_CONFIG, NAV_ITEMS } from '@/lib/constants';
 import { personalInfo } from '@/lib/data';
@@ -31,6 +31,7 @@ interface NavbarProps {
 export function Navbar({ className }: NavbarProps) {
     const t = useTranslations('navbar');
     const tCommon = useTranslations('common');
+    const tHero = useTranslations('hero');
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [observedSection, setObservedSection] = useState('home');
@@ -97,29 +98,33 @@ export function Navbar({ className }: NavbarProps) {
                 className
             )}
         >
-            {/* Navbar Container - Centered Pill */}
-            <div className="flex justify-center px-4 pt-4">
+            <div className="px-4 pt-4 sm:px-6 lg:px-8">
+                {/* Desktop top bar — wide R1 composition */}
                 <nav
                     className={cn(
-                        'flex items-center gap-2 px-2 py-2 rounded-full',
-                        'border border-[var(--border)]',
-                        'transition-all duration-300',
+                        'mx-auto hidden w-full max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-5 px-3 py-2 lg:grid',
+                        'transition-[background-color,border-color,box-shadow] duration-300',
                         isScrolled
-                            ? 'bg-[var(--background)]/80 backdrop-blur-xl shadow-lg border-[var(--border)]'
-                            : 'bg-[var(--background)]/60 backdrop-blur-md'
+                            ? 'rounded-full border border-[var(--border)] bg-[var(--card)]/90 shadow-md backdrop-blur-xl'
+                            : 'border border-transparent bg-transparent'
                     )}
                 >
-                    {/* Logo/Brand */}
-                    <Link
-                        href="/"
-                        onClick={handleNavClick}
-                        className="px-4 py-2 font-bold text-[var(--foreground)] hover:text-[var(--primary)] transition-colors"
-                    >
-                        {SITE_CONFIG.author}
-                    </Link>
+                    <div className="flex min-w-0 items-center gap-3 justify-self-start">
+                        <Link
+                            href="/"
+                            onClick={handleNavClick}
+                            className="px-2 py-2 font-bold text-[var(--foreground)] transition-opacity hover:opacity-70"
+                        >
+                            {SITE_CONFIG.author}
+                        </Link>
 
-                    {/* Desktop Navigation Links */}
-                    <div className="hidden md:flex items-center gap-1">
+                        <div className="hidden items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--card)] px-3.5 py-2 text-xs font-medium text-[var(--foreground-secondary)] xl:inline-flex">
+                            <span className="h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_0_4px_color-mix(in_srgb,var(--accent)_14%,transparent)]" />
+                            <span className="whitespace-nowrap">{tHero('available')}</span>
+                        </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 justify-self-center">
                         {NAV_ITEMS.map((item) => {
                             const isActive = activeSection === item.sectionId;
 
@@ -129,11 +134,11 @@ export function Navbar({ className }: NavbarProps) {
                                     href={item.href}
                                     onClick={handleNavClick}
                                     className={cn(
-                                        'px-4 py-2 text-sm font-medium rounded-full',
-                                        'transition-all duration-200',
+                                        'relative px-3 py-2 text-sm font-medium',
+                                        'transition-colors duration-200',
                                         isActive
-                                            ? 'text-[var(--primary)] bg-[var(--primary)]/10'
-                                            : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
+                                            ? 'text-[var(--foreground)] after:absolute after:inset-x-3 after:-bottom-0.5 after:h-px after:bg-[var(--foreground)]'
+                                            : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)]'
                                     )}
                                 >
                                     {t(item.labelKey)}
@@ -142,22 +147,42 @@ export function Navbar({ className }: NavbarProps) {
                         })}
                     </div>
 
-                    {/* Language Switch */}
-                    <LanguageSwitcher className="hidden md:flex" />
+                    <div className="flex items-center gap-2 justify-self-end">
+                        <ThemeToggle />
+                        <LanguageSwitcher />
+                        <a
+                            href={hireHref}
+                            className="ml-1 inline-flex items-center gap-1.5 rounded-full bg-[var(--primary)] px-4 py-2.5 text-sm font-medium text-[var(--primary-foreground)] transition-colors hover:bg-[var(--primary-hover)]"
+                        >
+                            {tCommon('hireMe')}
+                            <span aria-hidden>↗</span>
+                        </a>
+                    </div>
+                </nav>
 
-                    {/* CTA Button */}
-                    <a
-                        href={hireHref}
-                        className="hidden md:inline-flex ml-2 px-4 py-2 text-sm font-medium rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary-hover)] transition-colors"
+                {/* Existing mobile bar — redesign follows in the next pass */}
+                <nav
+                    className={cn(
+                        'mx-auto flex w-fit items-center gap-2 rounded-full border border-[var(--border)] px-2 py-2 lg:hidden',
+                        'transition-all duration-300',
+                        isScrolled
+                            ? 'bg-[var(--card)]/90 shadow-md backdrop-blur-xl'
+                            : 'bg-[var(--card)]/75 backdrop-blur-md'
+                    )}
+                >
+                    <Link
+                        href="/"
+                        onClick={handleNavClick}
+                        className="px-4 py-2 font-bold text-[var(--foreground)] transition-opacity hover:opacity-70"
                     >
-                        {tCommon('hireMe')}
-                    </a>
+                        {SITE_CONFIG.author}
+                    </Link>
 
-                    {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="md:hidden p-2 rounded-full hover:bg-[var(--background-tertiary)] transition-colors"
+                        className="rounded-full p-2 transition-colors hover:bg-[var(--background-tertiary)]"
                         aria-label="Toggle menu"
+                        aria-expanded={isMobileMenuOpen}
                     >
                         <HamburgerIcon isOpen={isMobileMenuOpen} />
                     </button>
@@ -221,7 +246,7 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel, h
     if (!isOpen) return null;
 
     return (
-        <div className="md:hidden px-4 pt-2">
+        <div className="px-4 pt-2 lg:hidden">
             <div
                 className={cn(
                     'flex flex-col gap-1 p-4 rounded-2xl',
@@ -242,7 +267,7 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel, h
                                 'px-4 py-3 text-sm font-medium rounded-xl',
                                 'transition-all duration-200',
                                 isActive
-                                    ? 'text-[var(--primary)] bg-[var(--primary)]/10'
+                                    ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
                                     : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--background-tertiary)]'
                             )}
                         >

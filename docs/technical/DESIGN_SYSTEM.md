@@ -41,33 +41,37 @@ The Design System is implemented using **CSS Custom Properties** (CSS Variables)
 
 ## Color System
 
-### Color Palette
+> **Phase 0 (2026-07-14):** **light-first** default. Palette matched to R1 hero panel. Teal/cyan retired. Source of truth: `app/globals.css`. Dark via `[data-theme="dark"]` later. See `docs/ui/ui-refinement-proposal.md` (D1).
 
-The palette uses a **50-950 scale** for maximum flexibility:
+### Color Palette (light default)
 
-#### Primary Colors (Blue)
+#### Surfaces
 
-| Token | Hex | Preview | Usage |
-|-------|-----|---------|-------|
-| `--color-primary-50` | `#eff6ff` | ![#eff6ff](https://via.placeholder.com/20/eff6ff/eff6ff) | Lightest backgrounds |
-| `--color-primary-100` | `#dbeafe` | ![#dbeafe](https://via.placeholder.com/20/dbeafe/dbeafe) | Light backgrounds |
-| `--color-primary-200` | `#bfdbfe` | ![#bfdbfe](https://via.placeholder.com/20/bfdbfe/bfdbfe) | Hover states (light) |
-| `--color-primary-300` | `#93c5fd` | ![#93c5fd](https://via.placeholder.com/20/93c5fd/93c5fd) | Borders |
-| `--color-primary-400` | `#60a5fa` | ![#60a5fa](https://via.placeholder.com/20/60a5fa/60a5fa) | Icons, hover (dark) |
-| `--color-primary-500` | `#3b82f6` | ![#3b82f6](https://via.placeholder.com/20/3b82f6/3b82f6) | Primary (dark mode) |
-| `--color-primary-600` | `#2563eb` | ![#2563eb](https://via.placeholder.com/20/2563eb/2563eb) | **Primary (light mode)** |
-| `--color-primary-700` | `#1d4ed8` | ![#1d4ed8](https://via.placeholder.com/20/1d4ed8/1d4ed8) | Primary hover |
-| `--color-primary-800` | `#1e40af` | ![#1e40af](https://via.placeholder.com/20/1e40af/1e40af) | Dark accent |
-| `--color-primary-900` | `#1e3a8a` | ![#1e3a8a](https://via.placeholder.com/20/1e3a8a/1e3a8a) | Very dark |
-| `--color-primary-950` | `#172554` | ![#172554](https://via.placeholder.com/20/172554/172554) | Darkest |
+| Token | Value | Usage |
+|-------|-------|--------|
+| `--background` | `#eef0f2` | Page canvas |
+| `--background-secondary` / `--card` | `#f5f5f6` | Panels, hero card |
+| `--foreground` | `#0a0a0a` | Primary text |
+| `--foreground-secondary` | `#6b6b73` | Body secondary |
 
-#### Accent Colors (Cyan)
+#### Primary (black CTA on light)
 
-| Token | Hex | Preview | Usage |
-|-------|-----|---------|-------|
-| `--color-accent-400` | `#22d3ee` | ![#22d3ee](https://via.placeholder.com/20/22d3ee/22d3ee) | Light accent |
-| `--color-accent-500` | `#06b6d4` | ![#06b6d4](https://via.placeholder.com/20/06b6d4/06b6d4) | **Default accent** |
-| `--color-accent-600` | `#0891b2` | ![#0891b2](https://via.placeholder.com/20/0891b2/0891b2) | Accent hover |
+| Token / theme | Value | Usage |
+|---------------|-------|--------|
+| `--primary` | `#0a0a0a` | Buttons, active nav |
+| `--primary-hover` | `#27272a` | Hover |
+| `--primary-foreground` | `#fafafa` | Text on primary |
+
+#### Accent (status green only)
+
+| Token | Value | Usage |
+|-------|-------|--------|
+| `--accent` | `#22c55e` | Availability pill, success signal |
+| `--accent-hover` | `#4ade80` | Hover |
+
+#### Neutrals (Zinc)
+
+Unchanged zinc scale for surfaces and text hierarchy.
 
 #### Neutral Colors (Zinc)
 

@@ -6,6 +6,21 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { locales, type Locale } from '@/lib/i18n/config';
 import { Navbar, BackgroundEffects, Footer } from "@/components/layout";
 
+const themeInitScript = `
+    (() => {
+        try {
+            const storedTheme = localStorage.getItem('theme');
+            const theme = storedTheme === 'light' || storedTheme === 'dark'
+                ? storedTheme
+                : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.dataset.theme = theme;
+            document.documentElement.style.colorScheme = theme;
+        } catch {
+            document.documentElement.dataset.theme = 'light';
+        }
+    })();
+`;
+
 const geistSans = Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"],
@@ -59,6 +74,9 @@ export default async function LocaleLayout({
 
     return (
         <html lang={locale} suppressHydrationWarning>
+            <head>
+                <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+            </head>
             <body
                 className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${spaceGrotesk.variable} antialiased`}
             >

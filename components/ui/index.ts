@@ -32,9 +32,12 @@ export type { BadgeProps, BadgeVariant, BadgeSize, BadgeGroupProps } from './Bad
 export { LanguageSwitcher } from './LanguageSwitcher';
 export type { LanguageSwitcherProps } from './LanguageSwitcher';
 
+// Theme Toggle
+export { ThemeToggle } from './ThemeToggle';
+export type { ThemeToggleProps } from './ThemeToggle';
+
 // Project Modal
 export { ProjectModal } from './ProjectModal';
 
 // Play Store Button
 export { PlayStoreButton, GooglePlayBrandIcon } from './PlayStoreButton';
-

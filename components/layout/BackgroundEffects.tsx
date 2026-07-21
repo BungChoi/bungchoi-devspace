@@ -2,26 +2,15 @@
 
 /**
  * ===========================================
- * BACKGROUND EFFECTS COMPONENT
+ * BACKGROUND EFFECTS — light default (Phase 0)
  * ===========================================
- * Global animated gradient background that stays fixed
- * while content scrolls over it. Creates a seamless
- * visual experience across all sections.
  */
 
 import { cn } from '@/lib/utils';
 
-// ============================================
-// TYPES
-// ============================================
-
 interface BackgroundEffectsProps {
     className?: string;
 }
-
-// ============================================
-// COMPONENT
-// ============================================
 
 export function BackgroundEffects({ className }: BackgroundEffectsProps) {
     return (
@@ -32,49 +21,24 @@ export function BackgroundEffects({ className }: BackgroundEffectsProps) {
             )}
             aria-hidden="true"
         >
-            {/* Base background color */}
             <div className="absolute inset-0 bg-[var(--background)]" />
 
-            {/* Animated gradient blobs - positioned at different locations */}
+            {/* Soft light atmosphere */}
+            <div className="absolute top-[-10%] left-[10%] h-[520px] w-[520px] rounded-full bg-[var(--card)] opacity-70 blur-[120px]" />
+            <div className="absolute top-[30%] right-[-5%] h-[420px] w-[420px] rounded-full bg-[var(--card)] opacity-50 blur-[100px]" />
+            <div className="absolute bottom-[-5%] left-[35%] h-[480px] w-[480px] rounded-full bg-[var(--card)] opacity-40 blur-[130px]" />
 
-            {/* Top left - primary glow */}
+            {/* Very subtle grid */}
             <div
-                className="absolute top-[10%] left-[15%] w-[600px] h-[600px] bg-[var(--primary)] opacity-15 rounded-full blur-[150px] animate-pulse"
-                style={{ animationDuration: '4s' }}
+                className="absolute inset-0 opacity-[0.035]"
+                style={{
+                    backgroundImage: `linear-gradient(var(--foreground) 1px, transparent 1px),
+                                      linear-gradient(90deg, var(--foreground) 1px, transparent 1px)`,
+                    backgroundSize: '64px 64px',
+                }}
             />
-
-            {/* Top right - accent glow */}
-            <div
-                className="absolute top-[5%] right-[10%] w-[400px] h-[400px] bg-[var(--accent)] opacity-10 rounded-full blur-[120px] animate-pulse"
-                style={{ animationDuration: '6s', animationDelay: '1s' }}
-            />
-
-            {/* Center - subtle primary */}
-            <div
-                className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[500px] h-[500px] bg-[var(--primary)] opacity-5 rounded-full blur-[180px] animate-pulse"
-                style={{ animationDuration: '8s', animationDelay: '2s' }}
-            />
-
-            {/* Bottom left - accent glow */}
-            <div
-                className="absolute bottom-[20%] left-[5%] w-[450px] h-[450px] bg-[var(--accent)] opacity-10 rounded-full blur-[130px] animate-pulse"
-                style={{ animationDuration: '5s', animationDelay: '0.5s' }}
-            />
-
-            {/* Bottom right - primary glow */}
-            <div
-                className="absolute bottom-[10%] right-[20%] w-[550px] h-[550px] bg-[var(--primary)] opacity-12 rounded-full blur-[140px] animate-pulse"
-                style={{ animationDuration: '7s', animationDelay: '3s' }}
-            />
-
-            {/* Radial overlay for depth */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,var(--background)_70%)]" />
         </div>
     );
 }
-
-// ============================================
-// EXPORTS
-// ============================================
 
 export type { BackgroundEffectsProps };

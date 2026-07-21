@@ -4,165 +4,115 @@
  * ===========================================
  * PROJECTS GRID SECTION
  * ===========================================
- * Grid of all project cards.
+ * Grid of all project cards → dedicated /projects/[id]
  */
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
+import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
 import { t } from '@/lib/utils/localization';
 import { Locale } from '@/lib/i18n/config';
-import { ProjectModal } from '@/components/ui';
-
-// ============================================
-// TYPES
-// ============================================
 
 interface ProjectsGridSectionProps {
     className?: string;
     projects: Project[];
 }
 
-// ============================================
-// COMPONENT
-// ============================================
-
 export function ProjectsGridSection({ className, projects }: ProjectsGridSectionProps) {
     const locale = useLocale() as Locale;
-    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     return (
         <section className={cn('py-12', className)}>
-            <div className="container max-w-6xl mx-auto px-4">
-                {/* Projects Grid */}
-                <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            <div className="container mx-auto max-w-6xl px-4">
+                <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
                     {projects.map((project) => (
-                        <ProjectCard 
-                            key={project.id} 
-                            project={project} 
-                            locale={locale} 
-                            onClick={() => setSelectedProject(project)}
-                        />
+                        <ProjectCard key={project.id} project={project} locale={locale} />
                     ))}
                 </div>
             </div>
-
-            {/* Project Detail Modal */}
-            <ProjectModal
-                project={selectedProject}
-                isOpen={selectedProject !== null}
-                onClose={() => setSelectedProject(null)}
-                locale={locale}
-            />
         </section>
     );
 }
 
-// ============================================
-// PROJECT CARD
-// ============================================
-
 interface ProjectCardProps {
     project: Project;
     locale: Locale;
-    onClick: () => void;
 }
 
-function ProjectCard({ project, locale, onClick }: ProjectCardProps) {
+function ProjectCard({ project, locale }: ProjectCardProps) {
     return (
-        <div 
-            onClick={onClick}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onClick();
-                }
-            }}
-            className="block"
-        >
+        <Link href={`/projects/${project.id}`} className="block">
             <article
                 className={cn(
-                    'group relative p-6 rounded-xl cursor-pointer',
-                    'bg-[var(--background)]/40 backdrop-blur-sm',
-                    'border border-[var(--primary)]/20',
-                    'hover:border-[var(--primary)]/50 transition-all duration-300'
+                    'group relative rounded-2xl p-6',
+                    'border border-[var(--border)] bg-[var(--card)]',
+                    'transition-all duration-300',
+                    'hover:-translate-y-1 hover:border-[var(--border-hover)] hover:shadow-xl'
                 )}
             >
-                {/* Featured Badge */}
                 {project.featured && (
-                    <div className="absolute -top-3 -right-3 px-3 py-1 rounded-full bg-[var(--primary)] text-white text-xs font-bold shadow-lg">
+                    <div className="absolute -right-2 -top-2 rounded-full bg-[var(--primary)] px-3 py-1 text-xs font-bold text-[var(--primary-foreground)] shadow-lg">
                         Featured
                     </div>
                 )}
 
-                {/* Project Image */}
-                <div className="aspect-video rounded-lg overflow-hidden bg-[var(--background-tertiary)] mb-5 relative border border-[var(--primary)]/10 group-hover:border-[var(--primary)]/30 transition-colors">
+                <div className="relative mb-5 aspect-video overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--background-tertiary)]">
                     {project.image ? (
                         <Image
                             src={project.image}
                             alt={project.title}
                             fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 50vw"
                         />
                     ) : (
-                        <>
-                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/10 to-transparent" />
-                            <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-30 group-hover:scale-110 transition-transform duration-500">
-                                📱
-                            </div>
-                        </>
+                        <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-30">
+                            📱
+                        </div>
                     )}
                 </div>
 
-                {/* Content */}
                 <div>
-                    {/* Year Badge */}
-                    <span className="text-xs text-[var(--foreground-muted)] bg-[var(--foreground)]/5 px-2 py-1 rounded mb-3 inline-block">
+                    <span className="mb-3 inline-block rounded bg-[var(--foreground)]/5 px-2 py-1 text-xs text-[var(--foreground-muted)]">
                         {project.year}
                     </span>
 
-                    {/* Title */}
-                    <h3 className="text-xl font-bold text-[var(--foreground)] mb-2 group-hover:text-[var(--primary)] transition-colors">
+                    <h3 className="mb-2 text-xl font-bold text-[var(--foreground)]">
                         {project.title}
                     </h3>
 
-                    {/* Description */}
-                    <p className="text-sm text-[var(--foreground-secondary)] line-clamp-2 mb-4">
+                    <p className="mb-4 line-clamp-2 text-sm text-[var(--foreground-secondary)]">
                         {t(project.description, locale)}
                     </p>
 
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2 mb-5">
+                    <div className="mb-5 flex flex-wrap gap-2">
                         {project.tags.slice(0, 4).map((tag) => (
                             <span
                                 key={tag}
-                                className="text-xs px-2 py-1 rounded-full bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20"
+                                className="rounded-full border border-[var(--border)] px-2 py-1 text-xs text-[var(--foreground-muted)]"
                             >
                                 {tag}
                             </span>
                         ))}
                     </div>
 
-                    {/* View Details Prompt */}
-                    <div className="flex items-center gap-2 text-sm text-[var(--primary)] font-medium">
+                    <div className="flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
                         <span>{locale === 'id' ? 'Lihat Detail' : 'View Details'}</span>
-                        <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg
+                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                         </svg>
                     </div>
                 </div>
             </article>
-        </div>
+        </Link>
     );
 }
-
-// ============================================
-// EXPORTS
-// ============================================
 
 export type { ProjectsGridSectionProps };
