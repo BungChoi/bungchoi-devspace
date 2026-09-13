@@ -27,6 +27,7 @@
  */
 
 import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 // ============================================
@@ -278,10 +279,12 @@ const CardImage = forwardRef<HTMLDivElement, CardImageProps>(
                 )}
                 {...props}
             >
-                <img
+                <Image
                     src={src}
                     alt={alt}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                 />
             </div>
         );

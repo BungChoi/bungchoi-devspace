@@ -8,7 +8,7 @@
  * Single full-modal scroll — image, header, and content scroll together.
  */
 
-import { useEffect, useRef, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import Image from 'next/image';
 import { Badge } from './Badge';
 import { Button } from './Button';
@@ -138,6 +138,50 @@ function DialogFooter({ links }: { links: ProjectLink[] }) {
     );
 }
 
+function ProjectCoverImage({
+    project,
+    isPublished,
+    publishedChipLabel,
+}: {
+    project: Project;
+    isPublished: boolean;
+    publishedChipLabel: string;
+}) {
+    const [imageError, setImageError] = useState(false);
+
+    return (
+        <div className="relative h-44 sm:h-52 overflow-hidden bg-[var(--background-tertiary)]">
+            {project.image && !imageError ? (
+                <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 672px"
+                    priority
+                    onError={() => setImageError(true)}
+                />
+            ) : (
+                <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[var(--background-secondary)] to-[var(--background-tertiary)] p-6 text-center">
+                    <span className="text-4xl opacity-30">📱</span>
+                    <span className="mt-2 text-xs font-mono uppercase tracking-widest text-[var(--foreground-muted)]">
+                        {project.title}
+                    </span>
+                </div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-transparent to-transparent pointer-events-none" />
+
+            {isPublished && (
+                <div className="absolute bottom-3 left-4">
+                    <Badge variant="success" size="sm" dot>
+                        {publishedChipLabel}
+                    </Badge>
+                </div>
+            )}
+        </div>
+    );
+}
+
 export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -252,29 +296,12 @@ export function ProjectModal({ project, isOpen, onClose, locale }: ProjectModalP
                     className="flex-1 overflow-y-auto overscroll-contain"
                 >
                     {/* Cover image */}
-                    <div className="relative h-44 sm:h-52 overflow-hidden bg-[var(--background-tertiary)]">
-                        {project.image ? (
-                            <Image
-                                src={project.image}
-                                alt=""
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 640px) 100vw, 672px"
-                                priority
-                            />
-                        ) : (
-                            <div className="flex h-full items-center justify-center text-5xl opacity-20">📱</div>
-                        )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[var(--card)] via-transparent to-transparent" />
-
-                        {isPublished && (
-                            <div className="absolute bottom-3 left-4">
-                                <Badge variant="success" size="sm" dot>
-                                    {publishedChipLabel}
-                                </Badge>
-                            </div>
-                        )}
-                    </div>
+                    <ProjectCoverImage
+                        key={project.id}
+                        project={project}
+                        isPublished={isPublished}
+                        publishedChipLabel={publishedChipLabel}
+                    />
 
                     {/* DialogHeader */}
                     <div className="space-y-1.5 p-4 pt-3">

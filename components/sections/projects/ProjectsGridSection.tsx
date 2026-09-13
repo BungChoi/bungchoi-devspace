@@ -4,16 +4,17 @@
  * ===========================================
  * PROJECTS GRID SECTION
  * ===========================================
- * Grid of all project cards → dedicated /projects/[id]
+ * Grid of all project cards with interactive popup modal
  */
 
 import Image from 'next/image';
+import { useState } from 'react';
 import { useLocale } from 'next-intl';
-import { Link } from '@/lib/i18n/navigation';
 import { cn } from '@/lib/utils';
 import type { Project } from '@/lib/types';
 import { t } from '@/lib/utils/localization';
 import { Locale } from '@/lib/i18n/config';
+import { ProjectModal } from '@/components/ui';
 
 interface ProjectsGridSectionProps {
     className?: string;
@@ -22,16 +23,29 @@ interface ProjectsGridSectionProps {
 
 export function ProjectsGridSection({ className, projects }: ProjectsGridSectionProps) {
     const locale = useLocale() as Locale;
+    const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
     return (
         <section className={cn('py-12', className)}>
             <div className="container mx-auto max-w-6xl px-4">
                 <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
                     {projects.map((project) => (
-                        <ProjectCard key={project.id} project={project} locale={locale} />
+                        <ProjectCard
+                            key={project.id}
+                            project={project}
+                            locale={locale}
+                            onSelect={setSelectedProject}
+                        />
                     ))}
                 </div>
             </div>
+
+            <ProjectModal
+                project={selectedProject}
+                isOpen={selectedProject !== null}
+                onClose={() => setSelectedProject(null)}
+                locale={locale}
+            />
         </section>
     );
 }
@@ -39,14 +53,29 @@ export function ProjectsGridSection({ className, projects }: ProjectsGridSection
 interface ProjectCardProps {
     project: Project;
     locale: Locale;
+    onSelect: (project: Project) => void;
 }
 
-function ProjectCard({ project, locale }: ProjectCardProps) {
+function ProjectCard({ project, locale, onSelect }: ProjectCardProps) {
+    const [imageError, setImageError] = useState(false);
+
     return (
-        <Link href={`/projects/${project.id}`} className="block">
+        <div
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelect(project)}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onSelect(project);
+                }
+            }}
+            className="block text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-2xl select-none"
+            aria-label={`${project.title} - ${locale === 'id' ? 'Buka detail' : 'View details'}`}
+        >
             <article
                 className={cn(
-                    'group relative rounded-2xl p-6',
+                    'group relative h-full rounded-2xl p-6',
                     'border border-[var(--border)] bg-[var(--card)]',
                     'transition-all duration-300',
                     'hover:-translate-y-1 hover:border-[var(--border-hover)] hover:shadow-xl'
@@ -59,23 +88,27 @@ function ProjectCard({ project, locale }: ProjectCardProps) {
                 )}
 
                 <div className="relative mb-5 aspect-video overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--background-tertiary)]">
-                    {project.image ? (
+                    {project.image && !imageError ? (
                         <Image
                             src={project.image}
                             alt={project.title}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"
                             sizes="(max-width: 768px) 100vw, 50vw"
+                            onError={() => setImageError(true)}
                         />
                     ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-4xl opacity-30">
-                            📱
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[var(--background-secondary)] to-[var(--background-tertiary)] p-4 text-center">
+                            <span className="text-4xl opacity-35">📱</span>
+                            <span className="mt-2 text-[11px] font-mono uppercase tracking-wider text-[var(--foreground-muted)]">
+                                {project.title}
+                            </span>
                         </div>
                     )}
                 </div>
 
                 <div>
-                    <span className="mb-3 inline-block rounded bg-[var(--foreground)]/5 px-2 py-1 text-xs text-[var(--foreground-muted)]">
+                    <span className="mb-3 inline-block rounded-md border border-[var(--border)] bg-[var(--card)] px-2 py-0.5 text-xs text-[var(--foreground-secondary)]">
                         {project.year}
                     </span>
 
@@ -87,11 +120,11 @@ function ProjectCard({ project, locale }: ProjectCardProps) {
                         {t(project.description, locale)}
                     </p>
 
-                    <div className="mb-5 flex flex-wrap gap-2">
+                    <div className="mb-5 flex flex-wrap gap-1.5">
                         {project.tags.slice(0, 4).map((tag) => (
                             <span
                                 key={tag}
-                                className="rounded-full border border-[var(--border)] px-2 py-1 text-xs text-[var(--foreground-muted)]"
+                                className="rounded-md border border-[var(--border)] bg-[var(--background-secondary)]/40 px-2 py-0.5 text-[11px] font-medium text-[var(--foreground-muted)]"
                             >
                                 {tag}
                             </span>
@@ -111,7 +144,7 @@ function ProjectCard({ project, locale }: ProjectCardProps) {
                     </div>
                 </div>
             </article>
-        </Link>
+        </div>
     );
 }
 
