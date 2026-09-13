@@ -184,21 +184,6 @@ export interface Education {
 }
 
 // ============================================
-// CONTACT FORM TYPES
-// ============================================
-export interface ContactFormData {
-    name: string;
-    email: string;
-    subject?: string;
-    message: string;
-}
-
-export interface ContactFormState {
-    status: 'idle' | 'loading' | 'success' | 'error';
-    message?: string;
-}
-
-// ============================================
 // PROFILE / PERSONAL INFO TYPES (with i18n support)
 // ============================================
 export interface Stat {

@@ -24,7 +24,3 @@ export type { HobiSectionProps } from './HobiSection';
 // Showcase Projects Preview
 export { ShowcaseProjectsSection } from './ShowcaseProjectsSection';
 export type { ShowcaseProjectsSectionProps } from './ShowcaseProjectsSection';
-
-// Blog Preview
-export { BlogPreviewSection } from './BlogPreviewSection';
-export type { BlogPreviewSectionProps } from './BlogPreviewSection';

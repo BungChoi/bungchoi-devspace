@@ -20,7 +20,6 @@ export {
     TechMarqueeSection,
     HobiSection,
     ShowcaseProjectsSection,
-    BlogPreviewSection,
 } from './home';
 
 export type {
@@ -29,7 +28,6 @@ export type {
     TechMarqueeSectionProps,
     HobiSectionProps,
     ShowcaseProjectsSectionProps,
-    BlogPreviewSectionProps,
 } from './home';
 
 // ============================================
@@ -41,7 +39,6 @@ export {
     AchievementsSection,
     EducationSection,
     WorkExperienceSection,
-    ExperienceSection,
 } from './about';
 
 export type {
@@ -50,7 +47,6 @@ export type {
     AchievementsSectionProps,
     EducationSectionProps,
     WorkExperienceSectionProps,
-    ExperienceSectionProps,
 } from './about';
 
 // ============================================
