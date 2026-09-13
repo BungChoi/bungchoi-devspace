@@ -45,7 +45,6 @@ This project follows a **Layer-Based Clean Architecture** pattern:
 |------|---------|
 | `next.config.ts` | Next.js configuration |
 | `tsconfig.json` | TypeScript config with `@/` path alias |
-| `tailwind.config.ts` | Tailwind CSS configuration |
 | `postcss.config.mjs` | PostCSS configuration |
 | `eslint.config.mjs` | ESLint rules |
 
