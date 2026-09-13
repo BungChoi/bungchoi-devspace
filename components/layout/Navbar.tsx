@@ -39,55 +39,103 @@ export function Navbar({ className }: NavbarProps) {
     const hireHref = `mailto:${personalInfo.email}`;
     const activeSection = pathname.startsWith('/projects')
         ? 'projects'
-        : pathname === '/'
-            ? observedSection
-            : 'home';
+        : pathname.startsWith('/about')
+            ? 'about'
+            : pathname === '/'
+                ? observedSection
+                : 'home';
 
-    // Handle scroll effect
+    // Handle scroll effect for glassmorphism navbar
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         handleScroll(); // Run on mount
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Track active anchor section on the Home page. On project detail pages,
-    // keep Projects active because that is the current content context.
+    // Track active anchor section on the Home page with continuous scroll spy
     useEffect(() => {
         if (pathname !== '/') {
             return;
         }
 
-        const sectionIds = NAV_ITEMS.map((item) => item.sectionId);
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visible = entries
-                    .filter((entry) => entry.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        // Complete map of all sections on the Home page to corresponding nav items
+        const sectionMap: { id: string; navId: string }[] = [
+            { id: 'home', navId: 'home' },
+            { id: 'about', navId: 'about' },
+            { id: 'hobi', navId: 'about' },
+            { id: 'experience', navId: 'experience' },
+            { id: 'work-experience', navId: 'experience' },
+            { id: 'projects', navId: 'projects' },
+            { id: 'achievements', navId: 'projects' },
+        ];
 
-                if (visible?.target.id) {
-                    setObservedSection(visible.target.id);
-                }
-            },
-            {
-                rootMargin: '-35% 0px -55% 0px',
-                threshold: [0.1, 0.25, 0.5],
+        let ticking = false;
+
+        const updateActiveSection = () => {
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const scrollHeight = document.documentElement.scrollHeight;
+
+            // 1. When near top of page, home is active
+            if (scrollY < 120) {
+                setObservedSection('home');
+                return;
             }
-        );
 
-        sectionIds.forEach((sectionId) => {
-            const element = document.getElementById(sectionId);
-            if (element) observer.observe(element);
-        });
+            // 2. When reached bottom of page, last section (projects) is active
+            if (windowHeight + scrollY >= scrollHeight - 80) {
+                setObservedSection('projects');
+                return;
+            }
 
-        return () => observer.disconnect();
+            // 3. Focal line: comfortable reading line below fixed header
+            const topOffset = Math.min(220, Math.max(140, windowHeight * 0.28));
+
+            let currentNavId = 'home';
+            for (const { id, navId } of sectionMap) {
+                const element = document.getElementById(id);
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    if (rect.top <= topOffset) {
+                        currentNavId = navId;
+                    }
+                }
+            }
+
+            setObservedSection(currentNavId);
+        };
+
+        const onScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateActiveSection();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+
+        // Initial check on mount
+        updateActiveSection();
+
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', onScroll);
+        };
     }, [pathname]);
 
-    const handleNavClick = () => {
+    const handleNavClick = (sectionId?: string) => {
         setIsMobileMenuOpen(false);
+        if (sectionId) {
+            setObservedSection(sectionId);
+        }
     };
 
     return (
@@ -112,7 +160,7 @@ export function Navbar({ className }: NavbarProps) {
                     <div className="flex min-w-0 items-center gap-3 justify-self-start">
                         <Link
                             href="/"
-                            onClick={handleNavClick}
+                            onClick={() => handleNavClick('home')}
                             className="px-2 py-2 font-bold text-[var(--foreground)] transition-opacity hover:opacity-70"
                         >
                             {SITE_CONFIG.author}
@@ -132,7 +180,7 @@ export function Navbar({ className }: NavbarProps) {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    onClick={handleNavClick}
+                                    onClick={() => handleNavClick(item.sectionId)}
                                     className={cn(
                                         'relative px-3 py-2 text-sm font-medium',
                                         'transition-colors duration-200',
@@ -172,7 +220,7 @@ export function Navbar({ className }: NavbarProps) {
                 >
                     <Link
                         href="/"
-                        onClick={handleNavClick}
+                        onClick={() => handleNavClick('home')}
                         className="px-4 py-2 font-bold text-[var(--foreground)] transition-opacity hover:opacity-70"
                     >
                         {SITE_CONFIG.author}
@@ -234,7 +282,7 @@ function HamburgerIcon({ isOpen }: { isOpen: boolean }) {
 interface MobileMenuProps {
     isOpen: boolean;
     activeSection: string;
-    onNavClick: () => void;
+    onNavClick: (sectionId?: string) => void;
     onClose: () => void;
     hireMeLabel: string;
     hireHref: string;
@@ -262,7 +310,7 @@ function MobileMenu({ isOpen, activeSection, onNavClick, onClose, hireMeLabel, h
                         <Link
                             key={item.href}
                             href={item.href}
-                            onClick={onNavClick}
+                            onClick={() => onNavClick(item.sectionId)}
                             className={cn(
                                 'px-4 py-3 text-sm font-medium rounded-xl',
                                 'transition-all duration-200',

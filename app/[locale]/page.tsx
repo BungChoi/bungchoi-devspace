@@ -30,9 +30,6 @@ export default async function Home({ params }: PageProps) {
         <main className="home-page relative">
             <HeroSection />
 
-            {/* Work immediately after hero */}
-            <ShowcaseProjectsSection />
-
             <TechMarqueeSection />
 
             <AboutSummarySection />
@@ -43,6 +40,9 @@ export default async function Home({ params }: PageProps) {
             <EducationSection />
 
             <WorkExperienceSection />
+
+            {/* Projects placed after experience */}
+            <ShowcaseProjectsSection />
 
             <AchievementsSection />
         </main>
